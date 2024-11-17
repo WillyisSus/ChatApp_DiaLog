@@ -10,6 +10,7 @@ module application.chatapp_dialog {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
 
     opens application.chatapp_dialog to javafx.fxml;
     exports application.chatapp_dialog;
