@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -201,16 +202,24 @@ public class AdminUserListController implements Initializable {
             e.printStackTrace();
         }
     }
-    public void handleChangePassword(ActionEvent event){
+    public void handleChangePassword(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-updatepassword-dialog.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("admin-user-listing-updatepassword-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             Optional<ButtonType> clickedButton = dialog.showAndWait();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    protected void changeToUser(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
+        scene = new Scene(fxmlLoader.load(), 1080, 720);
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
