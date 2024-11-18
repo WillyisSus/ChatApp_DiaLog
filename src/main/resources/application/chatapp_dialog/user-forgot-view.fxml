@@ -61,12 +61,22 @@
                   <Font name="Courier New Bold" size="24.0" />
                </font>
             </Label>
-            <TextField id="login-text-username" layoutX="140.0" layoutY="295.0" minHeight="40.0" minWidth="260.0" onAction="#logoutClick" promptText="Username">
+            <TextField id="login-text-username" layoutX="140.0" layoutY="295.0" minHeight="40.0" minWidth="260.0" promptText="Username">
                <font>
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </TextField>
-            <Button id="login-button-login" layoutX="182.0" layoutY="380.0" minWidth="80.0" mnemonicParsing="false" onAction="#logoutClick" text="Reset password">
+            <Label id="login-label-password" layoutX="140.0" layoutY="350.0" text="Email">
+               <font>
+                  <Font name="Courier New Bold" size="24.0" />
+               </font>
+            </Label>
+            <TextField id="login-text-username" layoutX="140.0" layoutY="380.0" minHeight="40.0" minWidth="260.0" promptText="abc@email.com">
+               <font>
+                  <Font name="Courier New Bold" size="16.0" />
+               </font>
+            </TextField>
+            <Button id="login-button-login" layoutX="182.0" layoutY="455.0" minWidth="80.0" mnemonicParsing="false" onAction="#logoutClick" text="Reset password">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
