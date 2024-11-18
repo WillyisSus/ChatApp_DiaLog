@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.SceneController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <ImageView id="login-image-left" fitHeight="720.0" fitWidth="540.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/loginleft.png" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+         <children>
+            <ImageView id="login-image-right" fitHeight="720.0" fitWidth="540.0" opacity="0.65" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/loginright.png" />
+               </image>
+            </ImageView>
+            <Label id="login-label-title" alignment="CENTER" contentDisplay="CENTER" layoutX="139.6" layoutY="40.0" text="DiaLog" textAlignment="CENTER">
+               <font>
+                  <Font name="Harlow Solid Italic" size="80.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="1.0" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Label>
+            <Label id="login-label-username" layoutX="140.0" layoutY="265.0" text="Username">
+               <font>
+                  <Font name="Courier New Bold" size="24.0" />
+               </font>
+            </Label>
+            <TextField id="login-text-username" layoutX="140.0" layoutY="295.0" minHeight="40.0" minWidth="260.0" onAction="#logoutClick" promptText="Username">
+               <font>
+                  <Font name="Courier New Bold" size="16.0" />
+               </font>
+            </TextField>
+            <Button id="login-button-login" layoutX="182.0" layoutY="380.0" minWidth="80.0" mnemonicParsing="false" onAction="#logoutClick" text="Reset password">
+               <font>
+                  <Font name="Courier New Bold" size="18.0" />
+               </font>
+            </Button>
+            <Button id="login-button-forgot" layoutX="160.0" layoutY="526.0" minWidth="220.0" mnemonicParsing="false" onAction="#logoutClick" text="Back to login">
+               <font>
+                  <Font name="Courier New Bold" size="18.0" />
+               </font>
+            </Button>
+            <Button id="login-button-create" layoutX="160.0" layoutY="577.0" minWidth="220.0" mnemonicParsing="false" onAction="#newClick" text="Create an account">
+               <font>
+                  <Font name="Courier New Bold" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>

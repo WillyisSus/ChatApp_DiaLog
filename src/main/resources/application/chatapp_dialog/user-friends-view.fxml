@@ -1,0 +1,1836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.SceneController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0">
+         <left>
+            <VBox prefHeight="720.0" prefWidth="82.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <MenuButton mnemonicParsing="false">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#accountClick" text="Account" />
+                              <MenuItem mnemonicParsing="false" onAction="#friendsClick" text="Friends" />
+                              <MenuItem mnemonicParsing="false" onAction="#logoutClick" text="Log out" />
+                           </items>
+                           <graphic>
+                              <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/user-icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MenuButton>
+                     </children>
+                  </HBox>
+                  <Label minHeight="570.0" />
+                  <ImageView fitHeight="72.0" fitWidth="72.0" onMouseClicked="#loginClick" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/arrow-back-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                  <Tab text="Friends">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <content>
+                                    <VBox prefHeight="720.0" prefWidth="976.0" spacing="10.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="40 minutes">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="1 hours">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="3 days">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="11 months">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="8 years">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                           <top>
+                              <TextField promptText="Search..." BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="Courier New" size="20.0" />
+                                 </font>
+                              </TextField>
+                           </top>
+                        </BorderPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Online">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <TextField promptText="Search..." BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="Courier New" size="20.0" />
+                                 </font>
+                              </TextField>
+                           </top>
+                           <center>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <content>
+                                    <VBox prefHeight="720.0" prefWidth="976.0" spacing="10.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label minWidth="180.0" text="Online">
+                                                   <font>
+                                                      <Font name="Courier New" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                        </BorderPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Requests">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <TextField promptText="Search..." BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="Courier New" size="20.0" />
+                                 </font>
+                              </TextField>
+                           </top>
+                           <center>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <content>
+                                    <VBox prefHeight="720.0" prefWidth="976.0" spacing="10.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Accept">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                                <MenuButton mnemonicParsing="false">
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" text="Remove" />
+                                                      <MenuItem mnemonicParsing="false" text="Block" />
+                                                      <MenuItem mnemonicParsing="false" text="Report" />
+                                                   </items>
+                                                </MenuButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                        </BorderPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Block">
+                     <content>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <TextField promptText="Search..." BorderPane.alignment="CENTER">
+                                 <font>
+                                    <Font name="Courier New" size="20.0" />
+                                 </font>
+                              </TextField>
+                           </top>
+                           <center>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                 <content>
+                                    <VBox prefHeight="720.0" prefWidth="976.0" spacing="10.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                             <children>
+                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/98.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label minWidth="504.0" text="Diana Kotex">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button mnemonicParsing="false" text="Remove">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                                <Button mnemonicParsing="false" text="Report">
+                                                   <font>
+                                                      <Font name="Courier New" size="20.0" />
+                                                   </font>
+                                                </Button>
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" top="15.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </center>
+                        </BorderPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Add friend">
+                     <content>
+                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                           <content>
+                              <VBox prefHeight="720.0" prefWidth="976.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="40 minutes">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="1 hours">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="3 days">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="11 months">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="8 years">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/98.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="504.0" text="Diana Kotex">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Label minWidth="180.0" text="Online">
+                                             <font>
+                                                <Font name="Courier New" size="24.0" />
+                                             </font>
+                                          </Label>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Remove" />
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" top="15.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                     </content>
+                     <content>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="50.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                       <children>
+                                          <Label text="Username">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField minWidth="360.0" promptText="Username123">
+                                             <font>
+                                                <Font name="Courier New Bold" size="24.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button mnemonicParsing="false" text="Find friend">
+                                             <font>
+                                                <Font name="Courier New Bold" size="16.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="50.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                       <children>
+                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/15.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label minWidth="432.0" text="Username123">
+                                             <font>
+                                                <Font name="Courier New Bold" size="36.0" />
+                                             </font>
+                                          </Label>
+                                          <Button mnemonicParsing="false" text="Add">
+                                             <font>
+                                                <Font name="Courier New" size="20.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                          <MenuButton mnemonicParsing="false">
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" text="Block" />
+                                                <MenuItem mnemonicParsing="false" text="Report" />
+                                             </items>
+                                          </MenuButton>
+                                       </children>
+                                       <padding>
+                                          <Insets left="80.0" />
+                                       </padding>
+                                       <VBox.margin>
+                                          <Insets top="15.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets top="50.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </GridPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+      </BorderPane>
+   </children>
+</GridPane>

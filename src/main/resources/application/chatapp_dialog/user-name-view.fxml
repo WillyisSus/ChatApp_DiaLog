@@ -273,19 +273,11 @@
                            </image>
                         </ImageView>
                         <Label minHeight="72.0" minWidth="10.0" />
-                        <Label id="chat-label-chat" minHeight="72.0" minWidth="576.0" onMouseClicked="#nameClick" text="Bet group">
+                        <TextField minWidth="432.0" onAction="#loginClick" text="Bet group">
                            <font>
-                              <Font name="Courier New Bold" size="32.0" />
+                              <Font name="Courier New" size="24.0" />
                            </font>
-                        </Label>
-                        <MenuButton id="chat-menu-chat" mnemonicParsing="false">
-                           <items>
-                              <MenuItem mnemonicParsing="false" onAction="#memberClick" text="Member" />
-                              <MenuItem mnemonicParsing="false" onAction="#searchClick" text="Search" />
-                              <MenuItem mnemonicParsing="false" text="Leave" />
-                              <MenuItem mnemonicParsing="false" text="Delete chat" />
-                           </items>
-                        </MenuButton>
+                        </TextField>
                      </children>
                   </FlowPane>
                </top>

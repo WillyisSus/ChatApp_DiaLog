@@ -276,7 +276,7 @@
                   <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
                   <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
                   <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" text="To User View" />
+                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeToUser" text="To User View" />
               </buttons>
             </ButtonBar>
          </top>
