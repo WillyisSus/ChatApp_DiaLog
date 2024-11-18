@@ -6,10 +6,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.event.ActionEvent;
+import javafx.stage.Stage;
 
-import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -36,14 +40,94 @@ public class AdminUserListController implements Initializable {
 
     @FXML
     private ListView<String> orderlist;
-    @FXML
-    private ListView<String> statuslist;
 
 
+    private Scene scene;
+    private Stage stage;
+    private Parent root;
     private int currentMax = 1;
     private String[] orders = {"Ascending Creation Date", "Descending Creation Date", "Ascending by name (A-Z)",  "Descending by name (Z-A)"};
-    private String[] statuses = {"offline", "online", "locked"};
     private ObservableList<User> userlist;
+
+
+
+    public void switchToUser(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+    public void switchToActiveUser(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void switchToGraph(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void switchToGroup(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void switchToReport(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void switchToNewUser(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     @FXML
     public void handleAddNewUser(){
 
@@ -117,7 +201,7 @@ public class AdminUserListController implements Initializable {
             e.printStackTrace();
         }
     }
-    public void handleChangePassword(){
+    public void handleChangePassword(ActionEvent event){
         try {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-updatepassword-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
@@ -153,7 +237,6 @@ public class AdminUserListController implements Initializable {
 
 //    Add list items
         orderlist.getItems().addAll(orders);
-        statuslist.getItems().addAll(statuses);
     }
 
 
