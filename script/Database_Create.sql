@@ -1,58 +1,77 @@
 create database dialog_db;
 
-create table user_info (
-    id serial primary key,
-    username varchar(100) unique not null,
-    password varchar(50) not null,
-    email varchar(100) not null,
-    displayname varchar(100),
-    sex boolean,
-    address varchar(255),
-    create_date timestamp default current_timestamp,
-    is_lock boolean default false,
-    is_admin boolean default false
+\connect dialog_db
+
+create table admin_accounts(
+	id serial primary key,
+	username varchar(50) not null,
+	password varchar(50) not null,
+	email varchar(200) not null,
+	displayname varchar(50),
+	create_date timestamp default current_timestamp,
+	is_online boolean default false
 );
 
-create table box_chat (
-    id serial primary key,
-    is_direct boolean not null,
-    box_name varchar(100),
-    create_date timestamp default current_timestamp
+create table user_accounts(
+	id serial primary key,
+	username varchar(50) not null,
+	password varchar(50) not null,
+	email varchar(200) not null,
+	displayname varchar(50),
+	sex boolean not null,
+	address varchar(200),
+	create_date timestamp default current_timestamp,
+	is_online boolean default false,
+	is_lock boolean default false
 );
 
-create table member_in_box (
-    user_id int references user_info(id),
-    box_id int references box_chat(id),
-    is_admin boolean,
-    primary key (user_id, box_id)
+create table box_chats (
+	id serial primary key,
+	box_name varchar(50) not null,
+	is_direct boolean default true,
+	create_date timestamp default current_timestamp
 );
 
-create table message (
-    msg_id serial primary key,
-    sender_id int references user_info(id),
-    box_id int references box_chat(id),
-    msg text,
-    create_date timestamp default current_timestamp
+create table messages(
+	id serial primary key,
+	user_id int references user_accounts(id),
+	box_id int references box_chats(id),
+	content text not null,
+	create_date timestamp default current_timestamp
 );
 
-create table report_msg (
-    rep_msg_id serial primary key,
-    reported_id int references user_info(id),
-    reporter_id int references user_info(id),
-    create_date timestamp default current_timestamp
+create table reports(
+	id serial primary key,
+	reported_id int references user_accounts(id),
+	reporter_id int references user_accounts(id),
+	create_date timestamp default current_timestamp
 );
 
-create table user_relationship (
-	relationship_id serial primary key,
-    user1_id int references user_info(id),
-    user2_id int references user_info(id),
-    -- 1 for block, 2 for friend request, 3 for friend
-    relationship smallint check (relationship between 1 and 3)
+create table friendships(
+	request_id int references user_accounts(id),
+	accept_id int references user_accounts(id),
+	is_accepted boolean default false,
+	primary key(request_id, accept_id)
 );
 
-create table session_log(
-    user_id int references user_info(id),
-    start_session timestamp default current_timestamp,
-    end_sesion timestamp,
-    primary key(user_id, start_session)
+create table block_lists(
+	id serial primary key,
+	user_id int references user_accounts(id),
+	block_id int references user_accounts(id)
+);
+
+create table box_chat_members(
+
+	box_id int references box_chats(id),
+	user_id int references user_accounts(id),
+	is_admin boolean default false ,
+	create_date timestamp default current_timestamp,
+	primary key(box_id, user_id)
+);
+
+create table user_activity_logs(
+	user_id int references user_accounts(id),
+	session_start timestamp default current_timestamp,
+	session_end timestamp,
+	primary key (user_id, session_start)
 );
