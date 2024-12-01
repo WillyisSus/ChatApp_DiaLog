@@ -1,22 +1,21 @@
-create database dialog_db;
-
-\connect dialog_db
-
 create table admin_accounts(
 	id serial primary key,
 	username varchar(50) not null,
-	password varchar(50) not null,
+	password varchar(100) not null,
 	email varchar(200) not null,
 	displayname varchar(50),
 	create_date timestamp default current_timestamp,
 	is_online boolean default false
 );
-
 create table user_accounts(
 	id serial primary key,
-	username varchar(50) not null,
-	password varchar(50) not null,
-	email varchar(200) not null,
+    username varchar(50) not null,
+    password varchar(100) not null,
+    email varchar(200) not null
+);
+
+create table user_account_info(
+    account_id int primary key references admin_accounts(id),
 	displayname varchar(50),
 	sex boolean not null,
 	address varchar(200),
