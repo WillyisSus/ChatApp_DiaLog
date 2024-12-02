@@ -24,6 +24,7 @@ create table user_accounts(
 create table user_account_info(
     account_id int primary key references user_accounts(id),
 	displayname varchar(50),
+	dob date,
 	sex boolean not null,
 	address varchar(200)
 
