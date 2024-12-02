@@ -1,27 +1,31 @@
+
 create table admin_accounts(
 	id serial primary key,
-	username varchar(50) not null,
+	username varchar(50) not null unique,
 	password varchar(100) not null,
-	email varchar(200) not null,
+	email varchar(200) not null unique,
 	displayname varchar(50),
+    salt char(6) not null,
 	create_date timestamp default current_timestamp,
 	is_online boolean default false
 );
 create table user_accounts(
 	id serial primary key,
-    username varchar(50) not null,
-    password varchar(100) not null,
-    email varchar(200) not null
+    username varchar(50) not null unique,
+    password varchar(100) not null ,
+    email varchar(200) not null unique,
+    salt char(6) not null,
+    is_online boolean default false,
+    is_lock boolean default false,
+	create_date timestamp default current_timestamp,
 );
 
 create table user_account_info(
-    account_id int primary key references admin_accounts(id),
-	displayname varchar(50),
+    account_id int primary key references user_accounts(id),
+	displayname varchar(50) ,
 	sex boolean not null,
 	address varchar(200),
-	create_date timestamp default current_timestamp,
-	is_online boolean default false,
-	is_lock boolean default false
+
 );
 
 create table box_chats (

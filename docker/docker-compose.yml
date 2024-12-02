@@ -1,0 +1,23 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres:latest
+    container_name: database_dialog
+    restart: always
+    # set shared memory limit when using docker-compose
+    hostname: 127.0.0.1
+    ports:
+      - 8010:5432
+    environment:
+      POSTGRES_USERNAME: admin
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+      - ./pgdata:/var/lib/postgresql/
+volumes:
+  pgdata:
+    external: true
+
