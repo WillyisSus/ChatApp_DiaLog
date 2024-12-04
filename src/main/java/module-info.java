@@ -11,6 +11,8 @@ module application.chatapp_dialog {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.desktop;
+    requires annotations;
+    requires java.sql;
 
     opens application.chatapp_dialog to javafx.fxml;
     exports application.chatapp_dialog;
