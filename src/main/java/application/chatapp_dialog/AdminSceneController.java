@@ -1,4 +1,5 @@
 package application.chatapp_dialog;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -6,9 +7,10 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 public class AdminSceneController {
-    private Scene scene;
-    private Stage stage;
-    private Parent root;
+    protected Scene scene;
+    protected Stage stage;
+    protected Parent root;
+
 
     public void switchToUser(ActionEvent event){
         try{
@@ -86,7 +88,6 @@ public class AdminSceneController {
         }
 
     }
-
 
 }
 

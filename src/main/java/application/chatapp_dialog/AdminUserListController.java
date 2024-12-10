@@ -1,6 +1,7 @@
 package application.chatapp_dialog;
 
 
+import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,25 +20,29 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import application.chatapp_dialog.dto.*;
+
+import application.chatapp_dialog.dal.AdminAccountDAL;
+
 public class AdminUserListController implements Initializable {
     @FXML
     private TableView tableview;
     @FXML
-    private TableColumn<User, String> username;
+    private TableColumn<AdminUserAccount, String> username;
     @FXML
-    private TableColumn<User, String> displayname;
+    private TableColumn<AdminUserAccount, String> displayname;
     @FXML
-    private TableColumn<User, String> email;
+    private TableColumn<AdminUserAccount, String> email;
     @FXML
-    private TableColumn<User, String> sex;
+    private TableColumn<AdminUserAccount, String> sex;
     @FXML
-    private TableColumn<User, String> address;
+    private TableColumn<AdminUserAccount, String> address;
     @FXML
-    private TableColumn<User, String> dob;
+    private TableColumn<AdminUserAccount, String> dob;
     @FXML
-    private TableColumn<User, String> createdate;
+    private TableColumn<AdminUserAccount, String> createdate;
     @FXML
-    private TableColumn<User, String> status;
+    private TableColumn<AdminUserAccount, String> status;
 
     @FXML
     private ListView<String> orderlist;
@@ -48,7 +53,7 @@ public class AdminUserListController implements Initializable {
     private Parent root;
     private int currentMax = 1;
     private String[] orders = {"Ascending Creation Date", "Descending Creation Date", "Ascending by name (A-Z)",  "Descending by name (Z-A)"};
-    private ObservableList<User> userlist;
+    private ObservableList<AdminUserAccount> userlist;
 
 
 
@@ -223,25 +228,18 @@ public class AdminUserListController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        userlist = FXCollections.observableArrayList(
-                new User("001", "user001", "User 001", "user001@gmail.com", "Male", "user001.address", "01/01/2001", "01/01/2001", "online"),
-                new User("002", "user002", "User 002", "user002@gmail.com", "Female", "user002.address", "02/02/2001", "02/02/2001", "online"),
-                new User("003", "user003", "User 003", "user003@gmail.com", "Male", "user001.address", "01/01/2001", "01/01/2001", "online"),
-                new User("004", "user004", "User 004", "user004@gmail.com", "Female", "user001.address", "01/01/2001", "01/01/2001", "online"),
-                new User("005", "user005", "User 005", "user005@gmail.com", "Female", "user001.address", "01/01/2001", "01/01/2001", "offline"),
-                new User("006", "user006", "User 006", "user006@gmail.com", "Male", "user001.address", "01/01/2001", "01/01/2001", "locked")
-        );
+        userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
         System.out.println(userlist.stream().toList().toString());
 //        Asscociate table collumns;
 
-        username.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
-        displayname.setCellValueFactory(new PropertyValueFactory<User, String>("displayname"));
-        email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-        sex.setCellValueFactory(new PropertyValueFactory<User, String>("sex"));
-        dob.setCellValueFactory(new PropertyValueFactory<User, String>("dob"));
-        address.setCellValueFactory(new PropertyValueFactory<User, String>("address"));
-        createdate.setCellValueFactory(new PropertyValueFactory<User, String>("createdate"));
-        status.setCellValueFactory(new PropertyValueFactory<User, String>("status"));
+        username.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("username"));
+        displayname.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("displayName"));
+        email.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("email"));
+        sex.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("sex"));
+        dob.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("dob"));
+        address.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("address"));
+        createdate.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("createDate"));
+        status.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("status"));
         tableview.setItems(userlist);
 
 //    Add list items

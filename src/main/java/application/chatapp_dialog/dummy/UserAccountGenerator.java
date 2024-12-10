@@ -68,7 +68,7 @@ public class UserAccountGenerator {
     }
 
     public static Timestamp randomCreateDate(){
-        return Timestamp.valueOf(LocalDateTime.now().withNano(0).toString());
+        return Timestamp.valueOf(LocalDateTime.now().withNano(0));
     }
 
     public static Date randomCreateDOB(){

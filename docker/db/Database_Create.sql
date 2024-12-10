@@ -16,8 +16,7 @@ create table user_accounts(
     password varchar(100) not null ,
     email varchar(200) not null unique,
     salt char(6) not null,
-    is_online boolean default false,
-    is_lock boolean default false,
+    status varchar(10) default 'offline' check (status in ('offline', 'online', 'locked')),
 	create_date timestamp default current_timestamp
 );
 
@@ -42,7 +41,8 @@ create table messages(
 	user_id int references user_accounts(id),
 	box_id int references box_chats(id),
 	content text not null,
-	create_date timestamp default current_timestamp
+	create_date timestamp default current_timestamp,
+	visible_to_owner boolean
 );
 
 create table reports(
