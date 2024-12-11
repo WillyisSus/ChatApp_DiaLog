@@ -21,7 +21,7 @@ create table user_accounts(
 );
 
 create table user_account_info(
-    account_id int primary key references user_accounts(id),
+    account_id int primary key references user_accounts(id) on delete cascade,
 	displayname varchar(50),
 	dob date,
 	sex boolean not null,
@@ -38,8 +38,8 @@ create table box_chats (
 
 create table messages(
 	id serial primary key,
-	user_id int references user_accounts(id),
-	box_id int references box_chats(id),
+	user_id int references user_accounts(id) on delete set null,
+	box_id int references box_chats(id) on delete cascade,
 	content text not null,
 	create_date timestamp default current_timestamp,
 	visible_to_owner boolean
@@ -47,35 +47,35 @@ create table messages(
 
 create table reports(
 	id serial primary key,
-	reported_id int references user_accounts(id),
-	reporter_id int references user_accounts(id),
+	reported_id int references user_accounts(id) on delete cascade,
+	reporter_id int references user_accounts(id) on delete cascade,
 	create_date timestamp default current_timestamp
 );
 
 create table friendships(
-	request_id int references user_accounts(id),
-	accept_id int references user_accounts(id),
+	request_id int references user_accounts(id) on delete cascade,
+	accept_id int references user_accounts(id) on delete cascade,
 	is_accepted boolean default false,
 	primary key(request_id, accept_id)
 );
 
 create table block_lists(
 	id serial primary key,
-	user_id int references user_accounts(id),
-	block_id int references user_accounts(id)
+	user_id int references user_accounts(id) on delete cascade,
+	block_id int references user_accounts(id) on delete cascade
 );
 
 create table box_chat_members(
 
-	box_id int references box_chats(id),
-	user_id int references user_accounts(id),
+	box_id int references box_chats(id) on delete cascade,
+	user_id int references user_accounts(id) on delete cascade,
 	is_admin boolean default false ,
 	create_date timestamp default current_timestamp,
 	primary key(box_id, user_id)
 );
 
 create table user_activity_logs(
-	user_id int references user_accounts(id),
+	user_id int references user_accounts(id) on delete cascade,
 	session_start timestamp default current_timestamp,
 	session_end timestamp,
 	primary key (user_id, session_start)

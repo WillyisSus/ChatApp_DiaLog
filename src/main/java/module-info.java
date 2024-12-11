@@ -18,4 +18,6 @@ module application.chatapp_dialog {
     opens application.chatapp_dialog.dal to javafx.base;
     opens application.chatapp_dialog to javafx.fxml;
     exports application.chatapp_dialog;
+    exports application.chatapp_dialog.admin.modalcontroller;
+    opens application.chatapp_dialog.admin.modalcontroller to javafx.fxml;
 }
