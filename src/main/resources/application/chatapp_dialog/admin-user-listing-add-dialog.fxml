@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane prefHeight="409.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.admin.modalcontroller.AdminAddNewUserController">
    <header>
       <Label alignment="CENTER" text="Add new user" textAlignment="CENTER">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
+         <padding>
+            <Insets bottom="16.0" top="16.0" />
+         </padding>
       </Label>
    </header>
    <content>
@@ -21,45 +29,66 @@
          <children>
             <HBox alignment="CENTER" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                <children>
-                  <Label prefHeight="21.0" prefWidth="86.0" text="Username" />
-                  <TextField />
+                  <Label prefHeight="21.0" prefWidth="97.0" text="Username*" />
+                  <TextField fx:id="username" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="23.0" layoutY="258.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
+               <children>
+                  <Label prefHeight="21.0" prefWidth="97.0" text="Password*" />
+                  <PasswordField fx:id="password" prefHeight="31.0" prefWidth="191.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="23.0" layoutY="23.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                <children>
-                  <Label text="Displayname" />
-                  <TextField />
+                  <Label prefHeight="21.0" prefWidth="98.0" text="Display name*" />
+                  <TextField fx:id="displayName" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="23.0" layoutY="54.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                <children>
-                  <Label prefHeight="21.0" prefWidth="84.0" text="Email" />
-                  <TextField />
+                  <Label prefHeight="21.0" prefWidth="101.0" text="Email*" />
+                  <TextField fx:id="email" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="23.0" layoutY="85.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                <children>
-                  <Label prefHeight="21.0" prefWidth="84.0" text="Sex" />
-                  <TextField />
+                  <Label prefHeight="21.0" prefWidth="73.0" text="Sex" />
+                  <HBox alignment="CENTER" prefHeight="21.0" prefWidth="213.0" spacing="16.0">
+                     <children>
+                        <RadioButton fx:id="isMale" mnemonicParsing="false" text="Male" />
+                        <RadioButton fx:id="isFemale" mnemonicParsing="false" text="Female" />
+                     </children>
+                  </HBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="23.0" layoutY="116.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                <children>
-                  <Label prefHeight="21.0" prefWidth="85.0" text="Address" />
-                  <TextField />
+                  <Label prefHeight="21.0" prefWidth="99.0" text="Address" />
+                  <TextField fx:id="address" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="23.0" layoutY="147.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                <children>
-                  <Label prefHeight="21.0" prefWidth="85.0" text="Date of birth" />
-                  <TextField />
+                  <Label prefHeight="21.0" prefWidth="101.0" text="Date of birth" />
+                  <DatePicker fx:id="dob" prefHeight="31.0" prefWidth="185.0" />
                </children>
             </HBox>
+            <HBox alignment="CENTER" layoutX="23.0" layoutY="295.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
+               <children>
+                  <CheckBox alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="21.0" prefWidth="144.0" text="Show Password" fx:id="showPassword" />
+               </children>
+            </HBox>
+            <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="582.0" text="Error message" textFill="RED">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
          </children>
       </VBox>
    </content>
    <buttonTypes>
-      <ButtonType fx:constant="OK" />
       <ButtonType fx:constant="CLOSE" />
+      <ButtonType fx:constant="OK" />
    </buttonTypes>
 </DialogPane>

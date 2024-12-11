@@ -51,7 +51,7 @@ public class AdminUserAccount {
     }
 
     public void setId(Integer id){
-        this.status.setValue(id.toString());
+        this.id.setValue(id.toString());
     }
     public void setDisplayName(String displayName) {
         this.displayName.setValue(displayName);

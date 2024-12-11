@@ -1,6 +1,8 @@
 package application.chatapp_dialog;
 
 
+import application.chatapp_dialog.admin.modalcontroller.AdminAddNewUserController;
+import application.chatapp_dialog.admin.modalcontroller.AdminUserListShowFriendController;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,8 +23,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.chatapp_dialog.dto.*;
-
-import application.chatapp_dialog.dal.AdminAccountDAL;
 
 public class AdminUserListController implements Initializable {
     @FXML
@@ -140,8 +140,22 @@ public class AdminUserListController implements Initializable {
         try {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-add-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
+            AdminAddNewUserController addNewCtrl = fxmlLoader.getController();
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
+            final Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+            ok.addEventFilter(
+                    ActionEvent.ACTION,
+                    event -> {
+                        if (!addNewCtrl.validate()){
+                            event.consume();
+                        }else {
+                            if (!addNewCtrl.addNewUser()){
+                                event.consume();
+                            }
+                        }
+                    }
+            );
             Optional<ButtonType> clickedButton = dialog.showAndWait();
         }catch (Exception e){
             e.printStackTrace();
@@ -163,11 +177,26 @@ public class AdminUserListController implements Initializable {
     public void handleRemoveUser(){
 
         try {
-            FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-remove-dialog.fxml"));
-            DialogPane dialogPane = fxmlLoader.load();
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setDialogPane(dialogPane);
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            Alert removeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+
+            removeAlert.setTitle("Remove a user");
+            removeAlert.setHeaderText("Removal Confirmation");
+            removeAlert.setContentText("Are you sure to remove this user!!!");
+            Optional<ButtonType> clickButton = removeAlert.showAndWait();
+            if (clickButton.get() == ButtonType.OK){
+                int index = tableview.getSelectionModel().getSelectedIndex();
+                AdminUserAccount selected = userlist.get(index);
+                if (AdminUserAccountDAL.deleteUser(Integer.parseInt(selected.getId()))){
+                    userlist.remove(selected);
+                }else{
+                    removeAlert = new Alert(Alert.AlertType.ERROR);
+                    removeAlert.setTitle("Cannot remove this user");
+                    removeAlert.setHeaderText("Removal Error!!!");
+                    removeAlert.setContentText("Something prevent this user from being removed");
+                }
+
+            }
+            System.out.println(clickButton);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -175,11 +204,16 @@ public class AdminUserListController implements Initializable {
     public void handleLockUser(){
 
         try {
-            FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-lock-dialog.fxml"));
-            DialogPane dialogPane = fxmlLoader.load();
-            Dialog<ButtonType> dialog = new Dialog<>();
-            dialog.setDialogPane(dialogPane);
-            Optional<ButtonType> clickedButton = dialog.showAndWait();
+            int index = tableview.getSelectionModel().getSelectedIndex();
+            AdminUserAccount selected = userlist.get(index);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Unlock/lock a user");
+            alert.setHeaderText("Action confirmation");
+            alert.setContentText((selected.getStatus().equals("locked")?"Unlock ": "Lock ") + selected.getUsername());
+            Optional<ButtonType> clickedButton = alert.showAndWait();
+            if  (clickedButton.get() == ButtonType.OK){
+
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -199,9 +233,15 @@ public class AdminUserListController implements Initializable {
     public void handleShowFriendList(){
         try {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-show-friend.fxml"));
+            AdminUserAccount selected  = (AdminUserAccount) tableview.getSelectionModel().getSelectedItem();
+            int userID = Integer.parseInt(selected.getId());
             DialogPane dialogPane = fxmlLoader.load();
+
+            AdminUserListShowFriendController friendController = fxmlLoader.getController();
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
+            friendController.loadData(userID);
+
             Optional<ButtonType> clickedButton = dialog.showAndWait();
         }catch (Exception e){
             e.printStackTrace();
@@ -241,7 +281,6 @@ public class AdminUserListController implements Initializable {
         createdate.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("createDate"));
         status.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("status"));
         tableview.setItems(userlist);
-
 //    Add list items
         orderlist.getItems().addAll(orders);
     }
