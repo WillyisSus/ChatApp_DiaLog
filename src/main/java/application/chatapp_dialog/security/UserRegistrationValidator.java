@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserRegistrationValidator {
-    private static final String regexPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%]).+$";
+    private static final String regexPassword = "^(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%]).+$";
     private static final String regexEmail = "^([\\w\\-\\.]+)[a-zA-Z0-9]+@([\\w\\-]+\\.)+([a-zA-Z]{2,})$";
     private static final String regexUsername = "^(?!admin)[a-zA-Z0-9]*$";
     public static boolean validatePassword(String password){
@@ -44,7 +44,4 @@ public class UserRegistrationValidator {
         return regexUsername;
     }
 
-    public static void main(String[] args) {
-        System.out.println(validatePassword("User123@"));
-    }
 }
