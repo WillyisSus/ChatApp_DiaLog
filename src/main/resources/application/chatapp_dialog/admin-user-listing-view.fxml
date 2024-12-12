@@ -51,13 +51,13 @@
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1080.0">
                                                             <children>
-                                                                <Button mnemonicParsing="false" onAction="#handleUpdateUser" prefHeight="31.0" prefWidth="161.0" text="Update" />
-                                                                <Button layoutX="815.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleChangePassword" prefHeight="31.0" prefWidth="161.0" text="Change Password" />
-                                                                <Button mnemonicParsing="false" onAction="#handleRemoveUser" prefHeight="31.0" prefWidth="161.0" text="Remove" />
-                                                                <Button mnemonicParsing="false" onAction="#handleLockUser" prefHeight="31.0" prefWidth="161.0" text="Lock/Unlock" />
-                                                                <Button mnemonicParsing="false" onAction="#handleAddNewUser" prefHeight="31.0" prefWidth="161.0" text="Add new user" />
-                                                                <Button layoutX="654.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleShowFriendList" prefHeight="31.0" prefWidth="161.0" text="Show friends" />
-                                                                <Button layoutX="654.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleShowLogin" prefHeight="31.0" prefWidth="161.0" text="Show sign-ins" />
+                                                                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdateUser" prefHeight="31.0" prefWidth="161.0" text="Update" />
+                                                                <Button fx:id="changePasswordButton" layoutX="815.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleChangePassword" prefHeight="31.0" prefWidth="161.0" text="Change Password" />
+                                                                <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleRemoveUser" prefHeight="31.0" prefWidth="161.0" text="Remove" />
+                                                                <Button fx:id="lockButton" mnemonicParsing="false" onAction="#handleLockUser" prefHeight="31.0" prefWidth="161.0" text="Lock/Unlock" />
+                                                                <Button fx:id="addNewButton" mnemonicParsing="false" onAction="#handleAddNewUser" prefHeight="31.0" prefWidth="161.0" text="Add new user" />
+                                                                <Button fx:id="showFriendButton" layoutX="654.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleShowFriendList" prefHeight="31.0" prefWidth="161.0" text="Show friends" />
+                                                                <Button fx:id="signInButton" layoutX="654.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleShowLogin" prefHeight="31.0" prefWidth="161.0" text="Show sign-ins" />
                                                             </children>
                                                         </HBox>
                                                         <HBox prefHeight="165.0" prefWidth="1101.0" spacing="16.0">
@@ -74,30 +74,36 @@
                                                                                 <VBox prefHeight="100.0" prefWidth="199.0">
                                                                                     <children>
                                                                                         <Label text="Username" />
-                                                                                        <TextField />
+                                                                                        <TextField fx:id="nameFilter" />
                                                                                     </children>
                                                                                 </VBox>
                                                                                 <VBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="198.0">
                                                                                     <children>
                                                                                         <Label text="Display Name" />
-                                                                                        <TextField prefWidth="164.0" />
+                                                                                        <TextField fx:id="displayNameFilter" prefWidth="164.0" />
                                                                                     </children>
                                                                                 </VBox>
                                                                                 <VBox layoutX="110.0" layoutY="10.0" prefHeight="78.0" prefWidth="213.0">
                                                                                     <children>
                                                                                         <Label text="Status" />
-                                                                  <MenuButton mnemonicParsing="false" text="Select status">
+                                                                  <MenuButton fx:id="statusMenu" mnemonicParsing="false" text="All status">
                                                                     <items>
-                                                                      <MenuItem mnemonicParsing="false" text="Online" />
-                                                                      <MenuItem mnemonicParsing="false" text="Offline" />
-                                                                        <MenuItem mnemonicParsing="false" text="Locked" />
+                                                                        <MenuItem fx:id="allItem" mnemonicParsing="false" text="All Item" />
+                                                                      <MenuItem fx:id="onlineItem" mnemonicParsing="false" text="Online" />
+                                                                      <MenuItem fx:id="offlineItem" mnemonicParsing="false" text="Offline" />
+                                                                        <MenuItem fx:id="lockItem" mnemonicParsing="false" text="Locked" />
                                                                     </items>
                                                                   </MenuButton>
                                                                                     </children>
                                                                                 </VBox>
                                                                             </children>
                                                                         </HBox>
-                                                                      <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="122.0" text="Filter" />
+                                                      <HBox prefHeight="100.0" prefWidth="200.0" spacing="16.0">
+                                                         <children>
+                                                                            <Button fx:id="filterButton" mnemonicParsing="false" prefHeight="0.0" prefWidth="122.0" text="Filter" />
+                                                            <Button fx:id="filterButton1" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="122.0" text="Clear Filter" />
+                                                         </children>
+                                                      </HBox>
                                                                     </children>
                                                                 </VBox>
                                                                 <VBox layoutX="26.0" layoutY="18.0" prefHeight="149.0" prefWidth="261.0" spacing="8.0">
@@ -112,7 +118,14 @@
                                                                                 <VBox layoutX="110.0" layoutY="10.0" prefHeight="100.0" prefWidth="263.0">
                                                                                     <children>
                                                                                         <Label text="Select one of the order" />
-                                                                                        <ListView fx:id="orderlist" prefHeight="79.0" prefWidth="260.0" />
+                                                                  <MenuButton fx:id="orderMenu" mnemonicParsing="false" prefHeight="31.0" prefWidth="277.0" text="Ascending by Name A-Z">
+                                                                    <items>
+                                                                      <MenuItem fx:id="nameAscending" mnemonicParsing="false" text="Ascending by Name A-Z" />
+                                                                      <MenuItem fx:id="nameDescending" mnemonicParsing="false" text="Descending by Name Z-A" />
+                                                                        <MenuItem fx:id="dateAscending" mnemonicParsing="false" text="Ascending by Create Date" />
+                                                                        <MenuItem fx:id="dateDescending" mnemonicParsing="false" text="Descending by Create Date" />
+                                                                    </items>
+                                                                  </MenuButton>
                                                                                     </children>
                                                                                 </VBox>
                                                                             </children>

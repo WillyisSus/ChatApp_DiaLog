@@ -37,7 +37,7 @@ public class AdminUserListShowFriendController implements Initializable {
 
     public void loadData(int userID){
         List<AdminFriendOfUser> friends = AdminUserAccountDAL.getFriendOfUser(userID);
-        if (friends.size() > 0){
+        if (!friends.isEmpty()){
             friendList = FXCollections.observableArrayList(friends);
             friendListTable.setItems(friendList);
         }

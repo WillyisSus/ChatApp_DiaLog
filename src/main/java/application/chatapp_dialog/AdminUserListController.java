@@ -2,8 +2,11 @@ package application.chatapp_dialog;
 
 
 import application.chatapp_dialog.admin.modalcontroller.AdminAddNewUserController;
+import application.chatapp_dialog.admin.modalcontroller.AdminEditUserController;
+import application.chatapp_dialog.admin.modalcontroller.AdminUserActivityLogController;
 import application.chatapp_dialog.admin.modalcontroller.AdminUserListShowFriendController;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
+import application.chatapp_dialog.dal.UtilityDAL;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,12 +22,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import application.chatapp_dialog.dto.*;
 
+import javax.swing.*;
+
 public class AdminUserListController implements Initializable {
+//    Table related
     @FXML
     private TableView tableview;
     @FXML
@@ -47,12 +54,58 @@ public class AdminUserListController implements Initializable {
     @FXML
     private ListView<String> orderlist;
 
+//    Functional button
+    @FXML
+    private Button updateButton;
+    @FXML
+    private Button changePasswordButton;
+    @FXML
+    private Button removeButton;
+    @FXML
+    private Button lockButton;
+    @FXML
+    private Button addNewButton;
+    @FXML
+    private Button showFriendButton;
+    @FXML
+    private Button signInButton;
 
+//    Filter and ordering
+
+    @FXML
+    private MenuButton statusMenu;
+    @FXML
+    private MenuItem offlineItem;
+    @FXML
+    private MenuItem onlineItem;
+    @FXML
+    private MenuItem lockItem;
+    @FXML
+    private MenuItem allItem;
+    @FXML
+    private MenuButton orderMenu;
+    @FXML
+    private MenuItem nameAscending;
+    @FXML
+    private MenuItem nameDescending;
+    @FXML
+    private MenuItem dateAscending;
+    @FXML
+    private MenuItem dateDescending;
+    @FXML
+    private TextField nameFilter;
+    @FXML
+    private TextField displayNameFilter;
+    @FXML
+    private Button filterButton;
+    @FXML
+    private Button clearFilterButton;
+
+//    Scene related
     private Scene scene;
     private Stage stage;
     private Parent root;
-    private int currentMax = 1;
-    private String[] orders = {"Ascending Creation Date", "Descending Creation Date", "Ascending by name (A-Z)",  "Descending by name (Z-A)"};
+
     private ObservableList<AdminUserAccount> userlist;
 
 
@@ -153,6 +206,7 @@ public class AdminUserListController implements Initializable {
                             if (!addNewCtrl.addNewUser()){
                                 event.consume();
                             }
+                            tableview.refresh();
                         }
                     }
             );
@@ -168,8 +222,24 @@ public class AdminUserListController implements Initializable {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-update-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
             Dialog<ButtonType> dialog = new Dialog<>();
+            AdminEditUserController ctrl =  fxmlLoader.getController();
+            int index = tableview.getSelectionModel().getSelectedIndex();
+            AdminUserAccount account = userlist.get(index);
+            ctrl.setUser(account);
             dialog.setDialogPane(dialogPane);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.addEventFilter(ActionEvent.ACTION, event -> {
+                if (!ctrl.validate()){
+                    System.out.println("validate is false");
+                    event.consume();
+                } else {
+                    userlist.set(index, ctrl.setNewInformation());
+                    tableview.refresh();
+
+                }
+            });
             Optional<ButtonType> clickedButton = dialog.showAndWait();
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -211,9 +281,19 @@ public class AdminUserListController implements Initializable {
             alert.setHeaderText("Action confirmation");
             alert.setContentText((selected.getStatus().equals("locked")?"Unlock ": "Lock ") + selected.getUsername());
             Optional<ButtonType> clickedButton = alert.showAndWait();
-            if  (clickedButton.get() == ButtonType.OK){
-
+            if (clickedButton.isPresent()){
+                if (clickedButton.get() ==  ButtonType.OK){
+                    String newStatus = (selected.getStatus().equals("locked") ? "offline" : "locked");
+                    if (AdminUserAccountDAL.updateUserStatus(Integer.parseInt(selected.getId()), newStatus)){
+                        alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Result for action - Success");
+                        alert.setHeaderText(newStatus.equals("locked") ? "Lock user successfully!!!" : "Unlock user successfully!!!" );
+                        selected.setStatus(newStatus);
+                        tableview.refresh();
+                    }
+                }
             }
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -223,6 +303,9 @@ public class AdminUserListController implements Initializable {
         try {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-signin-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
+            AdminUserActivityLogController ctrl = fxmlLoader.getController();
+            AdminUserAccount selected = (AdminUserAccount) tableview.getSelectionModel().getSelectedItem();
+            ctrl.setUser(Integer.parseInt(selected.getId()));
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             Optional<ButtonType> clickedButton = dialog.showAndWait();
@@ -271,6 +354,12 @@ public class AdminUserListController implements Initializable {
         userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
         System.out.println(userlist.stream().toList().toString());
 //        Asscociate table collumns;
+        updateButton.setDisable(true);
+        changePasswordButton.setDisable(true);
+        removeButton.setDisable(true);
+        lockButton.setDisable(true);
+        showFriendButton.setDisable(true);
+        signInButton.setDisable(true);
 
         username.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("username"));
         displayname.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("displayName"));
@@ -281,8 +370,27 @@ public class AdminUserListController implements Initializable {
         createdate.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("createDate"));
         status.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("status"));
         tableview.setItems(userlist);
+
+        tableview.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
+            System.out.println(o);
+            System.out.println(t1);
+            if (t1 != null){
+                updateButton.setDisable(false);
+                changePasswordButton.setDisable(false);
+                removeButton.setDisable(false);
+                lockButton.setDisable(false);
+                showFriendButton.setDisable(false);
+                signInButton.setDisable(false);
+            } else {
+                updateButton.setDisable(true);
+                changePasswordButton.setDisable(true);
+                removeButton.setDisable(true);
+                lockButton.setDisable(true);
+                showFriendButton.setDisable(true);
+                signInButton.setDisable(true);
+            }
+        });
 //    Add list items
-        orderlist.getItems().addAll(orders);
     }
 
 

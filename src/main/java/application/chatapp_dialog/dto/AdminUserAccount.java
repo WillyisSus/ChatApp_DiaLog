@@ -45,6 +45,17 @@ public class AdminUserAccount {
         this.status = new SimpleStringProperty(status);
     }
 
+    public AdminUserAccount(AdminUserAccount account){
+        this.id = new SimpleStringProperty(account.getId());
+        this.username = new SimpleStringProperty(account.getUsername());
+        this.email = new SimpleStringProperty(account.getEmail());
+        this.displayName = new SimpleStringProperty(account.getDisplayName());
+        this.address = new SimpleStringProperty(account.getAddress());
+        this.sex = new SimpleStringProperty(account.getSex()) ;
+        this.dob = new SimpleStringProperty(account.getDob());
+        this.createDate = new SimpleStringProperty(account.getCreateDate());
+        this.status = new SimpleStringProperty(account.getStatus());
+    }
 
     public void setStatus(String status) {
         this.status.setValue(status);

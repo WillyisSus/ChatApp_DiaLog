@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.admin.modalcontroller.AdminEditUserController">
     <header>
         <Label alignment="CENTER" text="Update user" textAlignment="CENTER">
             <font>
@@ -28,19 +28,19 @@
                 <HBox alignment="CENTER" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                     <children>
                         <Label prefHeight="21.0" prefWidth="86.0" text="Username" />
-                        <TextField prefHeight="31.0" prefWidth="219.0" promptText="current " />
+                        <TextField fx:id="username" prefHeight="31.0" prefWidth="219.0" promptText="current " />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="23.0" layoutY="23.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                     <children>
-                        <Label text="Displayname" />
-                        <TextField prefHeight="31.0" prefWidth="222.0" promptText="data" />
+                        <Label text="Display Name" />
+                        <TextField fx:id="displayName" prefHeight="31.0" prefWidth="222.0" promptText="data" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="23.0" layoutY="54.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                     <children>
                         <Label prefHeight="21.0" prefWidth="84.0" text="Email" />
-                        <TextField prefHeight="31.0" prefWidth="218.0" promptText="will" />
+                        <TextField fx:id="email" prefHeight="31.0" prefWidth="218.0" promptText="will" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="23.0" layoutY="85.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
@@ -48,8 +48,8 @@
                         <Label prefHeight="21.0" prefWidth="93.0" text="Sex" />
                         <HBox alignment="CENTER" prefHeight="21.0" prefWidth="213.0" spacing="16.0">
                             <children>
-                                <RadioButton mnemonicParsing="false" text="Male" />
-                                <RadioButton mnemonicParsing="false" text="Female" />
+                                <RadioButton fx:id="isMale" mnemonicParsing="false" text="Male" />
+                                <RadioButton fx:id="isFemale" mnemonicParsing="false" text="Female" />
                             </children>
                         </HBox>
                     </children>
@@ -57,16 +57,16 @@
                 <HBox alignment="CENTER" layoutX="23.0" layoutY="116.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                     <children>
                         <Label prefHeight="21.0" prefWidth="85.0" text="Address" />
-                        <TextField prefHeight="31.0" prefWidth="218.0" promptText="here" />
+                        <TextField fx:id="address" prefHeight="31.0" prefWidth="218.0" promptText="here" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER" layoutX="23.0" layoutY="147.0" prefHeight="31.0" prefWidth="270.0" spacing="16.0">
                     <children>
                         <Label prefHeight="21.0" prefWidth="85.0" text="Date of birth" />
-                  <DatePicker />
+                  <DatePicker fx:id="dob" />
                     </children>
                 </HBox>
-            <Label alignment="CENTER" prefHeight="21.0" prefWidth="599.0" text="Label" textFill="RED">
+            <Label fx:id="errorMessage" alignment="CENTER" prefHeight="21.0" prefWidth="599.0" text="Label" textFill="RED">
                <font>
                   <Font name="System Bold Italic" size="18.0" />
                </font>

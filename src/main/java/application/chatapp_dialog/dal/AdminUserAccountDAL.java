@@ -142,7 +142,7 @@ public class AdminUserAccountDAL {
     }
 
     public static boolean updateUserStatus(int userID, String status) throws SQLException{
-        String query = "update user_accounts set user_accounts.status = ? where user_accounts.id = ?";
+        String query = "update user_accounts set status = ? where id = ?";
         PreparedStatement ps = null;
         Connection conn = UtilityDAL.getConnection();
         ps = conn.prepareStatement(query);
@@ -179,10 +179,10 @@ public class AdminUserAccountDAL {
         if (row > 0){
             ps = conn.prepareStatement(infoQuery);
             ps.setString(1, account.getDisplayName());
-            ps.setDate(2, Date.valueOf(account.getCreateDate()));
+            ps.setDate(2, Date.valueOf(account.getDob()));
             ps.setBoolean(3, Boolean.parseBoolean(account.getSex()));
             ps.setString(4, account.getAddress());
-            ps.setInt(3, Integer.parseInt(account.getId()));
+            ps.setInt(5, Integer.parseInt(account.getId()));
             row = ps.executeUpdate();
         }else {
             return false;
