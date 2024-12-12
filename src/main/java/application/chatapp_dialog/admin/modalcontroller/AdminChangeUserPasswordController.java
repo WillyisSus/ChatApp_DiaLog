@@ -1,5 +1,6 @@
 package application.chatapp_dialog.admin.modalcontroller;
 
+import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import application.chatapp_dialog.security.UserRegistrationValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,9 +13,11 @@ import javafx.event.ActionEvent;
 import javax.xml.transform.Source;
 import java.lang.reflect.AccessFlag;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class AdminChangeUserPasswordController implements Initializable {
+    private int userID;
     @FXML
     private PasswordField newPassword;
     @FXML
@@ -47,11 +50,27 @@ public class AdminChangeUserPasswordController implements Initializable {
         return valid;
     };
 
+    public boolean changeUserPassword(){
+        try {
+            AdminUserAccountDAL.updatePassword(userID, newPassword.getText());
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database ERROR !!!");
+            alert.setHeaderText("Change user password failed!");
+            alert.setContentText("Database-related problems occur.");
+            return false;
+        }
+        return true;
+    }
 
-    private void resetUserPassword(ActionEvent event) {
+    public void resetUserPassword(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("IN PROGRESS!!! NEED EMAIL API SETUP");
         alert.showAndWait();
+    }
+
+    public void setUserID(int userID){
+        this.userID = userID;
     }
 
 }

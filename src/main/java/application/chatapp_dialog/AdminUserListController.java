@@ -1,10 +1,7 @@
 package application.chatapp_dialog;
 
 
-import application.chatapp_dialog.admin.modalcontroller.AdminAddNewUserController;
-import application.chatapp_dialog.admin.modalcontroller.AdminEditUserController;
-import application.chatapp_dialog.admin.modalcontroller.AdminUserActivityLogController;
-import application.chatapp_dialog.admin.modalcontroller.AdminUserListShowFriendController;
+import application.chatapp_dialog.admin.modalcontroller.*;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import application.chatapp_dialog.dal.UtilityDAL;
 import javafx.collections.FXCollections;
@@ -330,12 +327,27 @@ public class AdminUserListController implements Initializable {
             e.printStackTrace();
         }
     }
-    public void handleChangePassword(ActionEvent event) {
+    public void handleChangePassword() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("admin-user-listing-updatepassword-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
             Dialog<ButtonType> dialog = new Dialog<>();
+            AdminChangeUserPasswordController ctrl = fxmlLoader.getController();
+            int index = tableview.getSelectionModel().getSelectedIndex();
+            AdminUserAccount selected = userlist.get(index);
+            ctrl.setUserID(Integer.parseInt(selected.getId()));
             dialog.setDialogPane(dialogPane);
+            Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+            okButton.addEventFilter(
+                    ActionEvent.ACTION,
+                    event -> {
+                        if (!ctrl.validate()){
+                            event.consume();
+                        }else if (!ctrl.changeUserPassword()) {
+                            event.consume();
+                        }
+                    }
+            );
             Optional<ButtonType> clickedButton = dialog.showAndWait();
         } catch (Exception e) {
             e.printStackTrace();
