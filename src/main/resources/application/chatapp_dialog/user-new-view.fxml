@@ -15,7 +15,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.SceneController">
+<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.UserNewController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -24,7 +24,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ImageView id="login-image-left" fitHeight="720.0" fitWidth="540.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView id="signup-image-left" fitHeight="720.0" fitWidth="540.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/loginleft.png" />
          </image>
@@ -57,47 +57,47 @@
                   </LinearGradient>
                </textFill>
             </Label>
-            <Label id="login-label-username" layoutX="140.0" layoutY="225.0" text="Username">
+            <Label id="signup-label-username" layoutX="140.0" layoutY="225.0" text="Username">
                <font>
                   <Font name="Courier New Bold" size="24.0" />
                </font>
             </Label>
-            <TextField id="login-text-username" layoutX="140.0" layoutY="255.0" minHeight="40.0" minWidth="260.0" promptText="Username">
+            <TextField id="signup-text-username" fx:id="signupTextUsername" layoutX="140.0" layoutY="255.0" minHeight="40.0" minWidth="260.0" promptText="Username">
                <font>
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </TextField>
-            <Label id="login-label-username" layoutX="140.0" layoutY="310.0" text="Email">
+            <Label id="signup-label-email" layoutX="140.0" layoutY="310.0" text="Email">
                <font>
                   <Font name="Courier New Bold" size="24.0" />
                </font>
             </Label>
-            <TextField id="login-text-username" layoutX="140.0" layoutY="340.0" minHeight="40.0" minWidth="260.0" promptText="abc@email.com">
+            <TextField id="signup-text-email" fx:id="signupTextEmail" layoutX="140.0" layoutY="340.0" minHeight="40.0" minWidth="260.0" promptText="abc@email.com">
                <font>
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </TextField>
-            <Label id="login-label-password" layoutX="140.0" layoutY="395.0" text="Password">
+            <Label id="signup-label-password" layoutX="140.0" layoutY="395.0" text="Password">
                <font>
                   <Font name="Courier New Bold" size="24.0" />
                </font>
             </Label>
-            <PasswordField id="login-password-password" layoutX="140.0" layoutY="425.0" minHeight="40.0" minWidth="260.0" promptText="Password">
+            <PasswordField id="signup-password-password" fx:id="signupPasswordPassword" layoutX="140.0" layoutY="425.0" minHeight="40.0" minWidth="260.0" promptText="Password">
                <font>
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </PasswordField>
-            <Button id="login-button-login" layoutX="220.0" layoutY="500.0" minWidth="80.0" mnemonicParsing="false" onAction="#logoutClick" text="SIGN UP">
+            <Button id="signup-button-next" fx:id="signupButtonNext" layoutX="220.0" layoutY="500.0" minWidth="80.0" mnemonicParsing="false" text="NEXT">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
             </Button>
-            <Button id="login-button-forgot" layoutX="160.0" layoutY="571.0" minWidth="220.0" mnemonicParsing="false" onAction="#forgotClick" text="Forgot password">
+            <Button id="signup-button-forgot" fx:id="signupButtonForgot" layoutX="160.0" layoutY="571.0" minWidth="220.0" mnemonicParsing="false" text="Forgot password">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
             </Button>
-            <Button id="login-button-create" layoutX="160.0" layoutY="622.0" minWidth="220.0" mnemonicParsing="false" onAction="#logoutClick" text="Back to login">
+            <Button id="signup-button-login" fx:id="signupButtonLogin" layoutX="160.0" layoutY="622.0" minWidth="220.0" mnemonicParsing="false" text="Back to login">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
