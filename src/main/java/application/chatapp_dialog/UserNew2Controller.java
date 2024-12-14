@@ -18,6 +18,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UserNew2Controller implements Initializable {
@@ -32,6 +33,8 @@ public class UserNew2Controller implements Initializable {
     private String email;
     private String password;
     @FXML
+    private TextField signupTextDisplayname;
+    @FXML
     private DatePicker signupDateDob;
     @FXML
     private ChoiceBox<String> signupChoiceSex;
@@ -45,13 +48,10 @@ public class UserNew2Controller implements Initializable {
     @FXML
     private Button signupButtonLogin;
 
-    public int createdNewUser(String username, String email, String password, LocalDate dob, boolean sex, String address){
+    public int createdNewUser(String username, String email, String password, String displayname, LocalDate dob, boolean sex, String address){
         Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
-                if (!UserRegistrationValidator.validatePassword(password) || !UserRegistrationValidator.validateEmail(email) || !UserRegistrationValidator.validateUsername(username)){
-                    return 0;
-                }
                 String query = "insert into user_accounts (username, password, email, salt) " +
                         "values (?, ?, ?, ?)";
                 PreparedStatement ps = conn.prepareStatement(query);
@@ -66,13 +66,17 @@ public class UserNew2Controller implements Initializable {
                 System.out.println(row + " added");
                 query = "insert into user_account_info (displayname, dob, sex, address)" + "values (?, ?, ?, ?)";
                 ps = conn.prepareStatement(query);
-                ps.setString(1, username);
+                ps.setString(1, displayname);
                 ps.setDate(2, Date.valueOf(dob));
                 ps.setBoolean(3, sex);
                 ps.setString(4, address);
                 row = ps.executeUpdate();
                 System.out.println(ps.toString());
                 System.out.println(row + " added");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("Account create successfully!");
+                Optional<ButtonType> clickButton = alert.showAndWait();
                 return row;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -83,8 +87,9 @@ public class UserNew2Controller implements Initializable {
 
     @FXML
     public void buttonSignupClicked(ActionEvent event){
+        String displayname = signupTextDisplayname.getText();
         LocalDate dob = signupDateDob.getValue();
-        boolean sex = true;
+        Boolean sex = null;
         if ("Male".equals(signupChoiceSex.getValue())){
             sex = true;
         } else if ("Female".equals(signupChoiceSex.getValue())) {
@@ -92,9 +97,17 @@ public class UserNew2Controller implements Initializable {
         }
         String address = signupTextAddress.getText();
 
+        if (dob == null || sex == null || address.isBlank()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Notification");
+            alert.setHeaderText("Invalid information");
+            Optional<ButtonType> clickButton = alert.showAndWait();
+            return;
+        }
+
         System.out.println(username + "\n" + email + "\n" + password + "\n" + dob + "\n" + sex + "\n" + address);
 
-        int id = createdNewUser(username, email, password, dob, sex, address);
+        int id = createdNewUser(username, email, password, displayname, dob, sex, address);
         if (id != 0) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
@@ -106,7 +119,10 @@ public class UserNew2Controller implements Initializable {
                 throw new RuntimeException(exception);
             }
         } else {
-            System.out.println("cant not cre");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Notification");
+            alert.setHeaderText("Cannot create new account!");
+            Optional<ButtonType> clickButton = alert.showAndWait();
         }
     }
     @FXML
@@ -136,6 +152,7 @@ public class UserNew2Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        signupTextDisplayname.setText("");
         signupChoiceSex.getItems().addAll(sexList);
         signupTextAddress.setText("");
         signupButtonSignup.setOnAction(this::buttonSignupClicked);

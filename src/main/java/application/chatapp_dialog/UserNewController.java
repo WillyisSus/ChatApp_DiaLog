@@ -18,6 +18,7 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UserNewController implements Initializable {
@@ -45,8 +46,63 @@ public class UserNewController implements Initializable {
     public void buttonNextClicked(ActionEvent event){
         try {
             String username = signupTextUsername.getText();
-            String email = signupTextUsername.getText();
+            String email = signupTextEmail.getText();
             String password = signupPasswordPassword.getText();
+            if (!UserRegistrationValidator.validateUsername(username)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("Invalid username");
+                alert.setContentText("- 6-32 characters\n- Only alphanumerics\n- Cannot start with 'admin'");
+                Optional<ButtonType> clickButton = alert.showAndWait();
+                return;
+            }
+            if (!UserRegistrationValidator.validateEmail(email)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("Invalid email");
+                alert.setContentText("- 6-32 characters\n- Only alphanumerics\n- Cannot start with 'admin'");
+                Optional<ButtonType> clickButton = alert.showAndWait();
+                return;
+            }
+            if (!UserRegistrationValidator.validatePassword(password)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("Invalid password");
+                alert.setContentText("- 8-32 characters\n- At least one character\n- At least one number\n- At least one of !@#$%.");
+                Optional<ButtonType> clickButton = alert.showAndWait();
+                return;
+            }
+            Connection conn = UtilityDAL.getConnection();
+            if (conn != null) {
+                try {
+                    String query = "select count(id) from user_accounts where username = ?";
+                    PreparedStatement ps = conn.prepareStatement(query);
+                    ps.setString(1, username);
+                    ResultSet rs = ps.executeQuery();
+                    rs.next();
+                    if (rs.getInt(1) > 0){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Notification");
+                        alert.setHeaderText("Username are already exists");
+                        Optional<ButtonType> clickButton = alert.showAndWait();
+                        return;
+                    }
+                    query = "select count(id) from user_accounts where email = ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setString(1, email);
+                    rs = ps.executeQuery();
+                    rs.next();
+                    if (rs.getInt(1) > 0){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Notification");
+                        alert.setHeaderText("Email are already exists");
+                        Optional<ButtonType> clickButton = alert.showAndWait();
+                        return;
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-new-2-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             UserNew2Controller controller = fxmlLoader.getController();
