@@ -14,7 +14,7 @@ import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.security.EncryptPassword;
 
 public class AdminAccountDAL {
-    private static String getSaltQuery = "select salt from admin_accounts where username = ? or email = ?";
+    private static String getSaltQuery = "select * from admin_accounts where username = ? or email = ?";
 
 
     public static void createNewAdmin(String username, String password, String email, String displayName){
@@ -66,15 +66,12 @@ public class AdminAccountDAL {
             ResultSet  rs = ps.executeQuery();
             if (rs.next()){
                 String salt =  rs.getString("salt");
+                String id = rs.getString("id");
+                String displayName = rs.getString("displayname");
                 String hashedPass = EncryptPassword.hashPassword(password, salt);
-                ps = conn.prepareStatement("select * from admin_accounts where password = ?");
-                ps.setString(1, hashedPass);
-                rs = ps.executeQuery();
-                if (rs.next()){
-                    String id = rs.getString("id");
-                    String displayName = rs.getString("displayname");
-                    System.out.println(id + " " + displayName);
+                if (hashedPass.equals(rs.getString("password"))){
                     res = "Success";
+                    System.out.println(id + " " + displayName);
                 }
             }
         } catch (SQLException e) {
