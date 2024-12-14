@@ -32,6 +32,7 @@ public class AdminUserAccountDAL {
 
     public static AdminFriendOfUser createAdminFriendOfUser(ResultSet rs){
         AdminFriendOfUser friend =  new AdminFriendOfUser();
+        System.out.println(rs);
         try {
             friend.setId(rs.getInt("friendID"));
             friend.setUsername(rs.getString("username"));
