@@ -21,7 +21,7 @@ create table user_accounts(
 );
 
 create table user_account_info(
-    account_id int primary key references user_accounts(id) on delete cascade,
+    account_id serial primary key references user_accounts(id) on delete cascade,
 	displayname varchar(50),
 	dob date,
 	sex boolean not null,
