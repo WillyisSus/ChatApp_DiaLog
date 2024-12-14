@@ -57,6 +57,18 @@ public class AdminUserAccount {
         this.status = new SimpleStringProperty(account.getStatus());
     }
 
+    public void copyDataFromOtherAccount(AdminUserAccount account){
+        id.setValue(account.getId());
+        username.setValue(account.getUsername());
+        email.setValue(account.getEmail());
+        displayName.setValue(account.getDisplayName());
+        address.setValue(account.getAddress());
+        sex.setValue(account.getSex());
+        dob.setValue(account.getDob());
+        createDate.setValue(account.getCreateDate());
+        status.setValue(account.getStatus());
+    }
+
     public void setStatus(String status) {
         this.status.setValue(status);
     }

@@ -47,7 +47,7 @@ public class AdminActivityLogDAL {
             public int compare(AdminUserActivityLog o1, AdminUserActivityLog o2) {
                 Timestamp ts1 = o1.getSessionStartAsTimeStamp();
                 Timestamp ts2 = o2.getSessionStartAsTimeStamp();
-                return ts2.compareTo(ts1);
+                return ts1.compareTo(ts2);
             }
         };
     }
@@ -58,7 +58,7 @@ public class AdminActivityLogDAL {
             public int compare(AdminUserActivityLog o1, AdminUserActivityLog o2) {
                 Timestamp ts1 = o1.getSessionStartAsTimeStamp();
                 Timestamp ts2 = o2.getSessionStartAsTimeStamp();
-                return ts1.compareTo(ts2);
+                return ts2.compareTo(ts1);
             }
         };
     }

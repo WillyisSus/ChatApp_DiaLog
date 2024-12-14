@@ -3,9 +3,11 @@ package application.chatapp_dialog.dal;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.dto.AdminFriendOfUser;
 import application.chatapp_dialog.security.EncryptPassword;
+import eu.hansolo.toolbox.time.Times;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdminUserAccountDAL {
@@ -189,5 +191,49 @@ public class AdminUserAccountDAL {
         }
         return row > 0;
     }
+    public static Comparator<AdminUserAccount> getNameComparatorDescending(){
+        return new Comparator<AdminUserAccount>() {
+            @Override
+            public int compare(AdminUserAccount o1, AdminUserAccount o2) {
+                String name1 = o1.getUsername();
+                String name2 = o2.getUsername();
+                return name2.compareTo(name1);
+            }
+        };
+    }
+
+    public static Comparator<AdminUserAccount> getNameComparatorAscending(){
+        return new Comparator<AdminUserAccount>() {
+            @Override
+            public int compare(AdminUserAccount o1, AdminUserAccount o2) {
+                String name1 = o1.getUsername();
+                String name2 = o2.getUsername();
+                return name1.compareTo(name2);
+            }
+        };
+    }
+
+    public static Comparator<AdminUserAccount> getCreateDateComparatorAscending(){
+        return new Comparator<AdminUserAccount>() {
+            @Override
+            public int compare(AdminUserAccount o1, AdminUserAccount o2) {
+                Timestamp time1 = Timestamp.valueOf(o1.getCreateDate());
+                Timestamp time2 = Timestamp.valueOf(o2.getCreateDate());
+                return time1.compareTo(time2);
+            }
+        };
+    }
+
+    public  static Comparator<AdminUserAccount> getCreateDateComparatorDescending(){
+        return new Comparator<AdminUserAccount>() {
+            @Override
+            public int compare(AdminUserAccount o1, AdminUserAccount o2) {
+                Timestamp time1 = Timestamp.valueOf(o1.getCreateDate());
+                Timestamp time2 = Timestamp.valueOf(o2.getCreateDate());
+                return time2.compareTo(time1);
+            }
+        };
+    }
+
 
 }

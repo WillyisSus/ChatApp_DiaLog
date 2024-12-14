@@ -15,6 +15,7 @@ module application.chatapp_dialog {
     requires java.sql;
     requires jdk.jdi;
     requires com.fasterxml.jackson.annotation;
+    requires jdk.xml.dom;
     opens application.chatapp_dialog.dto to javafx.base;
     opens application.chatapp_dialog.dal to javafx.base;
     opens application.chatapp_dialog to javafx.fxml;

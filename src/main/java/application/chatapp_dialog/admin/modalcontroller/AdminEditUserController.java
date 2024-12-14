@@ -62,7 +62,7 @@ public class AdminEditUserController implements Initializable {
         temp.setAddress(address.getText());
         temp.setUsername(username.getText());
         try {
-            if (AdminUserAccountDAL.updateUserAccount(temp))
+            if (!AdminUserAccountDAL.updateUserAccount(temp))
                 return account;
         } catch (SQLException e) {
             throw new RuntimeException(e);
