@@ -4,9 +4,13 @@ package application.chatapp_dialog;
 import application.chatapp_dialog.admin.modalcontroller.*;
 import application.chatapp_dialog.dal.AdminActivityLogDAL;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
+import application.chatapp_dialog.dal.AdminUserFriendCountDAL;
 import application.chatapp_dialog.dal.UtilityDAL;
 import com.almasb.fxgl.scene3d.DoorComponent;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -145,9 +149,9 @@ public class AdminUserListController implements Initializable {
     @FXML
     private TableColumn<AdminUserFriendCount, String> friendCountDisplayName;
     @FXML
-    private TableColumn<AdminUserFriendCount, Integer> friendCountDirectFriend;
+    private TableColumn<AdminUserFriendCount, String> friendCountDirectFriend;
     @FXML
-    private TableColumn<AdminUserFriendCount, Integer> friendCountIndirectFriend;
+    private TableColumn<AdminUserFriendCount, String> friendCountIndirectFriend;
     @FXML
     private TableColumn<AdminUserFriendCount, String> friendCountCreateDate;
 
@@ -159,7 +163,24 @@ public class AdminUserListController implements Initializable {
     private TextField maxDirectFriendCountFilter;
     @FXML
     private TextField minDirectFriendCountFilter;
+//  Button
+    @FXML
+    private Button filterFriendTable;
+    @FXML
+    private Button clearFilterFriendTable;
+    @FXML
+    private MenuButton friendCountOrderMenu;
+    @FXML
+    private MenuItem friendAscendingByDate;
+    @FXML
+    private MenuItem friendDescendingByDate;
+    @FXML
+    private MenuItem friendDescendingByUsername;
+    @FXML
+    private MenuItem FriendAscendingByUsername;
 
+    @FXML
+    private Button friendReloadData;
 //    End of Friend list Tabs
     //    Scene related
     private Scene scene;
@@ -527,7 +548,78 @@ public class AdminUserListController implements Initializable {
         }
     }
 
+// Friend Count Function;
+    public void handleFilterUserFriendCount(ActionEvent event){
+        if (event.getSource() == filterFriendTable){
+            FilteredList<AdminUserFriendCount> filter = new FilteredList<AdminUserFriendCount>(friendCounts, data->{
+                boolean filteredByUsername = true;
+                boolean filteredByMaxDirect = true;
+                boolean filteredByMinDirect = true;
+                try {
+                    if (!friendCountUsernameFilter.getText().isEmpty()){
+                        filteredByUsername = data.getUsername().startsWith(friendCountUsernameFilter.getText());
+                    }
+                    if (!maxDirectFriendCountFilter.getText().isEmpty()){
+                        filteredByMaxDirect = data.getDirectFriends() <= Integer.parseInt(maxDirectFriendCountFilter.getText());
+                    }
+                    if (!minDirectFriendCountFilter.getText().isEmpty()){
+                        filteredByMinDirect = data.getDirectFriends() >= Integer.parseInt(minDirectFriendCountFilter.getText());
+                    }
+                } catch (NumberFormatException exception){
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("INVALID INPUT");
+                    alert.setContentText("Please only enter integers in Min Direct and Max Direct field.");
+                    alert.setHeaderText("Wrong number format!!!");
+                    alert.showAndWait();
+                }
+                return (filteredByMaxDirect && filteredByUsername && filteredByMinDirect);
+            });
+            friendCountTableView.setItems(filter);
+            friendCountTableView.refresh();
+        } else {
+            friendCountTableView.setItems(friendCounts);
+            friendCountTableView.refresh();
+        }
+    }
 
+    public void handleSortUserFriendCount(ActionEvent event){
+        if (event.getSource() == friendAscendingByDate){
+            friendCountOrderMenu.setText(friendAscendingByDate.getText());
+            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getCreateDateAscendingComparator());
+            friendCountTableView.refresh();
+        }
+        if (event.getSource() == friendDescendingByDate){
+            friendCountOrderMenu.setText(friendDescendingByDate.getText());
+            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getCreateDateDescendingComparator());
+            friendCountTableView.refresh();
+        }
+        if (event.getSource() == friendDescendingByUsername){
+            friendCountOrderMenu.setText(friendDescendingByUsername.getText());
+            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getUsernameDescendingComparator());
+            friendCountTableView.refresh();
+        }
+        if (event.getSource() == FriendAscendingByUsername){
+            friendCountOrderMenu.setText(FriendAscendingByUsername.getText());
+            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getUsernameAscendingComparator());
+            friendCountTableView.refresh();
+        }
+    }
+
+    public void handleReloadFriendCountData(){
+        try {
+            friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Database ERROR");
+            alert.setHeaderText("CANNOT GET DATA!!");
+            alert.setContentText("Something prevents client from getting data.");
+            alert.showAndWait();
+        }
+        friendCountTableView.setItems(friendCounts);
+        friendCountTableView.refresh();
+    }
+
+//    end of Friend count function
     @FXML
     protected void changeToUser(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
@@ -560,7 +652,25 @@ public class AdminUserListController implements Initializable {
         createdate.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("createDate"));
         status.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("status"));
         tableview.setItems(userlist);
-
+        tableview.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
+            System.out.println(o);
+            System.out.println(t1);
+            if (t1 != null){
+                updateButton.setDisable(false);
+                changePasswordButton.setDisable(false);
+                removeButton.setDisable(false);
+                lockButton.setDisable(false);
+                showFriendButton.setDisable(false);
+                signInButton.setDisable(false);
+            } else {
+                updateButton.setDisable(true);
+                changePasswordButton.setDisable(true);
+                removeButton.setDisable(true);
+                lockButton.setDisable(true);
+                showFriendButton.setDisable(true);
+                signInButton.setDisable(true);
+            }
+        });
 //       Tab latest login
         activityDateTime.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getSessionStart()));
         activityUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
@@ -568,9 +678,6 @@ public class AdminUserListController implements Initializable {
         activityLogs = null;
 
         orderMenu.setText(nameAscending.getText());
-
-
-
 
         statusFilter.getItems().addAll("All status", "Offline", "Online", "Locked");
         statusFilter.setValue(statusFilter.getItems().getFirst());
@@ -593,25 +700,27 @@ public class AdminUserListController implements Initializable {
             }
         });
 
+//        Friend counts table view
+        friendCountUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
+        friendCountDisplayName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDisplayName()));
+        friendCountDirectFriend.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDirectFriends().toString()));
+        friendCountIndirectFriend.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getIndirectFriends().toString()));
+        friendCountCreateDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
+        userFriends.setOnSelectionChanged((EventHandler<Event>) t->{
+            if(userFriends.isSelected() && friendCountTableView.getItems().isEmpty()){
+                System.out.println("???");
 
-
-        tableview.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
-            System.out.println(o);
-            System.out.println(t1);
-            if (t1 != null){
-                updateButton.setDisable(false);
-                changePasswordButton.setDisable(false);
-                removeButton.setDisable(false);
-                lockButton.setDisable(false);
-                showFriendButton.setDisable(false);
-                signInButton.setDisable(false);
-            } else {
-                updateButton.setDisable(true);
-                changePasswordButton.setDisable(true);
-                removeButton.setDisable(true);
-                lockButton.setDisable(true);
-                showFriendButton.setDisable(true);
-                signInButton.setDisable(true);
+                try {
+                    friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
+                    friendCountTableView.setItems(friendCounts);
+                    friendCountTableView.refresh();
+                } catch (SQLException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database ERROR");
+                    alert.setHeaderText("CANNOT GET DATA!!");
+                    alert.setContentText("Something prevents client from getting data.");
+                    alert.showAndWait();
+                }
             }
         });
 //    Add list items
