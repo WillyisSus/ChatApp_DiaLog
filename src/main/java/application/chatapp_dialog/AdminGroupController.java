@@ -174,16 +174,16 @@ public class AdminGroupController implements Initializable {
     public void handleSortBoxTable(ActionEvent event){
         if (event.getSource() == dateAscending){
             orderMenu.setText(dateAscending.getText());
-            boxTable.getItems().sort(AdminGroupInformationDAL.getDateAscendingComparator());
+            groupInformations.sort(AdminGroupInformationDAL.getDateAscendingComparator());
         } else if(event.getSource() == dateDescending){
             orderMenu.setText(dateDescending.getText());
-            boxTable.getItems().sort(AdminGroupInformationDAL.getDateDescendingComparator());
+            groupInformations.sort(AdminGroupInformationDAL.getDateDescendingComparator());
         } else if (event.getSource() == boxNameAscending){
             orderMenu.setText(boxNameAscending.getText());
-            boxTable.getItems().sort(AdminGroupInformationDAL.getBoxNameAscendingComparator());
+            groupInformations.sort(AdminGroupInformationDAL.getBoxNameAscendingComparator());
         } else {
             orderMenu.setText(boxNameDescending.getText());
-            boxTable.getItems().sort(AdminGroupInformationDAL.getBoxNameDescendingComparator());
+            groupInformations.sort(AdminGroupInformationDAL.getBoxNameDescendingComparator());
         }
         boxTable.refresh();
 

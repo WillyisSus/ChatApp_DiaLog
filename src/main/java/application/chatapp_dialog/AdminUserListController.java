@@ -349,7 +349,8 @@ public class AdminUserListController implements Initializable {
                 int index = tableview.getSelectionModel().getSelectedIndex();
                 AdminUserAccount selected = tableview.getItems().get(index);
                 if (AdminUserAccountDAL.deleteUser(Integer.parseInt(selected.getId()))){
-                    tableview.getItems().remove(selected);
+                    userlist.remove(selected);
+                    tableview.refresh();
                 }else{
                     removeAlert = new Alert(Alert.AlertType.ERROR);
                     removeAlert.setTitle("Cannot remove this user");
@@ -486,49 +487,41 @@ public class AdminUserListController implements Initializable {
 
     public void handleSortByUsernameAscending(){
         orderMenu.setText(nameAscending.getText());
-        tableview.getItems().sort(AdminUserAccountDAL.getNameComparatorAscending());
+        userlist.sort(AdminUserAccountDAL.getNameComparatorAscending());
         tableview.refresh();
     }
 
     public void handleSortByUsernameDescending(){
         orderMenu.setText(nameDescending.getText());
-        tableview.getItems().sort(AdminUserAccountDAL.getNameComparatorDescending());
+        userlist.sort(AdminUserAccountDAL.getNameComparatorDescending());
         tableview.refresh();
     }
 
     public void handleSortByCreateDateAscending(){
         orderMenu.setText(dateAscending.getText());
-        tableview.getItems().sort(AdminUserAccountDAL.getCreateDateComparatorAscending());
+        userlist.sort(AdminUserAccountDAL.getCreateDateComparatorAscending());
         tableview.refresh();
     }
 
     public void handleSortByCreateDateDescending(){
         orderMenu.setText(dateDescending.getText());
-        tableview.getItems().sort(AdminUserAccountDAL.getCreateDateComparatorDescending());
+        userlist.sort(AdminUserAccountDAL.getCreateDateComparatorDescending());
         tableview.refresh();
     }
 
-    public void handlerReloadActivityLogs(){
-        try {
-            activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
-            activityLogTableView.setItems(activityLogs);
-            activityLogTableView.refresh();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+
 //    Latest Logins functions
     public void handleSortActivityLogs(ActionEvent event){
         if (event.getSource() == activityDateAscending){
-            activityLogTableView.getItems().sort(AdminActivityLogDAL.getAscendingComparator());
+            activityLogs.sort(AdminActivityLogDAL.getAscendingComparator());
             activityOrder.setText(activityDateAscending.getText());
             activityLogTableView.refresh();
         }else if (event.getSource() == activityDateDescending){
-            activityLogTableView.getItems().sort(AdminActivityLogDAL.getDescendingComparator());
+            activityLogs.sort(AdminActivityLogDAL.getDescendingComparator());
             activityOrder.setText(activityDateDescending.getText());
             activityLogTableView.refresh();
         } else if (event.getSource() == activityUsernameAscending){
-            activityLogTableView.getItems().sort(new Comparator<AdminUserActivityLog>() {
+            activityLogs.sort(new Comparator<AdminUserActivityLog>() {
                 @Override
                 public int compare(AdminUserActivityLog o1, AdminUserActivityLog o2) {
                     return o1.getUsername().compareTo(o2.getUsername());
@@ -537,7 +530,7 @@ public class AdminUserListController implements Initializable {
             activityOrder.setText(activityUsernameAscending.getText());
             activityLogTableView.refresh();
         } else{
-            activityLogTableView.getItems().sort(new Comparator<AdminUserActivityLog>() {
+            activityLogs.sort(new Comparator<AdminUserActivityLog>() {
                 @Override
                 public int compare(AdminUserActivityLog o1, AdminUserActivityLog o2) {
                     return o2.getUsername().compareTo(o1.getUsername());
@@ -547,7 +540,15 @@ public class AdminUserListController implements Initializable {
             activityLogTableView.refresh();
         }
     }
-
+    public void handlerReloadActivityLogs(){
+        try {
+            activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
+            activityLogTableView.setItems(activityLogs);
+            activityLogTableView.refresh();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 // Friend Count Function;
     public void handleFilterUserFriendCount(ActionEvent event){
         if (event.getSource() == filterFriendTable){
@@ -585,16 +586,16 @@ public class AdminUserListController implements Initializable {
     public void handleSortUserFriendCount(ActionEvent event){
         if (event.getSource() == friendAscendingByDate){
             friendCountOrderMenu.setText(friendAscendingByDate.getText());
-            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getCreateDateAscendingComparator());
+            friendCounts.sort(AdminUserFriendCountDAL.getCreateDateAscendingComparator());
         }else if (event.getSource() == friendDescendingByDate){
             friendCountOrderMenu.setText(friendDescendingByDate.getText());
-            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getCreateDateDescendingComparator());
+            friendCounts.sort(AdminUserFriendCountDAL.getCreateDateDescendingComparator());
         }else if (event.getSource() == friendDescendingByUsername){
             friendCountOrderMenu.setText(friendDescendingByUsername.getText());
-            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getUsernameDescendingComparator());
+            friendCounts.sort(AdminUserFriendCountDAL.getUsernameDescendingComparator());
         } else if (event.getSource() == FriendAscendingByUsername){
             friendCountOrderMenu.setText(FriendAscendingByUsername.getText());
-            friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getUsernameAscendingComparator());
+            friendCounts.sort(AdminUserFriendCountDAL.getUsernameAscendingComparator());
         }
         friendCountTableView.refresh();
 

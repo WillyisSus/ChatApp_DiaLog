@@ -173,8 +173,9 @@ public class AdminReportController implements Initializable {
                     alert.setContentText("Click OK to continue.");
                     alert.showAndWait();
                 }else{
-                    reportTable.getItems().remove(selected);
+
                     reportList.remove(selected);
+                    reportTable.refresh();
                 }
             }
         }catch (Exception e){
@@ -210,22 +211,22 @@ public class AdminReportController implements Initializable {
     public void handleSort(ActionEvent event){
         if (event.getSource() == dateAscending){
             orderMenu.setText(dateAscending.getText());
-            reportTable.getItems().sort(AdminReportInformationDAL.getDateAscendingComparator());
+            reportList.sort(AdminReportInformationDAL.getDateAscendingComparator());
         } else if(event.getSource() == dateDescending){
             orderMenu.setText(dateDescending.getText());
-            reportTable.getItems().sort(AdminReportInformationDAL.getDateDescendingComparator());
+            reportList.sort(AdminReportInformationDAL.getDateDescendingComparator());
         } else if (event.getSource() == reporterAscending){
             orderMenu.setText(reporterAscending.getText());
-            reportTable.getItems().sort(AdminReportInformationDAL.getReporterUsernameAscendingComparator());
+            reportList.sort(AdminReportInformationDAL.getReporterUsernameAscendingComparator());
         } else if (event.getSource() == reporterDescending){
             orderMenu.setText(reporterDescending.getText());
-            reportTable.getItems().sort(AdminReportInformationDAL.getreporterUsernameDescendingComparator());
+            reportList.sort(AdminReportInformationDAL.getreporterUsernameDescendingComparator());
         } else if (event.getSource() == reportedNameAscending){
             orderMenu.setText(reportedNameAscending.getText());
-            reportTable.getItems().sort(AdminReportInformationDAL.getUsernameAscendingComparator());
+            reportList.sort(AdminReportInformationDAL.getUsernameAscendingComparator());
         } else {
             orderMenu.setText(reportedNameDescending.getText());
-            reportTable.getItems().sort(AdminReportInformationDAL.getUsernameDescendingComparator());
+            reportList.sort(AdminReportInformationDAL.getUsernameDescendingComparator());
         }
         reportTable.refresh();
     }
