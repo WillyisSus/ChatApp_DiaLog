@@ -586,23 +586,18 @@ public class AdminUserListController implements Initializable {
         if (event.getSource() == friendAscendingByDate){
             friendCountOrderMenu.setText(friendAscendingByDate.getText());
             friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getCreateDateAscendingComparator());
-            friendCountTableView.refresh();
-        }
-        if (event.getSource() == friendDescendingByDate){
+        }else if (event.getSource() == friendDescendingByDate){
             friendCountOrderMenu.setText(friendDescendingByDate.getText());
             friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getCreateDateDescendingComparator());
-            friendCountTableView.refresh();
-        }
-        if (event.getSource() == friendDescendingByUsername){
+        }else if (event.getSource() == friendDescendingByUsername){
             friendCountOrderMenu.setText(friendDescendingByUsername.getText());
             friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getUsernameDescendingComparator());
-            friendCountTableView.refresh();
-        }
-        if (event.getSource() == FriendAscendingByUsername){
+        } else if (event.getSource() == FriendAscendingByUsername){
             friendCountOrderMenu.setText(FriendAscendingByUsername.getText());
             friendCountTableView.getItems().sort(AdminUserFriendCountDAL.getUsernameAscendingComparator());
-            friendCountTableView.refresh();
         }
+        friendCountTableView.refresh();
+
     }
 
     public void handleReloadFriendCountData(){
