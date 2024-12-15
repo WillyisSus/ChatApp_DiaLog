@@ -97,7 +97,7 @@ public class UserNew2Controller implements Initializable {
         }
         String address = signupTextAddress.getText();
 
-        if (dob == null || sex == null || address.isBlank()){
+        if (displayname.isBlank() || dob == null || dob.isAfter(LocalDate.now()) || sex == null || address.isBlank()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Invalid information");
@@ -107,8 +107,7 @@ public class UserNew2Controller implements Initializable {
 
         System.out.println(username + "\n" + email + "\n" + password + "\n" + dob + "\n" + sex + "\n" + address);
 
-        int id = createdNewUser(username, email, password, displayname, dob, sex, address);
-        if (id != 0) {
+        if (createdNewUser(username, email, password, displayname, dob, sex, address) > 0) {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
