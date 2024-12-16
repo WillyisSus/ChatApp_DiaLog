@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -30,17 +31,12 @@
                <bottom>
                   <HBox alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ImageView id="chat-image-attach" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/attach-icon.png" />
-                           </image>
-                        </ImageView>
                         <TextField id="chat-text-send" fx:id="chatTextSend" layoutX="16.0" minHeight="40.0" minWidth="576.0" promptText="Send something...">
                            <font>
                               <Font name="Courier New" size="20.0" />
                            </font>
                         </TextField>
-                        <ImageView id="chat-image-send" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="chat-image-send" fx:id="chatImageSend" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/send-icon.png" />
                            </image>
@@ -52,23 +48,36 @@
                <center>
                   <ScrollPane hbarPolicy="NEVER" prefHeight="576.0" prefWidth="720.0" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
                      <content>
-                        <VBox prefHeight="576.0" prefWidth="720.0" spacing="20.0">
+                        <VBox id="chat-vbox-chat" fx:id="chatVboxChat" prefHeight="576.0" prefWidth="720.0" spacing="20.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
+                              <HBox prefWidth="710.0" spacing="5.0">
                                  <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/13.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="550.0">
+                                    <VBox>
                                        <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Ezekiel">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="What's Your Name?" wrapText="true">
+                                          <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                             <children>
+                                                <Label id="chat-label-name" minHeight="40.0" text="Ezekiel">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="24.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label text="20:10 31/02/2077">
+                                                   <font>
+                                                      <Font name="Courier New" size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </HBox>
+                                          <Label id="chat-label-message" minHeight="-Infinity" text="fdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfs" wrapText="true">
                                              <font>
                                                 <Font name="Courier New" size="20.0" />
                                              </font>
@@ -80,185 +89,61 @@
                                           <MenuItem mnemonicParsing="false" text="Block" />
                                           <MenuItem mnemonicParsing="false" text="Report" />
                                        </items>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
                                     </MenuButton>
                                  </children>
+                                 <padding>
+                                    <Insets left="10.0" right="10.0" />
+                                 </padding>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
+                              <HBox alignment="TOP_RIGHT" prefWidth="710.0" spacing="5.0">
                                  <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/15.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="550.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Tony">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="What?" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
                                     <MenuButton mnemonicParsing="false">
                                        <items>
                                           <MenuItem mnemonicParsing="false" text="Block" />
                                           <MenuItem mnemonicParsing="false" text="Report" />
                                        </items>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
                                     </MenuButton>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/37.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="550.0">
+                                    <VBox alignment="TOP_RIGHT">
                                        <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Grandpa">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit" wrapText="true">
+                                          <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                                             <children>
+                                                <Label text="20:10 31/02/2077">
+                                                   <font>
+                                                      <Font name="Courier New" size="16.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <Label id="chat-label-name" minHeight="40.0" text="Ezekiel">
+                                                   <font>
+                                                      <Font name="Courier New Bold" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <Label id="chat-label-message" minHeight="-Infinity" text="fdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfsfdsfdsfdsfdsfdsfdsfsfsfsfs" wrapText="true">
                                              <font>
                                                 <Font name="Courier New" size="20.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Block" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
                                  </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/13.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="550.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Ezekiel">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="What is your name?" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Block" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/61.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="550.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Mom">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="Who's want biscuits?" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Block" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Remove" />
-                                          <MenuItem mnemonicParsing="false" text="Delete" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                    <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="550.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="You">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="Yumyum" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/user-icon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/98.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="550.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Step-sister">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" minHeight="50.0" style="-fx-background-radius: 16; -fx-background-color: white;" text="Hey brother i'm stu..." wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Block" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" right="10.0" />
+                                 </padding>
                               </HBox>
                            </children>
+                           <padding>
+                              <Insets left="5.0" right="5.0" top="10.0" />
+                           </padding>
                         </VBox>
                      </content>
                   </ScrollPane>
@@ -266,27 +151,25 @@
                <top>
                   <FlowPane prefHeight="72.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label minHeight="72.0" minWidth="10.0" />
-                        <ImageView id="chat-image-chat" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/group-icon.png" />
-                           </image>
-                        </ImageView>
-                        <Label minHeight="72.0" minWidth="10.0" />
-                        <Label id="chat-label-chat" minHeight="72.0" minWidth="576.0" text="Bet group">
+                        <Label id="chat-label-chatname" fx:id="chatLabelChatname" minHeight="72.0" minWidth="658.0" text="Bet group">
                            <font>
                               <Font name="Courier New Bold" size="32.0" />
                            </font>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
                         </Label>
-                        <MenuButton id="chat-menu-chat" mnemonicParsing="false">
+                        <MenuButton id="chat-menu-chat" fx:id="chatMenuChat" mnemonicParsing="false">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Member" />
-                              <MenuItem mnemonicParsing="false" text="Search" />
-                              <MenuItem mnemonicParsing="false" text="Leave" />
-                              <MenuItem mnemonicParsing="false" text="Delete chat" />
+                              <MenuItem id="chat-menuitem-member" fx:id="chatMenuitemMember" mnemonicParsing="false" text="Member" />
+                              <MenuItem id="chat-menuitem-search" fx:id="chatMenuitemSearch" mnemonicParsing="false" text="Search" />
+                              <MenuItem id="chat-menuitem-leave" fx:id="chatMenuitemLeave" mnemonicParsing="false" text="Leave" />
                            </items>
                         </MenuButton>
                      </children>
+                     <BorderPane.margin>
+                        <Insets left="10.0" />
+                     </BorderPane.margin>
                   </FlowPane>
                </top>
             </BorderPane>
@@ -296,11 +179,11 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <MenuButton fx:id="accountMenu" mnemonicParsing="false">
+                        <MenuButton id="chat-menu-account" fx:id="chatMenuAccount" mnemonicParsing="false">
                            <items>
-                              <MenuItem mnemonicParsing="false" text="Account" />
-                              <MenuItem mnemonicParsing="false" text="Friends" />
-                              <MenuItem mnemonicParsing="false" text="Log out" />
+                              <MenuItem id="chat-menuitem-account" fx:id="chatMenuitemAccount" mnemonicParsing="false" text="Account" />
+                              <MenuItem id="chat-menuitem-friends" fx:id="chatMenuitemFriends" mnemonicParsing="false" text="Friends" />
+                              <MenuItem id="chat-menuitem-logout" fx:id="chatMenuitemLogout" mnemonicParsing="false" text="Log out" />
                            </items>
                            <graphic>
                               <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
@@ -317,107 +200,38 @@
                         </TextField>
                      </children>
                   </HBox>
-                  <VBox alignment="TOP_RIGHT" prefHeight="170.0" prefWidth="100.0">
+                  <HBox alignment="CENTER" prefHeight="54.0" prefWidth="200.0" spacing="170.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="200.0" spacing="170.0">
-                           <children>
-                              <Label minHeight="46.0" prefWidth="120.0" text="Online">
-                                 <font>
-                                    <Font name="Courier New Bold" size="30.0" />
-                                 </font>
-                              </Label>
-                              <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/group-create-icon.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <ScrollPane prefHeight="124.0" prefWidth="200.0">
-                           <content>
-                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                       <children>
-                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../images/13.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label id="chat-label-name" alignment="CENTER" text="Ezekiel" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New Bold" size="16.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                       <children>
-                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../images/98.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label id="chat-label-name" alignment="CENTER" text="Step-sister" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New Bold" size="16.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                       <children>
-                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../images/15.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label id="chat-label-name" alignment="CENTER" text="Tony" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New Bold" size="16.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                       <children>
-                                          <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../../images/61.png" />
-                                             </image>
-                                          </ImageView>
-                                          <Label id="chat-label-name" alignment="CENTER" text="Mom" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New Bold" size="16.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </content>
-                        </ScrollPane>
+                        <MenuButton id="chat-menu-online" fx:id="chatMenuOnline" mnemonicParsing="false" text="Online">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                           <font>
+                              <Font name="Courier New Bold" size="18.0" />
+                           </font>
+                        </MenuButton>
+                        <ImageView id="chat-image-creategroup" fx:id="chatImageCreategroup" fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/group-create-icon.png" />
+                           </image>
+                        </ImageView>
                      </children>
-                  </VBox>
-                  <ScrollPane hbarPolicy="NEVER" prefHeight="470.0" prefWidth="200.0" vbarPolicy="NEVER">
+                  </HBox>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="594.0" prefWidth="200.0" vbarPolicy="NEVER">
                      <content>
-                        <VBox prefHeight="470.0" prefWidth="360.0" spacing="20.0">
+                        <VBox id="chat-vbox-chatbox" fx:id="chatVboxChatbox" prefHeight="594.0" prefWidth="360.0" spacing="15.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
+                              <HBox alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/group-icon.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="225.0">
+                                    <VBox minWidth="302.0" prefWidth="225.0">
                                        <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Bet group">
+                                          <Label id="chat-label-name" maxHeight="40.0" minHeight="40.0" text="Bet group">
                                              <font>
                                                 <Font name="Courier New Bold" size="24.0" />
                                              </font>
                                           </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" text="Hey bro..." wrapText="true">
+                                          <Label id="chat-label-message" maxHeight="24.0" minHeight="24.0" text="Hey bro...a sdasdasasdasdasdasdasdsaddasda" wrapText="true">
                                              <font>
                                                 <Font name="Courier New" size="20.0" />
                                              </font>
@@ -431,15 +245,13 @@
                                        </items>
                                     </MenuButton>
                                  </children>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
+                              <HBox alignment="CENTER" prefWidth="720.0" spacing="10.0">
                                  <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/37.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="225.0">
+                                    <VBox minWidth="302.0" prefWidth="225.0">
                                        <children>
                                           <Label id="chat-label-name" minHeight="40.0" text="Grandpa">
                                              <font>
@@ -460,15 +272,13 @@
                                        </items>
                                     </MenuButton>
                                  </children>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
+                              <HBox alignment="CENTER" prefWidth="720.0" spacing="10.0">
                                  <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/98.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="225.0">
+                                    <VBox minWidth="302.0" prefWidth="225.0">
                                        <children>
                                           <Label id="chat-label-name" minHeight="40.0" text="Step-sister">
                                              <font>
@@ -489,93 +299,9 @@
                                        </items>
                                     </MenuButton>
                                  </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/15.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="225.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Tony">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" text="Fuc..." wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Delete" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/13.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="225.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Ezekiel">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" text="I love yo..." wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Delete" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" prefHeight="108.0" prefWidth="720.0" spacing="10.0">
-                                 <children>
-                                    <ImageView id="chat-image-avatar" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../images/61.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox prefHeight="200.0" prefWidth="225.0">
-                                       <children>
-                                          <Label id="chat-label-name" minHeight="40.0" text="Mom">
-                                             <font>
-                                                <Font name="Courier New Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                          <Label id="chat-label-message" maxWidth="480.0" text="Bet" wrapText="true">
-                                             <font>
-                                                <Font name="Courier New" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
-                                    <MenuButton mnemonicParsing="false">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Delete" />
-                                          <MenuItem mnemonicParsing="false" text="Report" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </VBox>

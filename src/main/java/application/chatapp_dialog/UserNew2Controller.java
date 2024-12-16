@@ -2,7 +2,6 @@ package application.chatapp_dialog;
 
 import application.chatapp_dialog.dal.UtilityDAL;
 import application.chatapp_dialog.security.EncryptPassword;
-import application.chatapp_dialog.security.UserRegistrationValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UserNew2Controller implements Initializable {
@@ -38,7 +34,7 @@ public class UserNew2Controller implements Initializable {
     private DatePicker signupDateDob;
     @FXML
     private ChoiceBox<String> signupChoiceSex;
-    private String[] sexList = {"Female", "Male"};
+    private final String[] sexList = {"Female", "Male"};
     @FXML
     private TextField signupTextAddress;
     @FXML
@@ -76,7 +72,7 @@ public class UserNew2Controller implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
                 alert.setHeaderText("Account create successfully!");
-                Optional<ButtonType> clickButton = alert.showAndWait();
+                alert.showAndWait();
                 return row;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -101,7 +97,7 @@ public class UserNew2Controller implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Invalid information");
-            Optional<ButtonType> clickButton = alert.showAndWait();
+            alert.showAndWait();
             return;
         }
 
@@ -121,7 +117,7 @@ public class UserNew2Controller implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Cannot create new account!");
-            Optional<ButtonType> clickButton = alert.showAndWait();
+            alert.showAndWait();
         }
     }
     @FXML
