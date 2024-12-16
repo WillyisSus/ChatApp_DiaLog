@@ -110,15 +110,16 @@ public class UserChatController implements Initializable {
                 } else {
                     chatLabelChatname.setText(rs.getString("box_name"));
                 }
-                query = "select account_id, content, displayname, create_date from messages join user_account_info on user_id = account_id where box_id = ? order by create_date, id";
+                query = "select id, account_id, displayname, content, create_date from messages join user_account_info on user_id = account_id where box_id = ? and visible_to_owner = true order by create_date, id";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, boxid);
                 rs = ps.executeQuery();
                 while(rs.next()){
                     int newchatid = rs.getInt(1);
+                    int newchatuserid = rs.getInt(2);
                     String newchatname = rs.getString(3);
-                    String newchatmess = rs.getString(2);
-                    String newchattime = LocalDateTime.parse(rs.getString(4), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")).format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+                    String newchatmess = rs.getString(4);
+                    String newchattime = LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")).format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
                     HBox newchatsection = new HBox();
                     newchatsection.setPadding(new Insets(0, 10, 0, 10));
                     newchatsection.setSpacing(10);
@@ -135,9 +136,11 @@ public class UserChatController implements Initializable {
                     Label newchatcontent = new Label(newchatmess);
                     newchatcontent.setFont(new Font("Courier New", 20));
                     newchatcontent.setMinHeight(Region.USE_PREF_SIZE);
-                    if (newchatid == id){
+                    if (newchatuserid == id){
                         MenuButton newchatbutton = new MenuButton();
                         MenuItem newchatitem = new MenuItem("Delete");
+                        newchatitem.setId(String.valueOf(newchatid));
+                        newchatitem.setOnAction(this::deleteMessage);
                         newchatbutton.getItems().add(newchatitem);
                         newchattitlebox.setAlignment(Pos.CENTER_RIGHT);
                         newchattextbox.setAlignment(Pos.TOP_RIGHT);
@@ -153,6 +156,20 @@ public class UserChatController implements Initializable {
                         chatVboxChat.getChildren().add(newchatsection);
                     }
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public void deleteMessage(ActionEvent event){
+        Connection conn = UtilityDAL.getConnection();
+        if (conn != null) {
+            try {
+                String query = "update messages set visible_to_owner = false where id = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, Integer.parseInt(((MenuItem)event.getSource()).getId()));
+                ps.executeUpdate();
+                vboxChatLoaded();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -308,9 +325,11 @@ public class UserChatController implements Initializable {
         chatMenuitemLogout.setOnAction(this::menuitemLogoutClicked);
         chatMenuOnline.setOnShowing(this::menuOnlineClicked);
         chatImageCreategroup.setOnMouseClicked(this::imageCreategroupClicked);
+        vboxChatLoaded();
+        vboxChatboxLoaded();
     }
 
-    void setdata(int gid){
+    public void setdata(int gid){
         id = gid;
         vboxChatLoaded();
         vboxChatboxLoaded();
