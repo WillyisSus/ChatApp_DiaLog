@@ -110,7 +110,7 @@ public class UserChatController implements Initializable {
                 } else {
                     chatLabelChatname.setText(rs.getString("box_name"));
                 }
-                query = "select id, account_id, displayname, content, create_date from messages join user_account_info on user_id = account_id where box_id = ? and visible_to_owner = true order by create_date, id";
+                query = "select id, account_id, displayname, content, create_date from messages join user_account_info on user_id = account_id where box_id = ? order by create_date, id";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, boxid);
                 rs = ps.executeQuery();
@@ -165,11 +165,12 @@ public class UserChatController implements Initializable {
         Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
-                String query = "update messages set visible_to_owner = false where id = ?";
+                String query = "delete from messages where id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, Integer.parseInt(((MenuItem)event.getSource()).getId()));
                 ps.executeUpdate();
                 vboxChatLoaded();
+                vboxChatboxLoaded();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -289,6 +290,7 @@ public class UserChatController implements Initializable {
                     String boxname = rs.getString(2);
                     String boxmess = rs.getString(3);
                     HBox newhboxbox = new HBox();
+                    newhboxbox.setId(String.valueOf(boxid));
                     newhboxbox.setAlignment(Pos.CENTER);
                     newhboxbox.setPadding(new Insets(0, 5, 0, 5));
                     newhboxbox.setSpacing(10);
@@ -305,12 +307,17 @@ public class UserChatController implements Initializable {
                     newboxmess.setMaxHeight(24);
                     newvboxdata.getChildren().addAll(newboxname, newboxmess);
                     newhboxbox.getChildren().add(newvboxdata);
+                    newhboxbox.setOnMouseClicked(this::hboxBoxClicked);
                     chatVboxChatbox.getChildren().add(newhboxbox);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+    public void hboxBoxClicked(MouseEvent event){
+        boxid = Integer.parseInt(((HBox)event.getSource()).getId());
+        vboxChatLoaded();
     }
 
     @Override
