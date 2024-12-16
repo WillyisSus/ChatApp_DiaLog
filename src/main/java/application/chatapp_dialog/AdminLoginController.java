@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 import application.chatapp_dialog.security.EncryptPassword;
 import application.chatapp_dialog.dal.AdminAccountDAL;
 
-import javax.swing.*;
 
 public class AdminLoginController  implements Initializable {
     @FXML

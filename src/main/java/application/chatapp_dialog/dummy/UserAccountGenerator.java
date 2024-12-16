@@ -7,7 +7,8 @@ import java.util.Random;
 import java.sql.Timestamp;
 public class UserAccountGenerator {
     private static String charSet =  "QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
-    private static String passwordSet =  "QWERTYUIOPASDFGHJKLZXCVBNM!@#$%^&*1234567890qwertyuiopasdfghjklzxcvbnm";
+    private static String passwordSet =  "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm";
+    private static String specialChar = "!@#$";
     private static boolean[] sex = {false, true};
     public static String randomUsername(){
         StringBuilder sb = new StringBuilder();
@@ -27,6 +28,9 @@ public class UserAccountGenerator {
             int index = rd.nextInt(cslength);
             sb.append(passwordSet.charAt(index));
         }
+        int index = rd.nextInt(specialChar.length());
+        sb.append(specialChar.charAt(index));
+        sb.append(Integer.toString(rd.nextInt(10)));
         return sb.toString();
     }
     public static String randomEmail(){

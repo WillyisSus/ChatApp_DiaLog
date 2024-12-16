@@ -2,10 +2,8 @@ package application.chatapp_dialog;
 
 
 import application.chatapp_dialog.admin.modalcontroller.*;
-import application.chatapp_dialog.dal.AdminActivityLogDAL;
-import application.chatapp_dialog.dal.AdminUserAccountDAL;
-import application.chatapp_dialog.dal.AdminUserFriendCountDAL;
-import application.chatapp_dialog.dal.UtilityDAL;
+import application.chatapp_dialog.dal.*;
+import application.chatapp_dialog.dummy.UserAccountGenerator;
 import com.almasb.fxgl.scene3d.DoorComponent;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -40,7 +38,6 @@ import application.chatapp_dialog.dto.*;
 import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.w3c.dom.html.HTMLTableElement;
 
-import javax.swing.*;
 
 public class AdminUserListController implements Initializable {
 //    Table related
@@ -79,7 +76,8 @@ public class AdminUserListController implements Initializable {
     private Button showFriendButton;
     @FXML
     private Button signInButton;
-
+    @FXML
+    private Button resetUserPasswordButton;
     @FXML
     private Button reloadData;
 //    Filter and ordering
@@ -424,6 +422,28 @@ public class AdminUserListController implements Initializable {
             e.printStackTrace();
         }
     }
+    public void handleResetUserPassword(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        AdminUserAccount selected = tableview.getSelectionModel().getSelectedItem();
+        alert.setTitle("Action confirmation!!!");
+        alert.setHeaderText("Are you sure to reset password of this account");
+        Optional<ButtonType> clicked = alert.showAndWait();
+        if (clicked.isPresent()){
+            if (clicked.get() == ButtonType.OK){
+                String newPass = UserAccountGenerator.randomPassword();
+                try {
+                    AdminUserAccountDAL.updatePassword(Integer.parseInt(selected.getId()), newPass);
+                    EmailDAL.sendNewPassword(selected.getEmail(), newPass);
+                    tableview.refresh();
+                } catch (SQLException e) {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Error");
+                    error.setHeaderText("Can not reset password of this user");
+                    error.showAndWait();
+                }
+            }
+        }
+    }
     public void handleChangePassword() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("admin-user-listing-updatepassword-dialog.fxml"));
@@ -432,7 +452,7 @@ public class AdminUserListController implements Initializable {
             AdminChangeUserPasswordController ctrl = fxmlLoader.getController();
             int index = tableview.getSelectionModel().getSelectedIndex();
             AdminUserAccount selected = tableview.getItems().get(index);
-            ctrl.setUserID(Integer.parseInt(selected.getId()));
+            ctrl.setUserID(selected);
             dialog.setDialogPane(dialogPane);
             Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
             okButton.addEventFilter(
@@ -634,6 +654,7 @@ public class AdminUserListController implements Initializable {
         lockButton.setDisable(true);
         showFriendButton.setDisable(true);
         signInButton.setDisable(true);
+        resetUserPasswordButton.setDisable(true);
 
         System.out.println(userlist.stream().toList().toString());
 //        Asscociate table collumns;
@@ -658,6 +679,7 @@ public class AdminUserListController implements Initializable {
                 lockButton.setDisable(false);
                 showFriendButton.setDisable(false);
                 signInButton.setDisable(false);
+                resetUserPasswordButton.setDisable(false);
             } else {
                 updateButton.setDisable(true);
                 changePasswordButton.setDisable(true);
@@ -665,6 +687,7 @@ public class AdminUserListController implements Initializable {
                 lockButton.setDisable(true);
                 showFriendButton.setDisable(true);
                 signInButton.setDisable(true);
+                resetUserPasswordButton.setDisable(true);
             }
         });
 //       Tab latest login

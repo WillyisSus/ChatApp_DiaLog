@@ -17,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
-import javax.print.DocFlavor;
 import java.net.URL;
 import java.security.AllPermission;
 import java.sql.SQLException;

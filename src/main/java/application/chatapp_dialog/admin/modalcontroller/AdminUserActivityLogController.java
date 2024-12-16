@@ -19,7 +19,6 @@ import org.intellij.lang.annotations.JdkConstants;
 
 import javafx.event.ActionEvent;
 
-import java.beans.SimpleBeanInfo;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;

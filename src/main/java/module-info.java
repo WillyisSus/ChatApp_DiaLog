@@ -10,12 +10,12 @@ module application.chatapp_dialog {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires java.desktop;
     requires annotations;
     requires java.sql;
     requires jdk.jdi;
     requires com.fasterxml.jackson.annotation;
     requires jdk.xml.dom;
+    requires jakarta.mail;
     opens application.chatapp_dialog.dto to javafx.base;
     opens application.chatapp_dialog.dal to javafx.base;
     opens application.chatapp_dialog to javafx.fxml;
