@@ -259,7 +259,21 @@ public class UserChatController implements Initializable {
         }
     }
     public void menuitemSearchClicked(ActionEvent event){}
-    public void menuitemReportClicked(ActionEvent event){}
+    public void menuitemReportClicked(ActionEvent event){
+        Connection conn = UtilityDAL.getConnection();
+        if (conn != null) {
+            try {
+                String query = "insert into reports (reporter_id, reported_id) values (?, (select user_id from box_chat_members where box_id = ? and user_id != ?))";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.setInt(2, boxid);
+                ps.setInt(3, id);
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     public void menuitemBlockClicked(ActionEvent event){
         Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
