@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -15,8 +14,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UserLoginController implements Initializable {
@@ -51,20 +48,21 @@ public class UserLoginController implements Initializable {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Notification");
                     alert.setHeaderText("Wrong username or password");
-                    Optional<ButtonType> clickButton = alert.showAndWait();
+                    alert.showAndWait();
                     return 0;
                 }
+                String op = rs.getString("password");
                 String salt = rs.getString("salt");
                 int id = rs.getInt("id");
                 String hashedPass = EncryptPassword.hashPassword(password, salt);
-                if (hashedPass.equals(password)){
+                if (hashedPass.equals(op)){
                     System.out.println("logged in " + id);
                     return id;
                 } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Notification");
                     alert.setHeaderText("Wrong username or password");
-                    Optional<ButtonType> clickButton = alert.showAndWait();
+                    alert.showAndWait();
                     return 0;
                 }
             } catch (SQLException e) {
@@ -83,7 +81,7 @@ public class UserLoginController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Wrong username or password");
-            Optional<ButtonType> clickButton = alert.showAndWait();
+            alert.showAndWait();
             return;
         }
         int id = loginedUser(username, password);
@@ -91,6 +89,8 @@ public class UserLoginController implements Initializable {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
+                UserChatController controller = fxmlLoader.getController();
+                controller.setdata(id);
                 stage = (Stage) display.getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();

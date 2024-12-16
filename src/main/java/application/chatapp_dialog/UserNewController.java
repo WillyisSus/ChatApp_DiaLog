@@ -1,13 +1,11 @@
 package application.chatapp_dialog;
 
 import application.chatapp_dialog.dal.UtilityDAL;
-import application.chatapp_dialog.security.EncryptPassword;
 import application.chatapp_dialog.security.UserRegistrationValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -16,9 +14,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UserNewController implements Initializable {
@@ -53,7 +48,7 @@ public class UserNewController implements Initializable {
                 alert.setTitle("Notification");
                 alert.setHeaderText("Invalid username");
                 alert.setContentText("- 6-32 characters\n- Only alphanumerics\n- Cannot start with 'admin'");
-                Optional<ButtonType> clickButton = alert.showAndWait();
+                alert.showAndWait();
                 return;
             }
             if (!UserRegistrationValidator.validateEmail(email)){
@@ -61,7 +56,7 @@ public class UserNewController implements Initializable {
                 alert.setTitle("Notification");
                 alert.setHeaderText("Invalid email");
                 alert.setContentText("- 6-32 characters\n- Only alphanumerics\n- Cannot start with 'admin'");
-                Optional<ButtonType> clickButton = alert.showAndWait();
+                alert.showAndWait();
                 return;
             }
             if (!UserRegistrationValidator.validatePassword(password)){
@@ -69,7 +64,7 @@ public class UserNewController implements Initializable {
                 alert.setTitle("Notification");
                 alert.setHeaderText("Invalid password");
                 alert.setContentText("- 8-32 characters\n- At least one character\n- At least one number\n- At least one of !@#$%.");
-                Optional<ButtonType> clickButton = alert.showAndWait();
+                alert.showAndWait();
                 return;
             }
             Connection conn = UtilityDAL.getConnection();
@@ -84,7 +79,7 @@ public class UserNewController implements Initializable {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Notification");
                         alert.setHeaderText("Username are already exists");
-                        Optional<ButtonType> clickButton = alert.showAndWait();
+                        alert.showAndWait();
                         return;
                     }
                     query = "select count(id) from user_accounts where email = ?";
@@ -96,7 +91,7 @@ public class UserNewController implements Initializable {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Notification");
                         alert.setHeaderText("Email are already exists");
-                        Optional<ButtonType> clickButton = alert.showAndWait();
+                        alert.showAndWait();
                         return;
                     }
                 } catch (SQLException e) {
