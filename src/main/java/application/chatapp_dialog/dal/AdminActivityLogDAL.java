@@ -18,6 +18,12 @@ public class AdminActivityLogDAL {
         log.setUsername(rs.getString("Username"));
         return log;
     }
+    public static AdminUserActivityLog createActiveUser(ResultSet rs) throws SQLException {
+        AdminUserActivityLog log = new AdminUserActivityLog();
+        log.setId(rs.getInt("user_id"));
+        log.setSessionStart(rs.getTimestamp("session_start"));
+        return log;
+    }
     public static List<AdminUserActivityLog> getAllUserActivityLog(Integer userID) throws SQLException {
         System.out.println("From DAL: " + userID);
         Connection conn = UtilityDAL.getConnection();
@@ -41,6 +47,21 @@ public class AdminActivityLogDAL {
         return activityLogs;
     }
 
+    public static List<AdminUserActivityLog> getActiveUserInYear(int year) throws SQLException {
+        Connection conn = UtilityDAL.getConnection();
+        String query = "select distinct on (user_id, EXTRACT(month from session_start)) user_id, session_start from user_activity_logs where EXTRACT(year from user_activity_logs.session_start) = ?";
+        PreparedStatement ps = null;
+        List<AdminUserActivityLog> activityLogs = new ArrayList<>();
+        if (conn != null){
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                activityLogs.add(createActiveUser(rs));
+            }
+        }else throw new SQLException("Cannot connect to database");
+        return activityLogs;
+    }
     public static Comparator<AdminUserActivityLog> getAscendingComparator(){
         return new Comparator<AdminUserActivityLog>() {
             @Override

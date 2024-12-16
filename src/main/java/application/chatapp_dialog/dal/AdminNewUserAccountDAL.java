@@ -14,6 +14,7 @@ import java.util.List;
 
 public class AdminNewUserAccountDAL {
     public static final String query = "select username, email, create_date from user_accounts";
+    private static final String queryInYear = "select username, email, create_date from user_accounts where EXTRACT(year from user_accounts.create_date) = ?";
     public static AdminNewUserAccount createObject(ResultSet rs) throws SQLException {
         AdminNewUserAccount obj = new AdminNewUserAccount();
         obj.setUsername(rs.getString("username"));
@@ -34,7 +35,37 @@ public class AdminNewUserAccountDAL {
         } else throw new SQLException("Database refuse connection.");
         return list;
     }
+    public static List<AdminNewUserAccount> getNewAccountInYear(int year) throws SQLException {
+        List<AdminNewUserAccount> list = new ArrayList<>();
+        Connection conn = UtilityDAL.getConnection();
+        if (conn != null){
+            try(PreparedStatement ps = conn.prepareStatement(queryInYear)){
+                ps.setInt(1, year);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    list.add(createObject(rs));
+                }
+            }
+        } else throw new SQLException("Database refuse connection.");
+        return list;
+    }
 
+    public static List<Integer> getDifferentYearWithNewAccount() throws SQLException {
+        List<Integer> list = new ArrayList<>();
+        Connection conn = UtilityDAL.getConnection();
+        if (conn != null){
+            try(PreparedStatement ps = conn.prepareStatement("select distinct EXTRACT(year from user_accounts.create_date) as years from user_accounts")){
+
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    list.add(rs.getInt("years"));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else throw new SQLException("Database refuse connection.");
+        return list;
+    }
     public static Comparator<AdminNewUserAccount> getDateAscendingComparator(){
         return new Comparator<AdminNewUserAccount>() {
             @Override

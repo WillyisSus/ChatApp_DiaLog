@@ -6,9 +6,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -18,92 +16,6 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.AdminGraphController">
     <children>
         <BorderPane layoutX="204.0" layoutY="119.0" prefHeight="720.0" prefWidth="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <center>
-                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-                    <tabs>
-                        <Tab text="New Accounts">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                    <children>
-                                        <BorderPane layoutX="6.0" prefHeight="644.0" prefWidth="1094.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
-                                 <left>
-                                    <VBox prefHeight="644.0" prefWidth="138.0" spacing="8.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <Label text="Pick a year">
-                                             <font>
-                                                <Font name="System Bold" size="21.0" />
-                                             </font>
-                                          </Label>
-                                          <HBox prefHeight="465.0" prefWidth="284.0" spacing="16.0">
-                                             <children>
-                                                <VBox layoutX="110.0" layoutY="10.0" prefHeight="100.0" prefWidth="298.0">
-                                                   <children>
-                                                      <ListView prefHeight="465.0" prefWidth="232.0" />
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </left>
-                                 <center>
-                                    <LineChart prefHeight="644.0" prefWidth="899.0" title="Newly Registered" BorderPane.alignment="CENTER">
-                                      <xAxis>
-                                        <CategoryAxis label="Month in year" side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                        <NumberAxis label="Numbers of account" side="LEFT" />
-                                      </yAxis>
-                                    </LineChart>
-                                 </center>
-                                        </BorderPane>
-                                    </children>
-                                </AnchorPane>
-                            </content>
-                        </Tab>
-                  <Tab text="Active users">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <BorderPane layoutX="6.0" prefHeight="644.0" prefWidth="1094.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
-                                 <left>
-                                    <VBox prefHeight="644.0" prefWidth="138.0" spacing="8.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <Label text="Pick a year">
-                                             <font>
-                                                <Font name="System Bold" size="21.0" />
-                                             </font>
-                                          </Label>
-                                          <HBox prefHeight="465.0" prefWidth="284.0" spacing="16.0">
-                                             <children>
-                                                <VBox layoutX="110.0" layoutY="10.0" prefHeight="100.0" prefWidth="298.0">
-                                                   <children>
-                                                      <ListView prefHeight="465.0" prefWidth="232.0" />
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </left>
-                                 <center>
-                                    <LineChart prefHeight="644.0" prefWidth="899.0" title="Active Users" BorderPane.alignment="CENTER">
-                                       <xAxis>
-                                          <CategoryAxis label="Month in year" side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis label="Numbers of account" side="LEFT" />
-                                       </yAxis>
-                                    </LineChart>
-                                 </center>
-                              </BorderPane>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                    </tabs>
-                </TabPane>
-            </center>
             <top>
                 <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <buttons>
@@ -117,6 +29,42 @@
                     </buttons>
                 </ButtonBar>
             </top>
+         <center>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox layoutX="41.0" layoutY="35.0" prefHeight="200.0" prefWidth="271.0">
+                     <children>
+                        <Label prefHeight="35.0" prefWidth="196.0" text="Select a year">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <MenuButton fx:id="yearButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="159.0" text="This year" />
+                     </children>
+                  </VBox>
+                  <HBox layoutY="157.0" prefHeight="525.0" prefWidth="1080.0">
+                     <children>
+                        <LineChart fx:id="newUsersChart" prefHeight="344.0" prefWidth="540.0" title="New Users">
+                           <xAxis>
+                              <CategoryAxis fx:id="newUsersX" label="Months in year" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis fx:id="newUsersY" label="Number of users" side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="activeUsersChart" prefHeight="344.0" prefWidth="540.0" title="Active Users">
+                           <xAxis>
+                              <CategoryAxis fx:id="activeUsersX" label="Month in year" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis fx:id="activeUsersY" label="Number of user" side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </center>
         </BorderPane>
     </children>
 </AnchorPane>
