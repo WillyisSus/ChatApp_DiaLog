@@ -34,6 +34,7 @@ public class EmailDAL {
                 }
             } catch (SQLException | MessagingException e) {
                 System.out.println(e.getMessage());
+                return false;
             }
         }
         return true;
@@ -58,6 +59,7 @@ public class EmailDAL {
                 }
             } catch (SQLException | MessagingException e) {
                 System.out.println(e.getMessage());
+                return false;
             }
         }
         return true;
