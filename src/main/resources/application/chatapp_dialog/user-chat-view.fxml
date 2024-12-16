@@ -159,13 +159,7 @@
                               <Insets left="10.0" right="10.0" />
                            </padding>
                         </Label>
-                        <MenuButton id="chat-menu-chat" fx:id="chatMenuChat" mnemonicParsing="false">
-                           <items>
-                              <MenuItem id="chat-menuitem-member" fx:id="chatMenuitemMember" mnemonicParsing="false" text="Member" />
-                              <MenuItem id="chat-menuitem-search" fx:id="chatMenuitemSearch" mnemonicParsing="false" text="Search" />
-                              <MenuItem id="chat-menuitem-leave" fx:id="chatMenuitemLeave" mnemonicParsing="false" text="Leave" />
-                           </items>
-                        </MenuButton>
+                        <MenuButton id="chat-menu-chat" fx:id="chatMenuChat" mnemonicParsing="false" />
                      </children>
                      <BorderPane.margin>
                         <Insets left="10.0" />
