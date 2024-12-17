@@ -51,10 +51,11 @@
                                                     <children>
                                                         <HBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="1080.0">
                                                             <children>
-                                                                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdateUser" prefHeight="31.0" prefWidth="161.0" text="Update" />
+                                                                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdateUser" prefHeight="31.0" prefWidth="109.0" text="Update" />
                                                                 <Button fx:id="changePasswordButton" layoutX="815.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleChangePassword" prefHeight="31.0" prefWidth="161.0" text="Change Password" />
-                                                                <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleRemoveUser" prefHeight="31.0" prefWidth="161.0" text="Remove" />
-                                                                <Button fx:id="lockButton" mnemonicParsing="false" onAction="#handleLockUser" prefHeight="31.0" prefWidth="161.0" text="Lock/Unlock" />
+                                                <Button fx:id="resetUserPasswordButton" layoutX="164.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleResetUserPassword" prefHeight="31.0" prefWidth="161.0" text="Reset Password" />
+                                                                <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handleRemoveUser" prefHeight="31.0" prefWidth="126.0" text="Remove" />
+                                                                <Button fx:id="lockButton" mnemonicParsing="false" onAction="#handleLockUser" prefHeight="31.0" prefWidth="131.0" text="Lock/Unlock" />
                                                                 <Button fx:id="addNewButton" mnemonicParsing="false" onAction="#handleAddNewUser" prefHeight="31.0" prefWidth="161.0" text="Add new user" />
                                                                 <Button fx:id="showFriendButton" layoutX="654.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleShowFriendList" prefHeight="31.0" prefWidth="161.0" text="Show friends" />
                                                                 <Button fx:id="signInButton" layoutX="654.0" layoutY="11.0" mnemonicParsing="false" onAction="#handleShowLogin" prefHeight="31.0" prefWidth="161.0" text="Show sign-ins" />
