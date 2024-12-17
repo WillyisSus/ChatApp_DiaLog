@@ -262,6 +262,7 @@ public class UserCreateGroupController implements Initializable  {
             alert.setHeaderText("Group must have at least 3 users.");
             alert.showAndWait();
             return;
+            //a
         }
         String groupname = createTextGroupname.getText();
         String message = createTextSend.getText();
