@@ -43,7 +43,7 @@ public class UserChatController implements Initializable {
     private GridPane display;
 
     int id = 1;
-    int boxid = 1;
+    int boxid = 0;
     @FXML
     private TextField chatTextSend;
     @FXML
@@ -104,7 +104,9 @@ public class UserChatController implements Initializable {
                 ps.setInt(1, boxid);
                 ps.setInt(2, id);
                 ResultSet rs = ps.executeQuery();
-                rs.next();
+                if (!rs.next()){
+                    return;
+                }
                 if (rs.getBoolean("is_direct")){
                     chatLabelChatname.setText(rs.getString("displayname"));
                 } else {
@@ -200,6 +202,9 @@ public class UserChatController implements Initializable {
         }
     }
     public void menuChatClicked(Event event){
+        if (boxid == 0){
+            return;
+        }
         Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
@@ -290,7 +295,17 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void menuitemMembersClicked(ActionEvent event){}
+    public void menuitemMembersClicked(ActionEvent event){
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-group-member-view.fxml"));
+            scene = new Scene(fxmlLoader.load(), 1080, 720);
+            stage = (Stage)display.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void menuitemLeaveClicked(ActionEvent event){
         Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
@@ -340,11 +355,53 @@ public class UserChatController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    public void menuOnlineClicked(Event event){}
+    public void menuOnlineClicked(Event event){
+        chatMenuOnline.getItems().clear();
+        Connection conn = UtilityDAL.getConnection();
+        if (conn != null) {
+            try {
+                String query = "select id, username, displayname from user_account_info join user_accounts on account_id = id join friendships on (id = request_id or id = accept_id) and is_accepted = true where status = 'online' and id != ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()){
+                    MenuItem newonlinefriend = new MenuItem(rs.getString(3));
+                    newonlinefriend.setId(String.valueOf(rs.getInt(1)));
+                    newonlinefriend.setOnAction(this::menuitemOnlineClicked);
+                    chatMenuOnline.getItems().add(newonlinefriend);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public void menuitemOnlineClicked(ActionEvent event){
+        Connection conn = UtilityDAL.getConnection();
+        if (conn != null) {
+            try {
+                String query = "select box_id from\n" +
+                        "(select box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ?\n" +
+                        "intersect\n" +
+                        "select box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ?)\n" +
+                        "where box_id in (select box_chats.id from box_chats where box_chats.is_direct)";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.setInt(2, Integer.parseInt(((MenuItem)event.getSource()).getId()));
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                boxid = rs.getInt(1);
+                vboxChatLoaded();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
     public void imageCreategroupClicked(MouseEvent event){
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-create-group-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
+            UserCreateGroupController controller = fxmlLoader.getController();
+            controller.setdata(id);
             stage = (Stage)display.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -394,7 +451,6 @@ public class UserChatController implements Initializable {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()){
                     int boxrid = rs.getInt(1);
-                    boxid = boxrid;
                     String boxname = rs.getString(2);
                     String boxmess = rs.getString(3);
                     HBox newhboxbox = new HBox();
@@ -430,6 +486,7 @@ public class UserChatController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        chatLabelChatname.setText("");
         chatTextSend.setText("");
         chatTextSend.setOnAction(this::textSendEntered);
         chatImageSend.setOnMouseClicked(this::imageSendClicked);
@@ -444,8 +501,13 @@ public class UserChatController implements Initializable {
         vboxChatLoaded();
     }
 
-    public void setdata(int gid){
+    public void setid(int gid){
         id = gid;
+        vboxChatboxLoaded();
+        vboxChatLoaded();
+    }
+    public void setboxid(int gboxid){
+        boxid = gboxid;
         vboxChatboxLoaded();
         vboxChatLoaded();
     }
