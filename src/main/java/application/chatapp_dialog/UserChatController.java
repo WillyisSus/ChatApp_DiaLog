@@ -20,7 +20,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import kotlin.collections.ArrayDeque;
 
 import java.io.*;
 import java.net.Socket;
@@ -50,8 +49,6 @@ public class UserChatController implements Initializable {
     private ImageView chatImageSend;
     @FXML
     private VBox chatVboxChat;
-    @FXML
-    private ImageView chatImageChat;
     @FXML
     private Label chatLabelChatname;
     @FXML
@@ -96,6 +93,13 @@ public class UserChatController implements Initializable {
     public void imageSendClicked(MouseEvent event){}
     public void vboxChatLoaded(){
         chatVboxChat.getChildren().clear();
+        if (boxid == 0){
+            chatTextSend.setVisible(false);
+            chatImageSend.setVisible(false);
+        } else {
+            chatTextSend.setVisible(true);
+            chatImageSend.setVisible(true);
+        }
         Connection conn = UtilityDAL.getConnection();
         if (conn != null){
             try{
@@ -181,10 +185,11 @@ public class UserChatController implements Initializable {
     public void labelChatnameClicked(MouseEvent event){
         TextInputDialog td = new TextInputDialog();
         td.setTitle("Notification");
-        td.setHeaderText("Enter group name");
+        td.setHeaderText("Enter group name.");
+        td.setContentText("Max 32 characters.");
         td.showAndWait();
         String newGroupname = td.getResult();
-        if (newGroupname != null && !newGroupname.isBlank()){
+        if (newGroupname != null && !newGroupname.isBlank() && newGroupname.length() <= 32){
             Connection conn = UtilityDAL.getConnection();
             if (conn != null) {
                 try {
@@ -256,6 +261,7 @@ public class UserChatController implements Initializable {
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, boxid);
                 ps.executeUpdate();
+                boxid = 0;
                 vboxChatboxLoaded();
                 vboxChatLoaded();
             } catch (SQLException e) {
@@ -274,6 +280,10 @@ public class UserChatController implements Initializable {
                 ps.setInt(2, boxid);
                 ps.setInt(3, id);
                 ps.executeUpdate();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("Reported sucessfully.");
+                alert.showAndWait();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -299,6 +309,8 @@ public class UserChatController implements Initializable {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-group-member-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
+            UserGroupMemberController controller = fxmlLoader.getController();
+            controller.setdata(id, boxid);
             stage = (Stage)display.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
@@ -315,6 +327,7 @@ public class UserChatController implements Initializable {
                 ps.setInt(1, boxid);
                 ps.setInt(2, id);
                 ps.executeUpdate();
+                boxid = 0;
                 vboxChatboxLoaded();
                 vboxChatLoaded();
             } catch (SQLException e) {
@@ -501,12 +514,8 @@ public class UserChatController implements Initializable {
         vboxChatLoaded();
     }
 
-    public void setid(int gid){
+    public void setdata(int gid, int gboxid){
         id = gid;
-        vboxChatboxLoaded();
-        vboxChatLoaded();
-    }
-    public void setboxid(int gboxid){
         boxid = gboxid;
         vboxChatboxLoaded();
         vboxChatLoaded();

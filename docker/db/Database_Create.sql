@@ -42,7 +42,7 @@ create table messages(
 	box_id int references box_chats(id) on delete cascade,
 	content text not null,
 	create_date timestamp default current_timestamp,
-	visible_to_owner boolean
+	visible_to_owner boolean default true
 );
 
 create table reports(

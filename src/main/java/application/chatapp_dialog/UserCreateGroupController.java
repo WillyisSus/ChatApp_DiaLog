@@ -182,19 +182,20 @@ public class UserCreateGroupController implements Initializable  {
     }
     @FXML
     public void textSendEntered(ActionEvent event){
-        if (newUserList.size() < 3){
+        if (newUserList.size() < 2){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
-            alert.setHeaderText("Group must have at least 3 users.");
+            alert.setHeaderText("Group must have at least 2 users.");
             alert.showAndWait();
             return;
         }
         String groupname = createTextGroupname.getText();
         String message = createTextSend.getText();
-        if (groupname.isBlank()) {
+        if (groupname.isBlank() || groupname.length() > 32) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Invalid group name.");
+            alert.setContentText("Max 32 characters.");
             alert.showAndWait();
             return;
         }
@@ -212,7 +213,7 @@ public class UserCreateGroupController implements Initializable  {
                         "values (?, ?)";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setString(1, groupname);
-                ps.setBoolean(2, newUserList.size() <= 2);
+                ps.setBoolean(2, false);
                 int row = ps.executeUpdate();
                 System.out.println(ps.toString());
                 System.out.println(row + " added");
@@ -222,11 +223,16 @@ public class UserCreateGroupController implements Initializable  {
                 rs.next();
                 int boxnid = rs.getInt(1);
                 for(Integer nid : newUserList){
-                    query = "insert into box_chat_members (box_id, user_id) " +
-                            "values (?, ?)";
+                    query = "insert into box_chat_members (box_id, user_id, is_admin) " +
+                            "values (?, ?, ?)";
                     ps = conn.prepareStatement(query);
                     ps.setInt(1, boxnid);
                     ps.setInt(2, nid);
+                    if (nid == id){
+                        ps.setBoolean(3, true);
+                    } else {
+                        ps.setBoolean(3, false);
+                    }
                     row = ps.executeUpdate();
                     System.out.println(ps.toString());
                     System.out.println(row + " added");
@@ -241,8 +247,7 @@ public class UserCreateGroupController implements Initializable  {
                     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                     scene = new Scene(fxmlLoader.load(), 1080, 720);
                     UserChatController controller = fxmlLoader.getController();
-                    controller.setid(id);
-                    controller.setboxid(boxnid);
+                    controller.setdata(id, boxnid);
                     stage = (Stage) display.getScene().getWindow();
                     stage.setScene(scene);
                     stage.show();
@@ -256,10 +261,10 @@ public class UserCreateGroupController implements Initializable  {
     }
     @FXML
     public void imageSendClicked(MouseEvent event){
-        if (newUserList.size() < 3){
+        if (newUserList.size() < 2){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
-            alert.setHeaderText("Group must have at least 3 users.");
+            alert.setHeaderText("Group must have at least 2 users.");
             alert.showAndWait();
             return;
             //a
@@ -316,8 +321,7 @@ public class UserCreateGroupController implements Initializable  {
                     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                     scene = new Scene(fxmlLoader.load(), 1080, 720);
                     UserChatController controller = fxmlLoader.getController();
-                    controller.setid(id);
-                    controller.setboxid(boxnid);
+                    controller.setdata(id, boxnid);
                     stage = (Stage) display.getScene().getWindow();
                     stage.setScene(scene);
                     stage.show();
@@ -418,8 +422,7 @@ public class UserCreateGroupController implements Initializable  {
                     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                     scene = new Scene(fxmlLoader.load(), 1080, 720);
                     UserChatController controller = fxmlLoader.getController();
-                    controller.setid(id);
-                    controller.setboxid(boxid);
+                    controller.setdata(id, boxid);
                     stage = (Stage) display.getScene().getWindow();
                     stage.setScene(scene);
                     stage.show();
@@ -506,8 +509,7 @@ public class UserCreateGroupController implements Initializable  {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             UserChatController controller = fxmlLoader.getController();
-            controller.setid(id);
-            controller.setboxid(Integer.parseInt(((HBox)event.getSource()).getId()));
+            controller.setdata(id, Integer.parseInt(((HBox)event.getSource()).getId()));
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
