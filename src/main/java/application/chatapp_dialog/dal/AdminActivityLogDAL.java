@@ -25,7 +25,6 @@ public class AdminActivityLogDAL {
         return log;
     }
     public static List<AdminUserActivityLog> getAllUserActivityLog(Integer userID) throws SQLException {
-        System.out.println("From DAL: " + userID);
         Connection conn = UtilityDAL.getConnection();
         String query = "select user_accounts.id as userID, user_accounts.username as Username, " +
                 "user_account_info.displayname as displayName, user_activity_logs.session_start as sessionStart,  user_activity_logs.session_end as sessionEnd " +
