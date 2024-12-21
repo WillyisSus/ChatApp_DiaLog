@@ -23,13 +23,13 @@
             <top>
                 <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <buttons>
-                        <Button mnemonicParsing="false" onAction="#switchToUser" text="Users" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGroup" text="Groups" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToReport" text="Reports" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" text="To User View" />
+                        <Button fx:id="toUserViewButton" mnemonicParsing="false" onAction="#switchToUser" text="Users" />
+                        <Button fx:id="toGroupViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGroup" text="Groups" />
+                        <Button fx:id="toReportViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToReport" text="Reports" />
+                        <Button fx:id="toNewcomerViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
+                        <Button fx:id="toGraphViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
+                        <Button fx:id="toActiveUserButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
+                        <Button fx:id="logOutButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToLogin" text="Log out" />
                     </buttons>
                 </ButtonBar>
             </top>

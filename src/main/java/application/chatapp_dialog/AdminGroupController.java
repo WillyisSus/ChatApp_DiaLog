@@ -3,6 +3,7 @@ package application.chatapp_dialog;
 import application.chatapp_dialog.dal.AdminGroupInformationDAL;
 import application.chatapp_dialog.dto.AdminGroupInformation;
 import application.chatapp_dialog.dto.AdminSimpleUserAccount;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AdminGroupController implements Initializable {
+
     @FXML
     private TableView<AdminGroupInformation> boxTable;
     @FXML
@@ -75,7 +77,31 @@ public class AdminGroupController implements Initializable {
     private Scene scene;
     private Stage stage;
     private Parent root;
-
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button toUserViewButton;
+    @FXML
+    private Button toGroupViewButton;
+    @FXML
+    private Button toReportViewButton;
+    @FXML
+    private Button toNewcomerViewButton;
+    @FXML
+    private Button toGraphViewButton;
+    @FXML
+    private Button toActiveUserButton;
+    public void switchToLogin(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public void switchToUser(ActionEvent event){
         try{
             Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
@@ -154,60 +180,83 @@ public class AdminGroupController implements Initializable {
     }
 
     public void handleFilter(ActionEvent event){
-        if (event.getSource() ==  filterGroupName){
-            FilteredList<AdminGroupInformation>  filteredList = new FilteredList<AdminGroupInformation>(groupInformations, data->{
-                boolean filtered = true;
-                if (!groupNameFilter.getText().isEmpty()){
-                    filtered = data.getGroupName().startsWith(groupNameFilter.getText());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getSource() ==  filterGroupName){
+                    FilteredList<AdminGroupInformation>  filteredList = new FilteredList<AdminGroupInformation>(groupInformations, data->{
+                        boolean filtered = true;
+                        if (!groupNameFilter.getText().isEmpty()){
+                            filtered = data.getGroupName().startsWith(groupNameFilter.getText());
+                        }
+                        return filtered;
+                    });
+                    boxTable.setItems(filteredList);
+                    boxTable.refresh();
+                }else {
+                    boxTable.setItems(groupInformations);
+                    boxTable.refresh();
                 }
-                return filtered;
-            });
-            boxTable.setItems(filteredList);
-            boxTable.refresh();
-        }else {
-            boxTable.setItems(groupInformations);
-            boxTable.refresh();
-        }
+            }
+        });
+
 
     }
 
     public void handleSortBoxTable(ActionEvent event){
-        if (event.getSource() == dateAscending){
-            orderMenu.setText(dateAscending.getText());
-            groupInformations.sort(AdminGroupInformationDAL.getDateAscendingComparator());
-        } else if(event.getSource() == dateDescending){
-            orderMenu.setText(dateDescending.getText());
-            groupInformations.sort(AdminGroupInformationDAL.getDateDescendingComparator());
-        } else if (event.getSource() == boxNameAscending){
-            orderMenu.setText(boxNameAscending.getText());
-            groupInformations.sort(AdminGroupInformationDAL.getBoxNameAscendingComparator());
-        } else {
-            orderMenu.setText(boxNameDescending.getText());
-            groupInformations.sort(AdminGroupInformationDAL.getBoxNameDescendingComparator());
-        }
-        boxTable.refresh();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getSource() == dateAscending){
+                    orderMenu.setText(dateAscending.getText());
+                    groupInformations.sort(AdminGroupInformationDAL.getDateAscendingComparator());
+                } else if(event.getSource() == dateDescending){
+                    orderMenu.setText(dateDescending.getText());
+                    groupInformations.sort(AdminGroupInformationDAL.getDateDescendingComparator());
+                } else if (event.getSource() == boxNameAscending){
+                    orderMenu.setText(boxNameAscending.getText());
+                    groupInformations.sort(AdminGroupInformationDAL.getBoxNameAscendingComparator());
+                } else {
+                    orderMenu.setText(boxNameDescending.getText());
+                    groupInformations.sort(AdminGroupInformationDAL.getBoxNameDescendingComparator());
+                }
+                boxTable.refresh();
+            }
+        });
 
     }
 
     public void showMemberAndAdminListOfGroup(AdminGroupInformation groupInformation){
-        try {
-            memberInGroups = FXCollections.observableArrayList(AdminGroupInformationDAL.getMemberOfGroup(groupInformation));
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Database error");
-            alert.setHeaderText("Cannot get group member data!!!");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
-        memberTableView.setItems(memberInGroups);
-        memberTableView.refresh();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    memberInGroups = FXCollections.observableArrayList(AdminGroupInformationDAL.getMemberOfGroup(groupInformation));
+                } catch (SQLException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Database error");
+                    alert.setHeaderText("Cannot get group member data!!!");
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                }
+                memberTableView.setItems(memberInGroups);
+                memberTableView.refresh();
 
-        adminTableView.setItems(new FilteredList<AdminSimpleUserAccount>(memberInGroups, AdminSimpleUserAccount::getAdmin));
-        adminTableView.refresh();
+                adminTableView.setItems(new FilteredList<AdminSimpleUserAccount>(memberInGroups, AdminSimpleUserAccount::getAdmin));
+                adminTableView.refresh();
+            }
+        });
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                toGroupViewButton.requestFocus();
+            }
+        });
         boxName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGroupName()));
         boxCreateDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
         boxAdmins.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAdmins().toString()));

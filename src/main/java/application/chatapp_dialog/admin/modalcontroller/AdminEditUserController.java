@@ -18,6 +18,18 @@ public class AdminEditUserController implements Initializable {
     private AdminUserAccount account;
 
     @FXML
+    private Button toUserViewButton;
+    @FXML
+    private Button toGroupViewButton;
+    @FXML
+    private Button toReportViewButton;
+    @FXML
+    private Button toNewcomerViewButton;
+    @FXML
+    private Button toGraphViewButton;
+    @FXML
+    private Button toActiveUserButton;
+    @FXML
     private TextField username;
     @FXML
     private TextField displayName;

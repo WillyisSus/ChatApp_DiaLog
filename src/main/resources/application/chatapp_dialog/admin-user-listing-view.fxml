@@ -126,11 +126,6 @@
                                                                         </HBox>
                                                                     </children>
                                                                 </VBox>
-                                                <Button fx:id="reloadData" alignment="CENTER" mnemonicParsing="false" onAction="#handleReloadData" prefHeight="148.0" prefWidth="124.0" text="Reload Data">
-                                                   <font>
-                                                      <Font name="System Bold" size="15.0" />
-                                                   </font>
-                                                </Button>
                                                             </children>
                                                             <padding>
                                                                 <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
@@ -183,7 +178,7 @@
                                                       <MenuItem fx:id="activityUsernameAscending" mnemonicParsing="false" onAction="#handleSortActivityLogs" text="Ascending by Username" />
                                                   </items>
                                                 </MenuButton>
-                                                <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="266.0" text="Reload Database" />
+                                                <Button fx:id="reloadActivityLogs" mnemonicParsing="false" prefHeight="31.0" prefWidth="266.0" text="Reload Database" />
                                                                 </children>
                                              <VBox.margin>
                                                 <Insets left="16.0" right="16.0" />
@@ -304,13 +299,13 @@
          <top>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <buttons>
-                  <Button mnemonicParsing="false" onAction="#switchToUser" text="Users" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGroup" text="Groups" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToReport" text="Reports" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
-                  <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeToUser" text="To User View" />
+                  <Button fx:id="toUserViewButton" mnemonicParsing="false" onAction="#switchToUser" text="Users" />
+                  <Button fx:id="toGroupViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGroup" text="Groups" />
+                  <Button fx:id="toReportViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToReport" text="Reports" />
+                  <Button fx:id="toNewcomerViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
+                  <Button fx:id="toGraphViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
+                  <Button fx:id="toActiveUserButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
+                  <Button fx:id="logOutButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToLogin" text="Log out" />
               </buttons>
             </ButtonBar>
          </top>

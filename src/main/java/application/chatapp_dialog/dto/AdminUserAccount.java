@@ -7,6 +7,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Objects;
+
 /**
  * Class to display user Info on TableView
  * */
@@ -138,5 +140,16 @@ public class AdminUserAccount {
 
     public String getStatus() {
         return status.get();
+    }
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminUserAccount)
+        {
+            AdminUserAccount c = (AdminUserAccount) o;
+            if ( this.getId().equals(c.getId()) ) //whatever here
+                return true;
+        }
+        return false;
     }
 }

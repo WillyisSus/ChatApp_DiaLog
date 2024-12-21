@@ -4,6 +4,7 @@ import application.chatapp_dialog.dal.AdminActivityLogDAL;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.dto.AdminUserActivityLog;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -59,8 +60,14 @@ public class AdminUserActivityLogController implements Initializable {
             if (activityLogs.isEmpty()){
                 return;
             }
-            activityLogs.sort(AdminActivityLogDAL.getAscendingComparator());
-            orderMenu.setText(ascendingItem.getText());
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    activityLogs.sort(AdminActivityLogDAL.getAscendingComparator());
+                    orderMenu.setText(ascendingItem.getText());
+                }
+            });
+
 
         }
     }
@@ -71,18 +78,29 @@ public class AdminUserActivityLogController implements Initializable {
             if (activityLogs.isEmpty()){
                 return;
             }
-            activityLogs.sort(AdminActivityLogDAL.getDescendingComparator());
-            orderMenu.setText(descendingItem.getText());
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    activityLogs.sort(AdminActivityLogDAL.getDescendingComparator());
+                    orderMenu.setText(descendingItem.getText());
+                }
+            });
+
         }
     }
 
     public void setUser(int userID){
-        try {
-            activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(userID));
-            activityTable.setItems(activityLogs);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());;
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(userID));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                activityTable.setItems(activityLogs);
+            }
+        });
         System.out.println(activityLogs.size());
     }
 

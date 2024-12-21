@@ -23,13 +23,13 @@
             <top>
                 <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <buttons>
-                        <Button mnemonicParsing="false" onAction="#switchToUser" text="Users" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGroup" text="Groups" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToReport" text="Reports" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
-                        <Button layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" text="To User View" />
+                        <Button fx:id="toUserViewButton" mnemonicParsing="false" onAction="#switchToUser" text="Users" />
+                        <Button fx:id="toGroupViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGroup" text="Groups" />
+                        <Button fx:id="toReportViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToReport" text="Reports" />
+                        <Button fx:id="toNewcomerViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToNewUser" text="Newcomers" />
+                        <Button fx:id="toGraphViewButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToGraph" text="Graphs" />
+                        <Button fx:id="toActiveUserButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToActiveUser" text="Active Users" />
+                        <Button fx:id="logOutButton" layoutX="1015.0" layoutY="15.0" mnemonicParsing="false" onAction="#switchToLogin" text="Log out" />
                     </buttons>
                 </ButtonBar>
             </top>
@@ -117,7 +117,7 @@
                                                 <VBox layoutX="110.0" layoutY="10.0" prefHeight="100.0" prefWidth="263.0">
                                                    <children>
                                                       <Label text="Select one of the order" />
-                                                      <MenuButton fx:id="orderMenu" mnemonicParsing="false" prefHeight="31.0" prefWidth="247.0" text="MenuButton">
+                                                      <MenuButton fx:id="orderMenu" mnemonicParsing="false" prefHeight="31.0" prefWidth="247.0" text="Select an order">
                                                         <items>
                                                           <MenuItem fx:id="reportedNameAscending" mnemonicParsing="false" onAction="#handleSort" text="Ascending by Reported Username" />
                                                           <MenuItem fx:id="reportedNameDescending" mnemonicParsing="false" onAction="#handleSort" text="Descending by Reported Username" />

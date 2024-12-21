@@ -16,7 +16,7 @@ public class AdminUserAccountDAL {
         try {
             ua.setAddress(rs.getString("Address"));
             ua.setDob(rs.getDate("DOB"));
-            ua.setCreateDate(rs.getTimestamp("CreateDate"));
+            ua.setCreateDate(Timestamp.valueOf(rs.getTimestamp("CreateDate").toLocalDateTime().withNano(0)));
             ua.setId(rs.getInt("UserID"));
             ua.setUsername(rs.getString("Username"));
             ua.setEmail(rs.getString("Email"));

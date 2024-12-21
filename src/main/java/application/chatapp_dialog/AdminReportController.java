@@ -3,6 +3,7 @@ package application.chatapp_dialog;
 import application.chatapp_dialog.dal.AdminGroupInformationDAL;
 import application.chatapp_dialog.dal.AdminReportInformationDAL;
 import application.chatapp_dialog.dto.AdminReportInformation;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +32,20 @@ public class AdminReportController implements Initializable {
     private Scene scene;
     private Stage stage;
     private Parent root;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button toUserViewButton;
+    @FXML
+    private Button toGroupViewButton;
+    @FXML
+    private Button toReportViewButton;
+    @FXML
+    private Button toNewcomerViewButton;
+    @FXML
+    private Button toGraphViewButton;
+    @FXML
+    private Button toActiveUserButton;
 // Table Properties
     @FXML
     private TableView<AdminReportInformation> reportTable;
@@ -78,6 +93,17 @@ public class AdminReportController implements Initializable {
     private Button lockUser;
 //  Table data properties;
     private ObservableList<AdminReportInformation> reportList;
+    public void switchToLogin(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public void switchToUser(ActionEvent event){
         try{
             Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
@@ -208,71 +234,90 @@ public class AdminReportController implements Initializable {
 //  Sort and filter functions
 
     public void handleSort(ActionEvent event){
-        if (event.getSource() == dateAscending){
-            orderMenu.setText(dateAscending.getText());
-            reportList.sort(AdminReportInformationDAL.getDateAscendingComparator());
-        } else if(event.getSource() == dateDescending){
-            orderMenu.setText(dateDescending.getText());
-            reportList.sort(AdminReportInformationDAL.getDateDescendingComparator());
-        } else if (event.getSource() == reporterAscending){
-            orderMenu.setText(reporterAscending.getText());
-            reportList.sort(AdminReportInformationDAL.getReporterUsernameAscendingComparator());
-        } else if (event.getSource() == reporterDescending){
-            orderMenu.setText(reporterDescending.getText());
-            reportList.sort(AdminReportInformationDAL.getreporterUsernameDescendingComparator());
-        } else if (event.getSource() == reportedNameAscending){
-            orderMenu.setText(reportedNameAscending.getText());
-            reportList.sort(AdminReportInformationDAL.getUsernameAscendingComparator());
-        } else {
-            orderMenu.setText(reportedNameDescending.getText());
-            reportList.sort(AdminReportInformationDAL.getUsernameDescendingComparator());
-        }
-        reportTable.refresh();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getSource() == dateAscending){
+                    orderMenu.setText(dateAscending.getText());
+                    reportList.sort(AdminReportInformationDAL.getDateAscendingComparator());
+                } else if(event.getSource() == dateDescending){
+                    orderMenu.setText(dateDescending.getText());
+                    reportList.sort(AdminReportInformationDAL.getDateDescendingComparator());
+                } else if (event.getSource() == reporterAscending){
+                    orderMenu.setText(reporterAscending.getText());
+                    reportList.sort(AdminReportInformationDAL.getReporterUsernameAscendingComparator());
+                } else if (event.getSource() == reporterDescending){
+                    orderMenu.setText(reporterDescending.getText());
+                    reportList.sort(AdminReportInformationDAL.getreporterUsernameDescendingComparator());
+                } else if (event.getSource() == reportedNameAscending){
+                    orderMenu.setText(reportedNameAscending.getText());
+                    reportList.sort(AdminReportInformationDAL.getUsernameAscendingComparator());
+                } else {
+                    orderMenu.setText(reportedNameDescending.getText());
+                    reportList.sort(AdminReportInformationDAL.getUsernameDescendingComparator());
+                }
+                reportTable.refresh();
+            }
+        });
+
     }
 
     public void handleFilter(ActionEvent event){
-        if (event.getSource() == filterButton){
-            if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null){
-                return;
-            }
-            FilteredList<AdminReportInformation> filteredList = new FilteredList<>(reportList, data->{
-               boolean filterByName = true;
-               boolean filterByMinDate = true;
-               boolean filterByMaxDate = true;
-               if (!filterValue.getText().isEmpty()){
-                    String filterMode = filterChoices.getValue();
-                    if (filterMode.contains("Reported")){
-                        filterByName = data.getReportedUsername().startsWith(filterValue.getText());
-                    } else if (filterMode.contains("Email")){
-                        filterByName = data.getReportedEmail().startsWith(filterValue.getText());
-                    } else {
-                        filterByName = data.getReporterUsername().startsWith(filterValue.getText());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getSource() == filterButton){
+                    if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null){
+                        return;
                     }
-               }
-               if (minDate.getValue() != null){
-                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                    filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
-               }
-                if (maxDate.getValue() != null){
-                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                    filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
+                    FilteredList<AdminReportInformation> filteredList = new FilteredList<>(reportList, data->{
+                        boolean filterByName = true;
+                        boolean filterByMinDate = true;
+                        boolean filterByMaxDate = true;
+                        if (!filterValue.getText().isEmpty()){
+                            String filterMode = filterChoices.getValue();
+                            if (filterMode.contains("Reported")){
+                                filterByName = data.getReportedUsername().startsWith(filterValue.getText());
+                            } else if (filterMode.contains("Email")){
+                                filterByName = data.getReportedEmail().startsWith(filterValue.getText());
+                            } else {
+                                filterByName = data.getReporterUsername().startsWith(filterValue.getText());
+                            }
+                        }
+                        if (minDate.getValue() != null){
+                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                            filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
+                        }
+                        if (maxDate.getValue() != null){
+                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                            filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
+                        }
+                        return (filterByName && filterByMaxDate && filterByMinDate);
+                    });
+                    reportTable.setItems(filteredList);
+                    reportTable.refresh();
+
+                }else {
+                    maxDate.setValue(null);
+                    minDate.setValue(null);
+                    reportTable.setItems(reportList);
+                    reportTable.refresh();
+
                 }
-               return (filterByName && filterByMaxDate && filterByMinDate);
-            });
-            reportTable.setItems(filteredList);
-            reportTable.refresh();
+            }
+        });
 
-        }else {
-            maxDate.setValue(null);
-            minDate.setValue(null);
-            reportTable.setItems(reportList);
-            reportTable.refresh();
-
-        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                toReportViewButton.requestFocus();
+            }
+        });
+
         reportedUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReportedUsername()));
         reportedEmail.setCellValueFactory(data->new SimpleStringProperty(data.getValue().getReportedEmail()));
         reportedDisplayName.setCellValueFactory(data->new SimpleStringProperty(data.getValue().getDisplayName()));

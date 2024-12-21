@@ -1,4 +1,5 @@
 package application.chatapp_dialog.admin.modalcontroller;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,10 +37,16 @@ public class AdminUserListShowFriendController implements Initializable {
     }
 
     public void loadData(int userID){
-        List<AdminFriendOfUser> friends = AdminUserAccountDAL.getFriendOfUser(userID);
-        if (!friends.isEmpty()){
-            friendList = FXCollections.observableArrayList(friends);
-            friendListTable.setItems(friendList);
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                List<AdminFriendOfUser> friends = AdminUserAccountDAL.getFriendOfUser(userID);
+                if (!friends.isEmpty()){
+                    friendList = FXCollections.observableArrayList(friends);
+                    friendListTable.setItems(friendList);
+                }
+            }
+        });
+
     }
 }

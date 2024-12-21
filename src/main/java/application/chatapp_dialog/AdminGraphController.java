@@ -15,6 +15,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
@@ -53,6 +54,31 @@ public class AdminGraphController implements Initializable {
     private Scene scene;
     private Stage stage;
     private Parent root;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button toUserViewButton;
+    @FXML
+    private Button toGroupViewButton;
+    @FXML
+    private Button toReportViewButton;
+    @FXML
+    private Button toNewcomerViewButton;
+    @FXML
+    private Button toGraphViewButton;
+    @FXML
+    private Button toActiveUserButton;
+    public void switchToLogin(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public void switchToUser(ActionEvent event){
         try{
             Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
@@ -188,6 +214,12 @@ public class AdminGraphController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                toGraphViewButton.requestFocus();
+            }
+        });
         newUsersInMonth = new ArrayList<>(List.of(0,0,0,0,0,0,0,0,0,0,0,0));
         activeUsersInMonth = new ArrayList<>(List.of(0,0,0,0,0,0,0,0,0,0,0,0));
         activeUsersX = new CategoryAxis(monthList);

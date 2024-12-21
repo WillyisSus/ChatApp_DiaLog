@@ -4,6 +4,7 @@ import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import application.chatapp_dialog.dal.EmailDAL;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.security.UserRegistrationValidator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -51,12 +52,17 @@ public class AdminChangeUserPasswordController implements Initializable {
     public boolean changeUserPassword(){
         try {
             AdminUserAccountDAL.updatePassword(Integer.parseInt(userID.getId()), newPassword.getText());
-            EmailDAL.sendNewPassword(userID.getEmail(), newPassword.getText());
-        } catch (SQLException e) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    EmailDAL.sendMessageToEmail(userID.getEmail(), "Admin changed your password to:" + newPassword.getText());
+                }
+            });
+        } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Database ERROR !!!");
             alert.setHeaderText("Change user password failed!");
-            alert.setContentText("Database-related problems occur.");
+            alert.setContentText(e.getMessage());
             return false;
         }
         return true;

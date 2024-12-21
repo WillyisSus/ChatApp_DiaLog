@@ -8,8 +8,8 @@ import javafx.beans.property.Property;
 import java.util.Properties;
 
 public class PasswordResetSender {
-    private static final String APP_EMAIL = "";
-    private static final String APP_PASSWORD = "";
+    private static final String APP_EMAIL = "willyonepoint2@gmail.com";
+    private static final String APP_PASSWORD = "icpo gknp uolo bwah";
 
     public static Session getEmailSession(){
         return Session.getInstance(getEmailProperties(), new Authenticator() {

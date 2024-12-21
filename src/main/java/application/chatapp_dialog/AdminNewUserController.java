@@ -4,6 +4,7 @@ import application.chatapp_dialog.dal.AdminUserFriendCountDAL;
 import application.chatapp_dialog.dto.AdminGroupInformation;
 import application.chatapp_dialog.dto.AdminNewUserAccount;
 import application.chatapp_dialog.dto.AdminReportInformation;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,20 @@ public class AdminNewUserController implements Initializable {
     private Scene scene;
     private Stage stage;
     private Parent root;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button toUserViewButton;
+    @FXML
+    private Button toGroupViewButton;
+    @FXML
+    private Button toReportViewButton;
+    @FXML
+    private Button toNewcomerViewButton;
+    @FXML
+    private Button toGraphViewButton;
+    @FXML
+    private Button toActiveUserButton;
 //    table property
     @FXML
     private TableView<AdminNewUserAccount> newUserTable;
@@ -68,6 +83,17 @@ public class AdminNewUserController implements Initializable {
     @FXML
     private MenuItem emailDescending;
 // Scene management
+    public void switchToLogin(ActionEvent event){
+        try{
+            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public void switchToUser(ActionEvent event){
         try{
             Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
@@ -146,68 +172,86 @@ public class AdminNewUserController implements Initializable {
     }
 // Functionality
     public void handleSort(ActionEvent event){
-        if (event.getSource() == usernameAscending){
-            orderMenu.setText(usernameAscending.getText());
-            newUserAccounts.sort(AdminNewUserAccountDAL.getUsernameAscending());
-        }else if (event.getSource() == usernameDescending){
-            orderMenu.setText(usernameDescending.getText());
-            newUserAccounts.sort(AdminNewUserAccountDAL.getUsernameDescending());
-        }else if (event.getSource() == emailAscending){
-            orderMenu.setText(emailAscending.getText());
-            newUserAccounts.sort(AdminNewUserAccountDAL.getEmailAscending());
-        } else if (event.getSource() == emailDescending){
-            orderMenu.setText(emailDescending.getText());
-            newUserAccounts.sort(AdminNewUserAccountDAL.getEmailDescending());
-        } else if (event.getSource() == dateAscending){
-            orderMenu.setText(dateAscending.getText());
-            newUserAccounts.sort(AdminNewUserAccountDAL.getDateAscendingComparator());
-        } else if (event.getSource() == dateDescending){
-            orderMenu.setText(dateDescending.getText());
-            newUserAccounts.sort(AdminNewUserAccountDAL.getDateDescendingComparator());
-        }
-        newUserTable.refresh();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getSource() == usernameAscending){
+                    orderMenu.setText(usernameAscending.getText());
+                    newUserAccounts.sort(AdminNewUserAccountDAL.getUsernameAscending());
+                }else if (event.getSource() == usernameDescending){
+                    orderMenu.setText(usernameDescending.getText());
+                    newUserAccounts.sort(AdminNewUserAccountDAL.getUsernameDescending());
+                }else if (event.getSource() == emailAscending){
+                    orderMenu.setText(emailAscending.getText());
+                    newUserAccounts.sort(AdminNewUserAccountDAL.getEmailAscending());
+                } else if (event.getSource() == emailDescending){
+                    orderMenu.setText(emailDescending.getText());
+                    newUserAccounts.sort(AdminNewUserAccountDAL.getEmailDescending());
+                } else if (event.getSource() == dateAscending){
+                    orderMenu.setText(dateAscending.getText());
+                    newUserAccounts.sort(AdminNewUserAccountDAL.getDateAscendingComparator());
+                } else if (event.getSource() == dateDescending){
+                    orderMenu.setText(dateDescending.getText());
+                    newUserAccounts.sort(AdminNewUserAccountDAL.getDateDescendingComparator());
+                }
+                newUserTable.refresh();
+            }
+        });
+
     }
 
     public void handleFilter(ActionEvent event) {
-        if (event.getSource() == filterButton) {
-            if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null) {
-                return;
-            }
-            FilteredList<AdminNewUserAccount> filteredList = new FilteredList<>(newUserAccounts, data -> {
-                boolean filterByName = true;
-                boolean filterByMinDate = true;
-                boolean filterByMaxDate = true;
-                if (!filterValue.getText().isEmpty()) {
-                    String filterMode = filterChoices.getValue();
-                    if (filterMode.contains("Username")) {
-                        filterByName = data.getUsername().startsWith(filterValue.getText());
-                    } else if (filterMode.contains("Email")) {
-                        filterByName = data.getEmail().startsWith(filterValue.getText());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (event.getSource() == filterButton) {
+                    if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null) {
+                        return;
                     }
-                }
-                if (minDate.getValue() != null) {
-                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                    filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
-                }
-                if (maxDate.getValue() != null) {
-                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                    filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
-                }
-                return (filterByName && filterByMaxDate && filterByMinDate);
-            });
-            newUserTable.setItems(filteredList);
-            newUserTable.refresh();
+                    FilteredList<AdminNewUserAccount> filteredList = new FilteredList<>(newUserAccounts, data -> {
+                        boolean filterByName = true;
+                        boolean filterByMinDate = true;
+                        boolean filterByMaxDate = true;
+                        if (!filterValue.getText().isEmpty()) {
+                            String filterMode = filterChoices.getValue();
+                            if (filterMode.contains("Username")) {
+                                filterByName = data.getUsername().startsWith(filterValue.getText());
+                            } else if (filterMode.contains("Email")) {
+                                filterByName = data.getEmail().startsWith(filterValue.getText());
+                            }
+                        }
+                        if (minDate.getValue() != null) {
+                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                            filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
+                        }
+                        if (maxDate.getValue() != null) {
+                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                            filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
+                        }
+                        return (filterByName && filterByMaxDate && filterByMinDate);
+                    });
+                    newUserTable.setItems(filteredList);
+                    newUserTable.refresh();
 
-        } else {
-            maxDate.setValue(null);
-            minDate.setValue(null);
-            newUserTable.setItems(newUserAccounts);
-            newUserTable.refresh();
+                } else {
+                    maxDate.setValue(null);
+                    minDate.setValue(null);
+                    newUserTable.setItems(newUserAccounts);
+                    newUserTable.refresh();
 
-        }
+                }
+            }
+        });
+
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                toNewcomerViewButton.requestFocus();
+            }
+        });
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         createDateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));

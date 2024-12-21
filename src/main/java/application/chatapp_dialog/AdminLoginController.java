@@ -38,15 +38,32 @@ public class AdminLoginController  implements Initializable {
     private Scene scene;
     private Stage stage;
     private Parent root;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button toUserViewButton;
+    @FXML
+    private Button toGroupViewButton;
+    @FXML
+    private Button toReportViewButton;
+    @FXML
+    private Button toNewcomerViewButton;
+    @FXML
+    private Button toGraphViewButton;
+    @FXML
+    private Button toActiveUserButton;
 
-    public String authenticate(String username, String password){
+    public int authenticate(String username, String password){
         return AdminAccountDAL.authenticate(username, password);
     }
 
-    public void goToAdminView(ActionEvent event){
+    public void goToAdminView(ActionEvent event, int id){
         System.out.println("Called");
         try {
-            root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            root = loader.load();
+            AdminUserListController ctrl = loader.getController();
+            ctrl.setAdminID(id);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -60,11 +77,12 @@ public class AdminLoginController  implements Initializable {
     public void login(ActionEvent event){
         String username = adminUsername.getText();
         String password = adminPassword.getText();
-        String res = authenticate(username, password);
+        int id = authenticate(username, password);
+        String res = (id == -1 ? "Wrong password or username" : "Success");
         message.setText(res);
 
         if (res.equals("Success")){
-            goToAdminView(event);
+            goToAdminView(event, id);
         }
     }
 

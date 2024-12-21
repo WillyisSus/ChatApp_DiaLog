@@ -49,12 +49,12 @@ public class AdminAccountDAL {
      * Return a String object, "Success" or "Wrong username or password!!!" for authentication process, or Exception message
      */
 
-    public static String authenticate(String username, String password){
+    public static int authenticate(String username, String password){
         Connection conn = UtilityDAL.getConnection();
         PreparedStatement ps = null;
-        String res = "Wrong username or password";
+        int res = -1;
         if (username.equals("adminghost") && password.equals("thebeliever")){
-            return "Success";
+            return -1;
         }
         try {
             ps = conn.prepareStatement(getSaltQuery);
@@ -70,14 +70,14 @@ public class AdminAccountDAL {
                 String displayName = rs.getString("displayname");
                 String hashedPass = EncryptPassword.hashPassword(password, salt);
                 if (hashedPass.equals(rs.getString("password"))){
-                    res = "Success";
+                    res = Integer.parseInt(id);
                     System.out.println(id + " " + displayName);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return -1;
         } catch (NullPointerException e){
-            return e.getMessage();
+            return -1;
         }
         return res;
     }
