@@ -1,3 +1,5 @@
+SET timezone = 'Asia/Calcutta';
+
 create database dialog_db;
 \connect dialog_db;
 create table admin_accounts(

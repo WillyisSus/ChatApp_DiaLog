@@ -50,7 +50,7 @@
                         </TableView>
                      </center>
                      <top>
-                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                        <VBox prefHeight="167.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
                            <children>
                               <HBox prefHeight="165.0" prefWidth="1101.0" spacing="16.0">
                                  <children>
