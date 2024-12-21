@@ -43,8 +43,70 @@ import org.w3c.dom.html.HTMLTableElement;
 
 public class AdminUserListController implements Initializable {
     private int adminID = -1;
-
-//    Table related
+    private Comparator<AdminUserAccount> userAccountComparator;
+    private Comparator<AdminUserActivityLog> userActivityLogComparator;
+    private Comparator<AdminUserFriendCount> userFriendCountComparator;
+    class MyAutoReloadUserList implements Runnable{
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminUserAccount> temp =  FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
+                if(userAccountComparator != null){
+                    temp.sort(userAccountComparator);
+                }
+                if (tableview.getItems() instanceof FilteredList<AdminUserAccount>){
+                    tableview.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserAccount>) tableview.getItems()).getPredicate()));
+                }else {
+                    tableview.setItems(temp);
+                }
+                userlist = temp;
+                tableview.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    class MyAutoReloadUserActivity implements Runnable{
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminUserActivityLog> temp =  FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
+                if(userActivityLogComparator != null){
+                    temp.sort(userActivityLogComparator);
+                }
+                if (activityLogTableView.getItems() instanceof FilteredList<AdminUserActivityLog>){
+                    activityLogTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserActivityLog>) activityLogTableView.getItems()).getPredicate()));
+                }else {
+                    activityLogTableView.setItems(temp);
+                }
+                activityLogs = temp;
+                tableview.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    class MyAutoReloadUserFriendCount implements Runnable{
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminUserFriendCount> temp =  FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
+                if(userFriendCountComparator != null){
+                    temp.sort(userFriendCountComparator);
+                }
+                if (friendCountTableView.getItems() instanceof FilteredList<AdminUserFriendCount>){
+                    friendCountTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserFriendCount>) friendCountTableView.getItems()).getPredicate()));
+                }else {
+                    friendCountTableView.setItems(temp);
+                }
+                friendCounts = temp;
+                tableview.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    //    Table related
     @FXML
     private TableView<AdminUserAccount> tableview;
     @FXML
@@ -363,7 +425,7 @@ public class AdminUserListController implements Initializable {
                     event.consume();
                 } else {
                     AdminUserAccount newAccount = ctrl.setNewInformation();
-                    account.copyDataFromOtherAccount(newAccount);
+                    userlist.set(index, newAccount);
                     tableview.refresh();
                 }
             });
@@ -396,7 +458,6 @@ public class AdminUserListController implements Initializable {
                 }
 
             }
-            System.out.println(clickButton);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -529,7 +590,6 @@ public class AdminUserListController implements Initializable {
                         if (!chosenStatus.equals(statusFilter.getItems().getFirst())){
                             filteredByStatus = i.getStatus().equals(chosenStatus.toLowerCase());
                         }
-                        System.out.println((filteredByUsername && filteredByDisplayName));
                         return (filteredByUsername && filteredByDisplayName && filteredByStatus);
                     });
                     tableview.setItems(filteredList);
@@ -556,7 +616,7 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 userlist.sort(AdminUserAccountDAL.getNameComparatorAscending());
-
+                userAccountComparator = AdminUserAccountDAL.getNameComparatorAscending();
                 tableview.refresh();
             }
         });
@@ -569,6 +629,7 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 userlist.sort(AdminUserAccountDAL.getNameComparatorDescending());
+                userAccountComparator = AdminUserAccountDAL.getNameComparatorDescending();
                 tableview.refresh();
             }
         });
@@ -580,6 +641,8 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 userlist.sort(AdminUserAccountDAL.getCreateDateComparatorAscending());
+                userAccountComparator = AdminUserAccountDAL.getCreateDateComparatorAscending();
+
                 tableview.refresh();
             }
         });
@@ -592,6 +655,7 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 userlist.sort(AdminUserAccountDAL.getCreateDateComparatorDescending());
+                userAccountComparator = AdminUserAccountDAL.getCreateDateComparatorDescending();
                 tableview.refresh();
             }
         });
@@ -604,10 +668,12 @@ public class AdminUserListController implements Initializable {
     public void handleSortActivityLogs(ActionEvent event){
         if (event.getSource() == activityDateAscending){
             activityLogs.sort(AdminActivityLogDAL.getAscendingComparator());
+            userActivityLogComparator = AdminActivityLogDAL.getAscendingComparator();
             activityOrder.setText(activityDateAscending.getText());
             activityLogTableView.refresh();
         }else if (event.getSource() == activityDateDescending){
             activityLogs.sort(AdminActivityLogDAL.getDescendingComparator());
+            userActivityLogComparator = AdminActivityLogDAL.getDescendingComparator();
             activityOrder.setText(activityDateDescending.getText());
             activityLogTableView.refresh();
         } else if (event.getSource() == activityUsernameAscending){
@@ -617,6 +683,13 @@ public class AdminUserListController implements Initializable {
                     return o1.getUsername().compareTo(o2.getUsername());
                 }
             });
+            userActivityLogComparator = new Comparator<AdminUserActivityLog>() {
+                @Override
+                public int compare(AdminUserActivityLog o1, AdminUserActivityLog o2) {
+                    return o1.getUsername().compareTo(o2.getUsername());
+                }
+            };
+
             activityOrder.setText(activityUsernameAscending.getText());
             activityLogTableView.refresh();
         } else{
@@ -626,6 +699,12 @@ public class AdminUserListController implements Initializable {
                     return o2.getUsername().compareTo(o1.getUsername());
                 }
             });
+            userActivityLogComparator =  new Comparator<AdminUserActivityLog>() {
+                @Override
+                public int compare(AdminUserActivityLog o1, AdminUserActivityLog o2) {
+                    return o2.getUsername().compareTo(o1.getUsername());
+                }
+            };
             activityOrder.setText(activityUsernameDescending.getText());
             activityLogTableView.refresh();
         }
@@ -671,7 +750,7 @@ public class AdminUserListController implements Initializable {
                 }
                 return (filteredByMaxDirect && filteredByUsername && filteredByMinDirect);
             });
-            System.out.println(filter.getClass());
+
             friendCountTableView.setItems(filter);
             friendCountTableView.refresh();
         } else {
@@ -683,15 +762,19 @@ public class AdminUserListController implements Initializable {
     public void handleSortUserFriendCount(ActionEvent event){
         if (event.getSource() == friendAscendingByDate){
             friendCountOrderMenu.setText(friendAscendingByDate.getText());
+            userFriendCountComparator = AdminUserFriendCountDAL.getCreateDateAscendingComparator();
             friendCounts.sort(AdminUserFriendCountDAL.getCreateDateAscendingComparator());
         }else if (event.getSource() == friendDescendingByDate){
             friendCountOrderMenu.setText(friendDescendingByDate.getText());
+            userFriendCountComparator = AdminUserFriendCountDAL.getCreateDateDescendingComparator();
             friendCounts.sort(AdminUserFriendCountDAL.getCreateDateDescendingComparator());
         }else if (event.getSource() == friendDescendingByUsername){
             friendCountOrderMenu.setText(friendDescendingByUsername.getText());
+            userFriendCountComparator = AdminUserFriendCountDAL.getUsernameDescendingComparator();
             friendCounts.sort(AdminUserFriendCountDAL.getUsernameDescendingComparator());
         } else if (event.getSource() == FriendAscendingByUsername){
             friendCountOrderMenu.setText(FriendAscendingByUsername.getText());
+            userFriendCountComparator = AdminUserFriendCountDAL.getUsernameAscendingComparator();
             friendCounts.sort(AdminUserFriendCountDAL.getUsernameAscendingComparator());
         }
         friendCountTableView.refresh();
@@ -728,6 +811,12 @@ public class AdminUserListController implements Initializable {
                 toUserViewButton.requestFocus();
             }
         });
+
+        userAccountComparator = null;
+        userActivityLogComparator = null;
+        userFriendCountComparator = null;
+        ScheduledExecutorService scheduledExecutorServiceUserList = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorServiceUserList.scheduleAtFixedRate(new MyAutoReloadUserList(), 0, 1000, TimeUnit.MILLISECONDS);
         filteredUserList = null;
         userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
         updateButton.setDisable(true);
@@ -738,7 +827,6 @@ public class AdminUserListController implements Initializable {
         signInButton.setDisable(true);
         resetUserPasswordButton.setDisable(true);
 
-        System.out.println(userlist.stream().toList().toString());
 //        Asscociate table collumns;
 
 
@@ -752,8 +840,7 @@ public class AdminUserListController implements Initializable {
         status.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("status"));
         tableview.setItems(userlist);
         tableview.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
-            System.out.println(o);
-            System.out.println(t1);
+
             if (t1 != null){
                 updateButton.setDisable(false);
                 changePasswordButton.setDisable(false);
@@ -785,9 +872,10 @@ public class AdminUserListController implements Initializable {
 
         latestLogins.setOnSelectionChanged((EventHandler<Event>) t->{
             if(latestLogins.isSelected() && activityLogTableView.getItems().isEmpty()){
-                System.out.println("???");
 
                 try {
+                    ScheduledExecutorService activityThread = Executors.newSingleThreadScheduledExecutor();
+                    activityThread.scheduleAtFixedRate(new MyAutoReloadUserActivity(), 0, 1000, TimeUnit.MILLISECONDS);
                     activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
                     activityLogTableView.setItems(activityLogs);
                     activityLogTableView.refresh();
@@ -809,9 +897,10 @@ public class AdminUserListController implements Initializable {
         friendCountCreateDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
         userFriends.setOnSelectionChanged((EventHandler<Event>) t->{
             if(userFriends.isSelected() && friendCountTableView.getItems().isEmpty()){
-                System.out.println("???");
 
                 try {
+                    ScheduledExecutorService friendCountThread = Executors.newSingleThreadScheduledExecutor();
+                    friendCountThread.scheduleAtFixedRate(new MyAutoReloadUserFriendCount(), 0, 1000, TimeUnit.MILLISECONDS);
                     friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
                     friendCountTableView.setItems(friendCounts);
                     friendCountTableView.refresh();

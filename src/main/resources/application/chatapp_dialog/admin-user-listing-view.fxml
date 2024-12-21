@@ -178,7 +178,7 @@
                                                       <MenuItem fx:id="activityUsernameAscending" mnemonicParsing="false" onAction="#handleSortActivityLogs" text="Ascending by Username" />
                                                   </items>
                                                 </MenuButton>
-                                                <Button fx:id="reloadActivityLogs" mnemonicParsing="false" prefHeight="31.0" prefWidth="266.0" text="Reload Database" />
+                                                <Button fx:id="reloadActivityLogs" mnemonicParsing="false" opacity="0.0" prefHeight="31.0" prefWidth="266.0" text="Reload Database" />
                                                                 </children>
                                              <VBox.margin>
                                                 <Insets left="16.0" right="16.0" />
