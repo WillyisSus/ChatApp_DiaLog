@@ -185,10 +185,10 @@ public class UserGroupMemberController implements Initializable {
                 rs.next();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
-                UserChatController controller = fxmlLoader.getController();
-                controller.setdata(id, rs.getInt(1));
                 stage = (Stage)display.getScene().getWindow();
                 stage.setScene(scene);
+                UserChatController controller = fxmlLoader.getController();
+                controller.setdata(id, rs.getInt(1), stage);
                 stage.show();
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
@@ -340,10 +340,10 @@ public class UserGroupMemberController implements Initializable {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            UserChatController controller = fxmlLoader.getController();
-            controller.setdata(id, boxid);
             stage = (Stage)display.getScene().getWindow();
             stage.setScene(scene);
+            UserChatController controller = fxmlLoader.getController();
+            controller.setdata(id, boxid, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -360,10 +360,10 @@ public class UserGroupMemberController implements Initializable {
                 ps.executeUpdate();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
-                UserChatController controller = fxmlLoader.getController();
-                controller.setdata(id, 0);
                 stage = (Stage)display.getScene().getWindow();
                 stage.setScene(scene);
+                UserChatController controller = fxmlLoader.getController();
+                controller.setdata(id, 0, stage);
                 stage.show();
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
@@ -439,10 +439,10 @@ public class UserGroupMemberController implements Initializable {
                 rs.next();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
-                UserChatController controller = fxmlLoader.getController();
-                controller.setdata(id, rs.getInt(1));
                 stage = (Stage)display.getScene().getWindow();
                 stage.setScene(scene);
+                UserChatController controller = fxmlLoader.getController();
+                controller.setdata(id, rs.getInt(1), stage);
                 stage.show();
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
@@ -451,12 +451,14 @@ public class UserGroupMemberController implements Initializable {
     }
     public void imageCreategroupClicked(MouseEvent event){
         try{
+            List<Integer> newuserlist = new ArrayList<>();
+            newuserlist.add(id);
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-create-group-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            UserCreateGroupController controller = fxmlLoader.getController();
-            controller.setdata(id);
             stage = (Stage)display.getScene().getWindow();
             stage.setScene(scene);
+            UserCreateGroupController controller = fxmlLoader.getController();
+            controller.setdata(id, stage, newuserlist);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -536,10 +538,10 @@ public class UserGroupMemberController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            UserChatController controller = fxmlLoader.getController();
-            controller.setdata(id, Integer.parseInt(((HBox) event.getSource()).getId()));
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserChatController controller = fxmlLoader.getController();
+            controller.setdata(id, Integer.parseInt(((HBox) event.getSource()).getId()), stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);

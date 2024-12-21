@@ -470,13 +470,15 @@ public class UserChatController implements Initializable, Runnable {
     }
     public void imageCreategroupClicked(MouseEvent event){
         try{
+            List<Integer> newuserlist = new ArrayList<>();
+            newuserlist.add(id);
             stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-create-group-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            UserCreateGroupController controller = fxmlLoader.getController();
-            controller.setdata(id);
             stage = (Stage)display.getScene().getWindow();
             stage.setScene(scene);
+            UserCreateGroupController controller = fxmlLoader.getController();
+            controller.setdata(id, stage, newuserlist);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -593,7 +595,6 @@ public class UserChatController implements Initializable, Runnable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        stage.setOnCloseRequest(event -> logout(stage));
         stop = false;
         chatTextSend2 = chatTextSend;
         chatImageSend2 = chatImageSend;
@@ -632,9 +633,11 @@ public class UserChatController implements Initializable, Runnable {
         t1.start();
     }
 
-    public void setdata(int gid, int gboxid){
+    public void setdata(int gid, int gboxid, Stage gstage){
         id = gid;
         boxid = gboxid;
+        stage = gstage;
+        stage.setOnCloseRequest(event -> logout(stage));
         vboxChatboxLoaded();
         vboxChatLoaded();
     }

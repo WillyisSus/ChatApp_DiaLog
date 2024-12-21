@@ -93,10 +93,10 @@ public class UserLoginController implements Initializable {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
-                UserChatController controller = fxmlLoader.getController();
-                controller.setdata(id, 0);
                 stage = (Stage) display.getScene().getWindow();
                 stage.setScene(scene);
+                UserChatController controller = fxmlLoader.getController();
+                controller.setdata(id, 0, stage);
                 stage.show();
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
