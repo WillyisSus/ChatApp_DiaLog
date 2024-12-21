@@ -1,6 +1,7 @@
 package application.chatapp_dialog;
 
 import application.chatapp_dialog.dal.UtilityDAL;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -18,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -33,7 +36,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class UserChatController implements Initializable {
+public class UserChatController implements Initializable, Runnable {
     @FXML
     private Stage stage;
     @FXML
@@ -41,66 +44,125 @@ public class UserChatController implements Initializable {
     @FXML
     private GridPane display;
 
-    int id = 1;
-    int boxid = 0;
+    static int id = 1;
+    static int boxid = 0;
+    static boolean stop  = false;
+//    static List<Integer> chatBoxchatList = new ArrayList<>();
+//    static List<Integer> chatBoxchatList2 = new ArrayList<>();
+//    static List<Integer> chatMessagesList = new ArrayList<>();
+//    static List<Integer> chatMessagesList2 = new ArrayList<>();
     @FXML
     private TextField chatTextSend;
+    static TextField chatTextSend2 = new TextField();
     @FXML
     private ImageView chatImageSend;
+    static ImageView chatImageSend2 = new ImageView();
     @FXML
     private VBox chatVboxChat;
+    static VBox chatVboxChat2 = new VBox();
     @FXML
     private Label chatLabelChatname;
+    static Label chatLabelChatname2 = new Label();
     @FXML
     private MenuButton chatMenuChat;
+    static MenuButton chatMenuChat2 = new MenuButton();
     @FXML
     private MenuButton chatMenuAccount;
+    static MenuButton chatMenuAccount2 = new MenuButton();
     @FXML
     private MenuItem chatMenuitemAccount;
+    static MenuItem chatMenuitemAccount2 = new MenuItem();
     @FXML
     private MenuItem chatMenuitemFriends;
+    static MenuItem chatMenuitemFriends2 = new MenuItem();
     @FXML
     private MenuItem chatMenuitemLogout;
+    static MenuItem chatMenuitemLogout2 = new MenuItem();
     @FXML
     private MenuButton chatMenuOnline;
+    static MenuButton chatMenuOnline2 = new MenuButton();
     @FXML
     private ImageView chatImageCreategroup;
+    static ImageView chatImageCreategroup2 = new ImageView();
     @FXML
     private VBox chatVboxChatbox;
-
+    static VBox chatVboxChatbox2 = new VBox();
     @FXML
-    public void textSendEntered(ActionEvent event){
-        String serverIP = "localhost";
-        int serverPort = 1234;
-        try (Socket socket = new Socket(serverIP, serverPort)) {
-            InputStream in = socket.getInputStream();
-            OutputStream out = socket.getOutputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+    private ScrollPane chatScrollChat;
+    static ScrollPane chatScrollChat2 = new ScrollPane();
+    @FXML
+    private ScrollPane chatScrollBoxchat;
+    static ScrollPane chatScrollBoxchat2 = new ScrollPane();
+    @FXML
+    private TextField chatTextSearchchat;
+    static TextField chatTextSearchchat2 = new TextField();
+    static String searchValue = "";
+    static int changable = 0;
+    @FXML
+    private TextField chatTextSearchbox;
+    static TextField chatTextSearchbox2 = new TextField();
 
-            String s = chatTextSend.getText();
-            System.out.println(s);
-            writer.write(s + " ");
-            writer.flush();
-
-            String s2 = reader.readLine();
-            System.out.println("Server message: " + s2);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    Connection conn = UtilityDAL.getConnection();
+    @FXML
+    synchronized public void textSendEntered(ActionEvent event){
+        String message = chatTextSend2.getText();
+        if (message == null || message.isBlank()){
+            return;
+        }
+        if (conn != null) {
+            try {
+                String query = "insert into messages (user_id, box_id, content) values (?, ?, ?)";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.setInt(2, boxid);
+                ps.setString(3, message);
+                ps.executeUpdate();
+                vboxChatboxLoaded();
+                vboxChatLoaded();
+                chatScrollChat2.applyCss();
+                chatScrollChat2.layout();
+                chatScrollChat2.setVvalue(1.0);
+                chatTextSend2.setText("");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-    public void imageSendClicked(MouseEvent event){}
-    public void vboxChatLoaded(){
-        chatVboxChat.getChildren().clear();
-        if (boxid == 0){
-            chatTextSend.setVisible(false);
-            chatImageSend.setVisible(false);
-        } else {
-            chatTextSend.setVisible(true);
-            chatImageSend.setVisible(true);
+    synchronized public void imageSendClicked(MouseEvent event){
+        String message = chatTextSend2.getText();
+        if (message == null || message.isBlank()){
+            return;
         }
-        Connection conn = UtilityDAL.getConnection();
+        if (conn != null) {
+            try {
+                String query = "insert into messages (user_id, box_id, content) values (?, ?, ?)";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.setInt(2, boxid);
+                ps.setString(3, message);
+                ps.executeUpdate();
+                vboxChatboxLoaded();
+                vboxChatLoaded();
+                chatScrollChat2.applyCss();
+                chatScrollChat2.layout();
+                chatScrollChat2.setVvalue(1.0);
+                chatTextSend2.setText("");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    synchronized public void vboxChatLoaded(){
+        chatVboxChat2.getChildren().clear();
+        if (boxid == 0){
+            chatTextSend2.setText("");
+            chatLabelChatname2.setText("");
+            chatTextSend2.setVisible(false);
+            chatImageSend2.setVisible(false);
+        } else {
+            chatTextSend2.setVisible(true);
+            chatImageSend2.setVisible(true);
+        }
         if (conn != null){
             try{
                 String query = "select box_name, displayname, is_direct from box_chats join box_chat_members on id = box_id join user_account_info on user_id = account_id where id = ? and user_id != ?";
@@ -112,9 +174,9 @@ public class UserChatController implements Initializable {
                     return;
                 }
                 if (rs.getBoolean("is_direct")){
-                    chatLabelChatname.setText(rs.getString("displayname"));
+                    chatLabelChatname2.setText(rs.getString("displayname"));
                 } else {
-                    chatLabelChatname.setText(rs.getString("box_name"));
+                    chatLabelChatname2.setText(rs.getString("box_name"));
                 }
                 query = "select id, account_id, displayname, content, create_date from messages join user_account_info on user_id = account_id where box_id = ? order by create_date, id";
                 ps = conn.prepareStatement(query);
@@ -125,8 +187,9 @@ public class UserChatController implements Initializable {
                     int newchatuserid = rs.getInt(2);
                     String newchatname = rs.getString(3);
                     String newchatmess = rs.getString(4);
-                    String newchattime = LocalDateTime.parse(rs.getString(5), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")).format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+                    String newchattime = rs.getTimestamp(5).toLocalDateTime().format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
                     HBox newchatsection = new HBox();
+                    newchatsection.setId(String.valueOf(newchatid));
                     newchatsection.setPadding(new Insets(0, 10, 0, 10));
                     newchatsection.setSpacing(10);
                     newchatsection.setPrefWidth(710);
@@ -143,23 +206,23 @@ public class UserChatController implements Initializable {
                     newchatcontent.setFont(new Font("Courier New", 20));
                     newchatcontent.setMinHeight(Region.USE_PREF_SIZE);
                     if (newchatuserid == id){
-                        MenuButton newchatbutton = new MenuButton();
-                        MenuItem newchatitem = new MenuItem("Delete");
-                        newchatitem.setId(String.valueOf(newchatid));
-                        newchatitem.setOnAction(this::deleteMessage);
-                        newchatbutton.getItems().add(newchatitem);
+                        Label newchatdelete = new Label("Delete");
+                        newchatdelete.setId(String.valueOf(newchatid));
+                        newchatdelete.setFont(new Font("Courier New", 12));
+                        newchatdelete.setTextFill(Color.BLUE);
+                        newchatdelete.setOnMouseClicked(this::deleteMessage);
                         newchattitlebox.setAlignment(Pos.CENTER_RIGHT);
                         newchattextbox.setAlignment(Pos.TOP_RIGHT);
                         newchatsection.setAlignment(Pos.TOP_RIGHT);
-                        newchattitlebox.getChildren().addAll(newchattitletime, newchattitlename);
+                        newchattitlebox.getChildren().addAll(newchatdelete, newchattitletime, newchattitlename);
                         newchattextbox.getChildren().addAll(newchattitlebox, newchatcontent);
-                        newchatsection.getChildren().addAll(newchatbutton, newchattextbox);
-                        chatVboxChat.getChildren().add(newchatsection);
+                        newchatsection.getChildren().add(newchattextbox);
+                        chatVboxChat2.getChildren().add(newchatsection);
                     } else {
                         newchattitlebox.getChildren().addAll(newchattitlename, newchattitletime);
                         newchattextbox.getChildren().addAll(newchattitlebox, newchatcontent);
                         newchatsection.getChildren().addAll(newchattextbox);
-                        chatVboxChat.getChildren().add(newchatsection);
+                        chatVboxChat2.getChildren().add(newchatsection);
                     }
                 }
             } catch (SQLException e) {
@@ -167,13 +230,12 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void deleteMessage(ActionEvent event){
-        Connection conn = UtilityDAL.getConnection();
+    synchronized public void deleteMessage(MouseEvent event){
         if (conn != null) {
             try {
                 String query = "delete from messages where id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
-                ps.setInt(1, Integer.parseInt(((MenuItem)event.getSource()).getId()));
+                ps.setInt(1, Integer.parseInt(((Label)event.getSource()).getId()));
                 ps.executeUpdate();
                 vboxChatboxLoaded();
                 vboxChatLoaded();
@@ -182,7 +244,10 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void labelChatnameClicked(MouseEvent event){
+    synchronized public void labelChatnameClicked(MouseEvent event){
+        if (boxid == 0){
+            return;
+        }
         TextInputDialog td = new TextInputDialog();
         td.setTitle("Notification");
         td.setHeaderText("Enter group name.");
@@ -190,7 +255,6 @@ public class UserChatController implements Initializable {
         td.showAndWait();
         String newGroupname = td.getResult();
         if (newGroupname != null && !newGroupname.isBlank() && newGroupname.length() <= 32){
-            Connection conn = UtilityDAL.getConnection();
             if (conn != null) {
                 try {
                     String query = "update box_chats set box_name = ? where id = ?";
@@ -206,14 +270,13 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void menuChatClicked(Event event){
+    synchronized public void menuChatClicked(Event event){
         if (boxid == 0){
             return;
         }
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
-                chatMenuChat.getItems().clear();
+                chatMenuChat2.getItems().clear();
                 String query = "select is_direct from box_chats where id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, boxid);
@@ -222,29 +285,24 @@ public class UserChatController implements Initializable {
                 if (rs.getBoolean(1)){
                     MenuItem newitemfriend = new MenuItem("Unfriend");
                     newitemfriend.setOnAction(this::menuitemFriendClicked);
-                    MenuItem newitemsearch = new MenuItem("Search");
-                    newitemsearch.setOnAction(this::menuitemSearchClicked);
                     MenuItem newitemreport = new MenuItem("Report");
                     newitemreport.setOnAction(this::menuitemReportClicked);
                     MenuItem newitemblock = new MenuItem("Block");
                     newitemblock.setOnAction(this::menuitemBlockClicked);
-                    chatMenuChat.getItems().addAll(newitemfriend, newitemsearch, newitemreport, newitemblock);
+                    chatMenuChat2.getItems().addAll(newitemfriend, newitemreport, newitemblock);
                 } else {
                     MenuItem newitemmember = new MenuItem("Members");
                     newitemmember.setOnAction(this::menuitemMembersClicked);
-                    MenuItem newitemsearch = new MenuItem("Search");
-                    newitemsearch.setOnAction(this::menuitemSearchClicked);
                     MenuItem newitemleave = new MenuItem("Leave");
                     newitemleave.setOnAction(this::menuitemLeaveClicked);
-                    chatMenuChat.getItems().addAll(newitemmember, newitemsearch, newitemleave);
+                    chatMenuChat2.getItems().addAll(newitemmember, newitemleave);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-    public void menuitemFriendClicked(ActionEvent event){
-        Connection conn = UtilityDAL.getConnection();
+    synchronized public void menuitemFriendClicked(ActionEvent event){
         if (conn != null) {
             try {
                 String query = "delete from friendships where (request_id = ? and accept_id = (select user_id from box_chat_members where box_id = ? and user_id != ?))\n" +
@@ -269,9 +327,7 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void menuitemSearchClicked(ActionEvent event){}
-    public void menuitemReportClicked(ActionEvent event){
-        Connection conn = UtilityDAL.getConnection();
+    synchronized public void menuitemReportClicked(ActionEvent event){
         if (conn != null) {
             try {
                 String query = "insert into reports (reporter_id, reported_id) values (?, (select user_id from box_chat_members where box_id = ? and user_id != ?))";
@@ -289,8 +345,7 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void menuitemBlockClicked(ActionEvent event){
-        Connection conn = UtilityDAL.getConnection();
+    synchronized public void menuitemBlockClicked(ActionEvent event){
         if (conn != null) {
             try {
                 String query = "insert into block_lists (user_id, block_id) values (?, (select user_id from box_chat_members where box_id = ? and user_id != ?))";
@@ -305,8 +360,9 @@ public class UserChatController implements Initializable {
             }
         }
     }
-    public void menuitemMembersClicked(ActionEvent event){
+    synchronized public void menuitemMembersClicked(ActionEvent event){
         try{
+            stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-group-member-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             UserGroupMemberController controller = fxmlLoader.getController();
@@ -318,8 +374,7 @@ public class UserChatController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    public void menuitemLeaveClicked(ActionEvent event){
-        Connection conn = UtilityDAL.getConnection();
+    synchronized public void menuitemLeaveClicked(ActionEvent event){
         if (conn != null) {
             try {
                 String query = "delete from box_chat_members where box_id = ? and user_id = ?";
@@ -337,6 +392,7 @@ public class UserChatController implements Initializable {
     }
     public void menuitemAccountClicked(ActionEvent event){
         try{
+            stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-account-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage)display.getScene().getWindow();
@@ -348,6 +404,7 @@ public class UserChatController implements Initializable {
     }
     public void menuitemFriendsClicked(ActionEvent event){
         try{
+            stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-friends-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage)display.getScene().getWindow();
@@ -359,6 +416,7 @@ public class UserChatController implements Initializable {
     }
     public void menuitemLogoutClicked(ActionEvent event){
         try{
+            stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage)display.getScene().getWindow();
@@ -370,7 +428,6 @@ public class UserChatController implements Initializable {
     }
     public void menuOnlineClicked(Event event){
         chatMenuOnline.getItems().clear();
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
                 String query = "select id, username, displayname from user_account_info join user_accounts on account_id = id join friendships on (id = request_id or id = accept_id) and is_accepted = true where status = 'online' and id != ?";
@@ -389,7 +446,6 @@ public class UserChatController implements Initializable {
         }
     }
     public void menuitemOnlineClicked(ActionEvent event){
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
                 String query = "select box_id from\n" +
@@ -404,6 +460,9 @@ public class UserChatController implements Initializable {
                 rs.next();
                 boxid = rs.getInt(1);
                 vboxChatLoaded();
+                chatScrollChat2.applyCss();
+                chatScrollChat2.layout();
+                chatScrollChat2.setVvalue(1.0);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -411,6 +470,7 @@ public class UserChatController implements Initializable {
     }
     public void imageCreategroupClicked(MouseEvent event){
         try{
+            stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-create-group-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             UserCreateGroupController controller = fxmlLoader.getController();
@@ -422,12 +482,19 @@ public class UserChatController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-    public void vboxChatboxLoaded(){
-        chatVboxChatbox.getChildren().clear();
-        Connection conn = UtilityDAL.getConnection();
+    synchronized public void vboxChatboxLoaded(){
+        chatVboxChatbox2.getChildren().clear();
         if (conn != null) {
             try {
-                String query = "with directbox as ( " +
+                String query = "select * from box_chat_members where box_id = ? and user_id = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, boxid);
+                ps.setInt(2, id);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()){
+                    boxid = 0;
+                }
+                query = "with directbox as ( " +
                         "    select distinct on (box_chats.id) box_chats.id, user_account_info.displayname as box_name, messages.content as newestmessage " +
                         "    from box_chats " +
                         "    join box_chat_members  " +
@@ -457,11 +524,11 @@ public class UserChatController implements Initializable {
                         "select * from groupbox " +
                         "union  " +
                         "select * from directbox;";
-                PreparedStatement ps = conn.prepareStatement(query);
+                ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.setInt(2, id);
                 ps.setInt(3, id);
-                ResultSet rs = ps.executeQuery();
+                rs = ps.executeQuery();
                 while (rs.next()){
                     int boxrid = rs.getInt(1);
                     String boxname = rs.getString(2);
@@ -485,22 +552,68 @@ public class UserChatController implements Initializable {
                     newvboxdata.getChildren().addAll(newboxname, newboxmess);
                     newhboxbox.getChildren().add(newvboxdata);
                     newhboxbox.setOnMouseClicked(this::hboxBoxClicked);
-                    chatVboxChatbox.getChildren().add(newhboxbox);
+                    chatVboxChatbox2.getChildren().add(newhboxbox);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
     }
-    public void hboxBoxClicked(MouseEvent event){
+    synchronized public void hboxBoxClicked(MouseEvent event){
         boxid = Integer.parseInt(((HBox)event.getSource()).getId());
         vboxChatLoaded();
+        chatScrollChat2.applyCss();
+        chatScrollChat2.layout();
+        chatScrollChat2.setVvalue(1.0);
+    }
+    synchronized public void textSearchchatEntered(ActionEvent event){
+        String newsearchtext = chatTextSearchchat2.getText();
+        if (newsearchtext == null || newsearchtext.isBlank() || boxid == 0){
+            return;
+        }
+        if (conn != null) {
+            try {
+                String query = "select * from messages where box_id = ? and content like ? order by create_date desc";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, boxid);
+                ps.setString(2, "%" + newsearchtext + "%");
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    if (changable == 0){
+                        chatScrollChat2.applyCss();
+                        chatScrollChat2.layout();
+                        chatScrollChat2.setVvalue((double) chatVboxChat2.getChildren().indexOf(chatVboxChat.lookup("#" + rs.getInt("id"))) / chatVboxChat.getChildren().size());
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        stage.setOnCloseRequest(event -> logout(stage));
+        stop = false;
+        chatTextSend2 = chatTextSend;
+        chatImageSend2 = chatImageSend;
+        chatVboxChat2 = chatVboxChat;
+        chatLabelChatname2 = chatLabelChatname;
+        chatMenuChat2 = chatMenuChat;
+        chatMenuitemAccount2 = chatMenuitemAccount;
+        chatMenuitemFriends2 = chatMenuitemFriends;
+        chatMenuitemLogout2 = chatMenuitemLogout;
+        chatMenuOnline2 = chatMenuOnline;
+        chatImageCreategroup2 = chatImageCreategroup;
+        chatVboxChatbox2 = chatVboxChatbox;
+        chatScrollChat2 = chatScrollChat;
+        chatScrollBoxchat2 = chatScrollBoxchat;
+        chatTextSearchchat2 = chatTextSearchchat;
+        chatTextSearchbox2 = chatTextSearchbox;
         chatLabelChatname.setText("");
         chatTextSend.setText("");
+        chatTextSearchchat.setText("");
+        chatTextSearchbox.setText("");
         chatTextSend.setOnAction(this::textSendEntered);
         chatImageSend.setOnMouseClicked(this::imageSendClicked);
         chatLabelChatname.setOnMouseClicked(this::labelChatnameClicked);
@@ -510,8 +623,13 @@ public class UserChatController implements Initializable {
         chatMenuitemLogout.setOnAction(this::menuitemLogoutClicked);
         chatMenuOnline.setOnShowing(this::menuOnlineClicked);
         chatImageCreategroup.setOnMouseClicked(this::imageCreategroupClicked);
+        chatTextSearchchat.setOnAction(this::textSearchchatEntered);
         vboxChatboxLoaded();
         vboxChatLoaded();
+        Runnable r1 = new UserChatController();
+        Thread t1 = new Thread(r1, "UserChatController");
+        t1.setDaemon(true);
+        t1.start();
     }
 
     public void setdata(int gid, int gboxid){
@@ -519,5 +637,42 @@ public class UserChatController implements Initializable {
         boxid = gboxid;
         vboxChatboxLoaded();
         vboxChatLoaded();
+    }
+
+    public void run(){
+        while (true){
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (stop){
+                return;
+            }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    vboxChatboxLoaded();
+                    vboxChatLoaded();
+                }
+            });
+            if (!Objects.equals(chatTextSearchchat2.getText(), searchValue)){
+                searchValue = chatTextSearchchat2.getText();
+                changable = 0;
+            }
+        }
+    }
+
+    public void logout(Stage st){
+        if (conn != null) {
+            try {
+                String query = "update user_accounts set status = 'offline' where id = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.executeUpdate();;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

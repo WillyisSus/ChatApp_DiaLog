@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.SceneController">
+<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.UserFriendController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -35,9 +35,9 @@
                      <children>
                         <MenuButton mnemonicParsing="false">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#accountClick" text="Account" />
-                              <MenuItem mnemonicParsing="false" onAction="#friendsClick" text="Friends" />
-                              <MenuItem mnemonicParsing="false" onAction="#logoutClick" text="Log out" />
+                              <MenuItem id="friend-menuitem-account" fx:id="friendMenuitemAccount" mnemonicParsing="false" text="Account" />
+                              <MenuItem mnemonicParsing="false" text="Friends" />
+                              <MenuItem id="friend-menuitem-logout" fx:id="friendMenuitemLogout" mnemonicParsing="false" text="Log out" />
                            </items>
                            <graphic>
                               <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
@@ -50,7 +50,7 @@
                      </children>
                   </HBox>
                   <Label minHeight="570.0" />
-                  <ImageView fitHeight="72.0" fitWidth="72.0" onMouseClicked="#loginClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="friend-image-back" fx:id="friendImageBack" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/arrow-back-icon.png" />
                      </image>
@@ -61,381 +61,237 @@
          <center>
             <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                  <Tab text="Friends">
+                  <Tab id="friend-tab-friends" fx:id="friendTabFriends" text="Friends">
                      <content>
                         <BorderPane prefHeight="200.0" prefWidth="200.0">
                            <center>
-                              <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <ScrollPane id="friend-scroll-friends" fx:id="friendScrollFriends" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <content>
-                                    <VBox prefHeight="720.0" prefWidth="976.0" spacing="10.0">
+                                    <VBox id="friend-vbox-friends" fx:id="friendVboxFriends" prefHeight="654.0" prefWidth="976.0" spacing="10.0">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <HBox spacing="80.0">
+                                                         <children>
+                                                            <Label maxWidth="580.0" minWidth="580.0" text="Diana Kotex">
+                                                               <font>
+                                                                  <Font name="Courier New Bold" size="30.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Online" textFill="LIME">
+                                                               <font>
+                                                                  <Font name="Courier New" size="24.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="BOTTOM_LEFT" spacing="50.0">
+                                                         <children>
+                                                            <Label text="Chat" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Group" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Unfriend" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Block" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Report" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="45.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                              <padding>
                                                 <Insets left="30.0" top="15.0" />
                                              </padding>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="40 minutes">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <HBox spacing="80.0">
+                                                         <children>
+                                                            <Label maxWidth="580.0" minWidth="580.0" text="Diana Kotex">
+                                                               <font>
+                                                                  <Font name="Courier New Bold" size="30.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Online" textFill="LIME">
+                                                               <font>
+                                                                  <Font name="Courier New" size="24.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="BOTTOM_LEFT" spacing="50.0">
+                                                         <children>
+                                                            <Label text="Chat" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Group" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Unfriend" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Block" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Report" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="45.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                              <padding>
                                                 <Insets left="30.0" top="15.0" />
                                              </padding>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <HBox spacing="80.0">
+                                                         <children>
+                                                            <Label maxWidth="580.0" minWidth="580.0" text="Diana Kotex">
+                                                               <font>
+                                                                  <Font name="Courier New Bold" size="30.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Online" textFill="LIME">
+                                                               <font>
+                                                                  <Font name="Courier New" size="24.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="BOTTOM_LEFT" spacing="50.0">
+                                                         <children>
+                                                            <Label text="Chat" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Group" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Unfriend" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Block" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Report" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="45.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                              <padding>
                                                 <Insets left="30.0" top="15.0" />
                                              </padding>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="1 hours">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="3 days">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="11 months">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="8 years">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
-                                             </children>
-                                             <padding>
-                                                <Insets left="30.0" top="15.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0" spacing="30.0">
-                                             <children>
-                                                <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../../images/98.png" />
-                                                   </image>
-                                                </ImageView>
-                                                <Label minWidth="504.0" text="Diana Kotex">
-                                                   <font>
-                                                      <Font name="Courier New Bold" size="36.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label minWidth="180.0" text="Online">
-                                                   <font>
-                                                      <Font name="Courier New" size="24.0" />
-                                                   </font>
-                                                </Label>
-                                                <MenuButton mnemonicParsing="false">
-                                                   <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
-                                                      <MenuItem mnemonicParsing="false" text="Remove" />
-                                                      <MenuItem mnemonicParsing="false" text="Block" />
-                                                      <MenuItem mnemonicParsing="false" text="Report" />
-                                                   </items>
-                                                </MenuButton>
+                                                <VBox spacing="10.0">
+                                                   <children>
+                                                      <HBox spacing="80.0">
+                                                         <children>
+                                                            <Label maxWidth="580.0" minWidth="580.0" text="Diana Kotex">
+                                                               <font>
+                                                                  <Font name="Courier New Bold" size="30.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Online" textFill="LIME">
+                                                               <font>
+                                                                  <Font name="Courier New" size="24.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="BOTTOM_LEFT" spacing="50.0">
+                                                         <children>
+                                                            <Label text="Chat" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Group" textFill="BLUE">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Unfriend" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Block" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <Label text="Report" textFill="RED">
+                                                               <font>
+                                                                  <Font name="Courier New" size="18.0" />
+                                                               </font>
+                                                            </Label>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="45.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                              <padding>
                                                 <Insets left="30.0" top="15.0" />
@@ -447,7 +303,7 @@
                               </ScrollPane>
                            </center>
                            <top>
-                              <TextField promptText="Search..." BorderPane.alignment="CENTER">
+                              <TextField id="friend-text-searchfriends" fx:id="friendTextSearchfriends" promptText="Search..." BorderPane.alignment="CENTER">
                                  <font>
                                     <Font name="Courier New" size="20.0" />
                                  </font>
@@ -490,8 +346,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -521,8 +377,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -552,8 +408,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -583,8 +439,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -614,8 +470,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -645,8 +501,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -676,8 +532,8 @@
                                                 </Label>
                                                 <MenuButton mnemonicParsing="false">
                                                    <items>
-                                                      <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                      <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                       <MenuItem mnemonicParsing="false" text="Remove" />
                                                       <MenuItem mnemonicParsing="false" text="Block" />
                                                       <MenuItem mnemonicParsing="false" text="Report" />
@@ -1394,8 +1250,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1425,8 +1281,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1456,8 +1312,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1487,8 +1343,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1518,8 +1374,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1549,8 +1405,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1580,8 +1436,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1611,8 +1467,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1642,8 +1498,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1673,8 +1529,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1704,8 +1560,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />
@@ -1735,8 +1591,8 @@
                                           </Label>
                                           <MenuButton mnemonicParsing="false">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#loginClick" text="Chat" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#createClick" text="Group" />
+                                                <MenuItem mnemonicParsing="false" text="Chat" />
+                                                      <MenuItem mnemonicParsing="false" text="Group" />
                                                 <MenuItem mnemonicParsing="false" text="Remove" />
                                                 <MenuItem mnemonicParsing="false" text="Block" />
                                                 <MenuItem mnemonicParsing="false" text="Report" />

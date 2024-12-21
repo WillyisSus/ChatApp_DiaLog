@@ -536,5 +536,6 @@ public class UserCreateGroupController implements Initializable  {
 
     public void setdata(int gid){
         id = gid;
+        vboxChatboxLoaded();
     }
 }

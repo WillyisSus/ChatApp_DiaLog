@@ -35,8 +35,8 @@ public class UserLoginController implements Initializable {
     @FXML
     private Button loginButtonCreate;
 
+    Connection conn = UtilityDAL.getConnection();
     public int loginedUser(String username, String password){
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
                 String query = "select * from user_accounts where username = ? or email = ?";
@@ -57,6 +57,10 @@ public class UserLoginController implements Initializable {
                 String hashedPass = EncryptPassword.hashPassword(password, salt);
                 if (hashedPass.equals(op)){
                     System.out.println("logged in " + id);
+                    query = "update user_accounts set status = 'online' where id = ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
                     return id;
                 } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);

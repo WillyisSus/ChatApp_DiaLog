@@ -287,7 +287,7 @@ public class UserGroupMemberController implements Initializable {
                 String query = "delete from box_chat_members where box_id = ? and user_id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, boxid);
-                ps.setInt(1, Integer.parseInt(((MenuItem)event.getSource()).getId()));
+                ps.setInt(2, Integer.parseInt(((MenuItem)event.getSource()).getId()));
                 ps.executeUpdate();
                 vboxMemberLoaded();
             } catch (SQLException e) {
@@ -597,6 +597,7 @@ public class UserGroupMemberController implements Initializable {
         memberButtonAddmember.setOnAction(this::buttonAddmemberClicked);
         vboxChatboxLoaded();
         vboxMemberLoaded();
+
     }
 
     public void setdata(int gid, int gboxid){
