@@ -103,7 +103,24 @@ public class UserPasswordController implements Initializable, Runnable {
     synchronized public void buttonResetClicked(ActionEvent event){
         if (conn != null) {
             try {
-
+                String query = "select email from user_accounts where id = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                String email = rs.getString(1);
+                query = "update user_accounts set status = 'offline' where id = ?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.executeUpdate();
+                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.executeUpdate();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("An email has been send.");
+                alert.show();
                 stop = true;
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
@@ -121,7 +138,7 @@ public class UserPasswordController implements Initializable, Runnable {
                 String oldpass = passwordPasswordOldpw.getText();
                 String newpass = passwordPasswordNewpw.getText();
                 String confirmpass = passwordPasswordConfirmpw.getText();
-                if (newpass != confirmpass){
+                if (!newpass.equals(confirmpass)){
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Notification");
                     alert.setHeaderText("Confirm password does not matched.");
@@ -140,6 +157,7 @@ public class UserPasswordController implements Initializable, Runnable {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
+                rs.next();
                 String op = rs.getString("password");
                 String salt = rs.getString("salt");
                 String hashedPass = EncryptPassword.hashPassword(oldpass, salt);
@@ -157,6 +175,18 @@ public class UserPasswordController implements Initializable, Runnable {
                 ps.setString(1, hashedPassword);
                 ps.setString(2, newsalt);
                 ps.setInt(3, id);
+                ps.executeUpdate();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Notification");
+                alert.setHeaderText("Password Changed. Logging out.");
+                alert.show();
+                query = "update user_accounts set status = 'offline' where id = ?";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.executeUpdate();
+                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
                 ps.executeUpdate();
                 stop = true;
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));

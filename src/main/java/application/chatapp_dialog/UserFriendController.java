@@ -90,10 +90,10 @@ public class UserFriendController implements Initializable, Runnable  {
             stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-account-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            //UserAccountController controller = fxmlLoader.getController();
-            //controller.setdata(id);
             stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
+            UserAccountController controller = fxmlLoader.getController();
+            controller.setdata(id, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -106,7 +106,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.executeUpdate();
-                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ?";
+                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.executeUpdate();
@@ -835,7 +835,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.executeUpdate();
-                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ?";
+                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
                 ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.executeUpdate();

@@ -14,7 +14,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.SceneController">
+<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.UserForgotController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -61,7 +61,7 @@
                   <Font name="Courier New Bold" size="24.0" />
                </font>
             </Label>
-            <TextField id="login-text-username" layoutX="140.0" layoutY="295.0" minHeight="40.0" minWidth="260.0" promptText="Username">
+            <TextField id="login-text-username" fx:id="forgotTextUsername" layoutX="140.0" layoutY="295.0" minHeight="40.0" minWidth="260.0" promptText="Username">
                <font>
                   <Font name="Courier New Bold" size="16.0" />
                </font>
@@ -71,22 +71,22 @@
                   <Font name="Courier New Bold" size="24.0" />
                </font>
             </Label>
-            <TextField id="login-text-username" layoutX="140.0" layoutY="380.0" minHeight="40.0" minWidth="260.0" promptText="abc@email.com">
+            <TextField id="login-text-username" fx:id="forgotTextEmail" layoutX="140.0" layoutY="380.0" minHeight="40.0" minWidth="260.0" promptText="abc@email.com">
                <font>
                   <Font name="Courier New Bold" size="16.0" />
                </font>
             </TextField>
-            <Button id="login-button-login" layoutX="182.0" layoutY="455.0" minWidth="80.0" mnemonicParsing="false" onAction="#logoutClick" text="Reset password">
+            <Button id="login-button-login" fx:id="forgotButtonReset" layoutX="182.0" layoutY="455.0" minWidth="80.0" mnemonicParsing="false" text="Reset password">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
             </Button>
-            <Button id="login-button-forgot" layoutX="160.0" layoutY="526.0" minWidth="220.0" mnemonicParsing="false" onAction="#logoutClick" text="Back to login">
+            <Button id="login-button-forgot" fx:id="forgotButtonLogin" layoutX="160.0" layoutY="526.0" minWidth="220.0" mnemonicParsing="false" text="Back to login">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
             </Button>
-            <Button id="login-button-create" layoutX="160.0" layoutY="577.0" minWidth="220.0" mnemonicParsing="false" onAction="#newClick" text="Create an account">
+            <Button id="login-button-create" fx:id="forgotButtonCreate" layoutX="160.0" layoutY="577.0" minWidth="220.0" mnemonicParsing="false" text="Create an account">
                <font>
                   <Font name="Courier New Bold" size="18.0" />
                </font>
