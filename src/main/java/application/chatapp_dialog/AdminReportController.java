@@ -2,7 +2,9 @@ package application.chatapp_dialog;
 
 import application.chatapp_dialog.dal.AdminGroupInformationDAL;
 import application.chatapp_dialog.dal.AdminReportInformationDAL;
+import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import application.chatapp_dialog.dto.AdminReportInformation;
+import application.chatapp_dialog.dto.AdminUserAccount;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -22,12 +24,37 @@ import java.net.URL;
 import java.security.AllPermission;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AdminReportController implements Initializable {
 
+    private class MyAutoReloadReport implements Runnable{
 
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminReportInformation> temp =  FXCollections.observableArrayList(AdminReportInformationDAL.getReportList());
+                if(comparator != null){
+                    temp.sort(comparator);
+                }
+                if (reportTable.getItems() instanceof FilteredList<AdminReportInformation>){
+                    reportTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminReportInformation>) reportTable.getItems()).getPredicate()));
+                }else {
+                    reportTable.setItems(temp);
+                }
+
+                reportList = temp;
+                reportTable.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 // scene controller
     private Scene scene;
     private Stage stage;
@@ -92,6 +119,7 @@ public class AdminReportController implements Initializable {
     @FXML
     private Button lockUser;
 //  Table data properties;
+    private Comparator<AdminReportInformation> comparator;
     private ObservableList<AdminReportInformation> reportList;
     public void switchToLogin(ActionEvent event){
         try{
@@ -239,21 +267,27 @@ public class AdminReportController implements Initializable {
             public void run() {
                 if (event.getSource() == dateAscending){
                     orderMenu.setText(dateAscending.getText());
+                    comparator = AdminReportInformationDAL.getDateAscendingComparator();
                     reportList.sort(AdminReportInformationDAL.getDateAscendingComparator());
                 } else if(event.getSource() == dateDescending){
                     orderMenu.setText(dateDescending.getText());
+                    comparator = AdminReportInformationDAL.getDateDescendingComparator();
                     reportList.sort(AdminReportInformationDAL.getDateDescendingComparator());
                 } else if (event.getSource() == reporterAscending){
                     orderMenu.setText(reporterAscending.getText());
+                    comparator = AdminReportInformationDAL.getReporterUsernameAscendingComparator();
                     reportList.sort(AdminReportInformationDAL.getReporterUsernameAscendingComparator());
                 } else if (event.getSource() == reporterDescending){
                     orderMenu.setText(reporterDescending.getText());
+                    comparator = AdminReportInformationDAL.getreporterUsernameDescendingComparator();
                     reportList.sort(AdminReportInformationDAL.getreporterUsernameDescendingComparator());
                 } else if (event.getSource() == reportedNameAscending){
                     orderMenu.setText(reportedNameAscending.getText());
+                    comparator = AdminReportInformationDAL.getUsernameAscendingComparator();
                     reportList.sort(AdminReportInformationDAL.getUsernameAscendingComparator());
                 } else {
                     orderMenu.setText(reportedNameDescending.getText());
+                    comparator = AdminReportInformationDAL.getUsernameDescendingComparator();
                     reportList.sort(AdminReportInformationDAL.getUsernameDescendingComparator());
                 }
                 reportTable.refresh();
@@ -317,7 +351,9 @@ public class AdminReportController implements Initializable {
                 toReportViewButton.requestFocus();
             }
         });
-
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadReport(), 5000, 1000, TimeUnit.MILLISECONDS);
+        comparator = null;
         reportedUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReportedUsername()));
         reportedEmail.setCellValueFactory(data->new SimpleStringProperty(data.getValue().getReportedEmail()));
         reportedDisplayName.setCellValueFactory(data->new SimpleStringProperty(data.getValue().getDisplayName()));

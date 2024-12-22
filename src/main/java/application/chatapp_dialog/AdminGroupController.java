@@ -20,11 +20,34 @@ import javafx.scene.Node;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AdminGroupController implements Initializable {
-
+    private class MyAutoReloadGroupInformation implements Runnable {
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminGroupInformation> temp =  FXCollections.observableArrayList(AdminGroupInformationDAL.getGroupInformationList());
+                if(comparator != null){
+                    temp.sort(comparator);
+                }
+                if (boxTable.getItems() instanceof FilteredList<AdminGroupInformation>){
+                    boxTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminGroupInformation>) boxTable.getItems()).getPredicate()));
+                }else {
+                    boxTable.setItems(temp);
+                }
+                groupInformations = temp;
+                boxTable.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
     @FXML
     private TableView<AdminGroupInformation> boxTable;
     @FXML
@@ -36,6 +59,7 @@ public class AdminGroupController implements Initializable {
     @FXML
     private TableColumn<AdminGroupInformation, String> boxMembers;
 
+    private Comparator<AdminGroupInformation> comparator;
     private ObservableList<AdminGroupInformation> groupInformations;
     private ObservableList<AdminSimpleUserAccount> memberInGroups;
 //    Admin table
@@ -257,6 +281,9 @@ public class AdminGroupController implements Initializable {
                 toGroupViewButton.requestFocus();
             }
         });
+        comparator = null;
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadGroupInformation(), 5000, 1000, TimeUnit.MILLISECONDS);
         boxName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGroupName()));
         boxCreateDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
         boxAdmins.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAdmins().toString()));

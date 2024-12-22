@@ -19,10 +19,34 @@ import javafx.scene.Node;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AdminActiveUserController implements Initializable {
+    private class MyAutoReloadActiveUser implements Runnable{
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminActiveUserInformation> temp =  FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations());
+                if(comparator != null){
+                    temp.sort(comparator);
+                }
+                if (tableView.getItems() instanceof FilteredList<AdminActiveUserInformation>){
+                    tableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminActiveUserInformation>) tableView.getItems()).getPredicate()));
+                }else {
+                    tableView.setItems(temp);
+                }
+                activeUserInformations = temp;
+                tableView.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 //    Table property
     @FXML
     private TableView<AdminActiveUserInformation> tableView;
@@ -39,6 +63,7 @@ public class AdminActiveUserController implements Initializable {
     @FXML
     private TableColumn<AdminActiveUserInformation, String> createDateColumn;
 
+    private Comparator<AdminActiveUserInformation> comparator;
     private ObservableList<AdminActiveUserInformation> activeUserInformations;
 //    Filter property
     @FXML
@@ -256,15 +281,19 @@ public class AdminActiveUserController implements Initializable {
             public void run() {
                 if (event.getSource() == createDateAscending){
                     orderMenu.setText(createDateAscending.getText());
+                    comparator = AdminActiveUserInformationDAL.getDateAscendingComparator();
                     activeUserInformations.sort(AdminActiveUserInformationDAL.getDateAscendingComparator());
                 } else if(event.getSource() == createDateDescending){
                     orderMenu.setText(createDateDescending.getText());
+                    comparator = AdminActiveUserInformationDAL.getDateDescendingComparator();
                     activeUserInformations.sort(AdminActiveUserInformationDAL.getDateDescendingComparator());
                 } else if (event.getSource() == usernameAscending){
                     orderMenu.setText(usernameAscending.getText());
+                    comparator = AdminActiveUserInformationDAL.getUsernameAscendingComparator();
                     activeUserInformations.sort(AdminActiveUserInformationDAL.getUsernameAscendingComparator());
                 } else if (event.getSource() == usernameDescending){
                     orderMenu.setText(usernameDescending.getText());
+                    comparator = AdminActiveUserInformationDAL.getUsernameDescendingComparator();
                     activeUserInformations.sort(AdminActiveUserInformationDAL.getUsernameDescendingComparator());
                 }
                 tableView.refresh();
@@ -280,6 +309,9 @@ public class AdminActiveUserController implements Initializable {
                 toActiveUserButton.requestFocus();
             }
         });
+        comparator = null;
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(new MyAutoReloadActiveUser(), 5000, 1000, TimeUnit.MILLISECONDS);
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         createDateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toLocalDateTime().withNano(0).toString()));

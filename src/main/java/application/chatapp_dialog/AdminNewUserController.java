@@ -22,9 +22,34 @@ import javafx.scene.Node;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AdminNewUserController implements Initializable {
+
+    private class MyAutoReloadNewUser implements Runnable{
+        @Override
+        public void run() {
+            try {
+                ObservableList<AdminNewUserAccount> temp =  FXCollections.observableArrayList(AdminNewUserAccountDAL.getAllNewAccount());
+                if(comparator != null){
+                    temp.sort(comparator);
+                }
+                if (newUserTable.getItems() instanceof FilteredList<AdminNewUserAccount>){
+                    newUserTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminNewUserAccount>) newUserTable.getItems()).getPredicate()));
+                }else {
+                    newUserTable.setItems(temp);
+                }
+                newUserAccounts = temp;
+                newUserTable.refresh();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 //    Scene properties
     private Scene scene;
     private Stage stage;
@@ -53,8 +78,9 @@ public class AdminNewUserController implements Initializable {
     @FXML
     private TableColumn<AdminNewUserAccount, String> createDateColumn;
 
-    private ObservableList<AdminNewUserAccount> newUserAccounts;
 
+    private ObservableList<AdminNewUserAccount> newUserAccounts;
+    private Comparator<AdminNewUserAccount> comparator;
     // Filter Properties
     @FXML
     private TextField filterValue;
@@ -177,21 +203,27 @@ public class AdminNewUserController implements Initializable {
             public void run() {
                 if (event.getSource() == usernameAscending){
                     orderMenu.setText(usernameAscending.getText());
+                    comparator = AdminNewUserAccountDAL.getUsernameAscending();
                     newUserAccounts.sort(AdminNewUserAccountDAL.getUsernameAscending());
                 }else if (event.getSource() == usernameDescending){
                     orderMenu.setText(usernameDescending.getText());
+                    comparator = AdminNewUserAccountDAL.getUsernameDescending();
                     newUserAccounts.sort(AdminNewUserAccountDAL.getUsernameDescending());
                 }else if (event.getSource() == emailAscending){
                     orderMenu.setText(emailAscending.getText());
+                    comparator = AdminNewUserAccountDAL.getEmailAscending();
                     newUserAccounts.sort(AdminNewUserAccountDAL.getEmailAscending());
                 } else if (event.getSource() == emailDescending){
                     orderMenu.setText(emailDescending.getText());
+                    comparator = AdminNewUserAccountDAL.getEmailDescending();
                     newUserAccounts.sort(AdminNewUserAccountDAL.getEmailDescending());
                 } else if (event.getSource() == dateAscending){
                     orderMenu.setText(dateAscending.getText());
+                    comparator = AdminNewUserAccountDAL.getDateAscendingComparator();
                     newUserAccounts.sort(AdminNewUserAccountDAL.getDateAscendingComparator());
                 } else if (event.getSource() == dateDescending){
                     orderMenu.setText(dateDescending.getText());
+                    comparator = AdminNewUserAccountDAL.getDateDescendingComparator();
                     newUserAccounts.sort(AdminNewUserAccountDAL.getDateDescendingComparator());
                 }
                 newUserTable.refresh();
@@ -252,6 +284,9 @@ public class AdminNewUserController implements Initializable {
                 toNewcomerViewButton.requestFocus();
             }
         });
+        comparator = null;
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadNewUser(), 5000, 1000, TimeUnit.MILLISECONDS);
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         createDateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
