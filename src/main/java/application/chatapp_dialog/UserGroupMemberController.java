@@ -289,7 +289,7 @@ public class UserGroupMemberController implements Initializable, Runnable {
     synchronized public void menuitemAdminClicked(MouseEvent event){
         if (conn != null) {
             try {
-                String query = "update box_chat_members set is_admin = !is_admin where user_id = ?";
+                String query = "update box_chat_members set is_admin = not is_admin where user_id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, Integer.parseInt(((Label)event.getSource()).getId()));
                 ps.executeUpdate();
