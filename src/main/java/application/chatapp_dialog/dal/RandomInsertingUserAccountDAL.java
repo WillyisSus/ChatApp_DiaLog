@@ -45,7 +45,7 @@ public class RandomInsertingUserAccountDAL {
                     sb.append(dob + " ");
                     sb.append("\n");
                     try {
-                        fw = new FileWriter("src/main/resources/dummy/users.txt", true);
+                        fw = new FileWriter("users.txt", true);
                         fw.write(sb.toString());
                         fw.close();
                     } catch (IOException e) {
