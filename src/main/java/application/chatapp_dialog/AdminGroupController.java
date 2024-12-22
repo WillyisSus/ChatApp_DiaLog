@@ -38,16 +38,19 @@ public class AdminGroupController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminGroupInformation> temp =  FXCollections.observableArrayList(AdminGroupInformationDAL.getGroupInformationList(connection));
-                    if(comparator != null){
-                        temp.sort(comparator);
+                    if (temp !=  null){
+                        if(comparator != null){
+                            temp.sort(comparator);
+                        }
+                        if (boxTable.getItems() instanceof FilteredList<AdminGroupInformation>){
+                            boxTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminGroupInformation>) boxTable.getItems()).getPredicate()));
+                        }else {
+                            boxTable.setItems(temp);
+                        }
+                        groupInformations = temp;
+                        boxTable.refresh();
                     }
-                    if (boxTable.getItems() instanceof FilteredList<AdminGroupInformation>){
-                        boxTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminGroupInformation>) boxTable.getItems()).getPredicate()));
-                    }else {
-                        boxTable.setItems(temp);
-                    }
-                    groupInformations = temp;
-                    boxTable.refresh();
+
                 }
 
             } catch (Exception e) {

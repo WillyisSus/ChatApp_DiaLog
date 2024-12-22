@@ -69,7 +69,6 @@ public class AdminEditUserController implements Initializable {
     }
     public AdminUserAccount setNewInformation() {
         AdminUserAccount temp = new AdminUserAccount(account);
-        System.out.println(temp.getId() == account.getId());
         temp.setDob(Date.valueOf(dob.getValue()));
         temp.setSex(isMale.isSelected());
         temp.setDisplayName(displayName.getText());

@@ -44,17 +44,20 @@ public class AdminReportController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminReportInformation> temp =  FXCollections.observableArrayList(AdminReportInformationDAL.getReportList(connection));
-                    if(comparator != null){
-                        temp.sort(comparator);
-                    }
-                    if (reportTable.getItems() instanceof FilteredList<AdminReportInformation>){
-                        reportTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminReportInformation>) reportTable.getItems()).getPredicate()));
-                    }else {
-                        reportTable.setItems(temp);
+                    if(temp != null){
+                        if(comparator != null){
+                            temp.sort(comparator);
+                        }
+                        if (reportTable.getItems() instanceof FilteredList<AdminReportInformation>){
+                            reportTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminReportInformation>) reportTable.getItems()).getPredicate()));
+                        }else {
+                            reportTable.setItems(temp);
+                        }
+
+                        reportList = temp;
+                        reportTable.refresh();
                     }
 
-                    reportList = temp;
-                    reportTable.refresh();
                 }
 
             } catch (Exception e) {

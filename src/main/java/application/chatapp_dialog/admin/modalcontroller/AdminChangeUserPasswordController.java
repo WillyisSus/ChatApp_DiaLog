@@ -49,12 +49,13 @@ public class AdminChangeUserPasswordController implements Initializable {
     public boolean changeUserPassword(){
         try {
             AdminUserAccountDAL.updatePassword(Integer.parseInt(userID.getId()), newPassword.getText(), connection);
-            Platform.runLater(new Runnable() {
+            Thread thrd = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     EmailDAL.sendMessageToEmail(userID.getEmail(), "Admin changed your password to:" + newPassword.getText());
                 }
             });
+            thrd.start();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Database ERROR !!!");

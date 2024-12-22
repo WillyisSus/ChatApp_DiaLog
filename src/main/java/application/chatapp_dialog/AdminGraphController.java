@@ -277,7 +277,7 @@ public class AdminGraphController implements Initializable {
                     years.forEach(year -> {
                         MenuItem newItem = new MenuItem(year.toString());
                         newItem.setOnAction(event -> fetchYearData(event));
-
+                        yearButton.getItems().add(newItem);
                     });
 
 

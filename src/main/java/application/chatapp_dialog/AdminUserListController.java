@@ -49,16 +49,19 @@ public class AdminUserListController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminUserAccount> temp =  FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation(connection));
-                    if(userAccountComparator != null){
-                        temp.sort(userAccountComparator);
+                    if (temp != null){
+                        if(userAccountComparator != null){
+                            temp.sort(userAccountComparator);
+                        }
+                        if (tableview.getItems() instanceof FilteredList<AdminUserAccount>){
+                            tableview.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserAccount>) tableview.getItems()).getPredicate()));
+                        }else {
+                            tableview.setItems(temp);
+                        }
+                        userlist = temp;
+                        tableview.refresh();
                     }
-                    if (tableview.getItems() instanceof FilteredList<AdminUserAccount>){
-                        tableview.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserAccount>) tableview.getItems()).getPredicate()));
-                    }else {
-                        tableview.setItems(temp);
-                    }
-                    userlist = temp;
-                    tableview.refresh();
+
                 }
 
             } catch (Exception e) {
@@ -72,16 +75,19 @@ public class AdminUserListController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminUserActivityLog> temp =  FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
-                    if(userActivityLogComparator != null){
-                        temp.sort(userActivityLogComparator);
+                    if (temp != null){
+                        if(userActivityLogComparator != null){
+                            temp.sort(userActivityLogComparator);
+                        }
+                        if (activityLogTableView.getItems() instanceof FilteredList<AdminUserActivityLog>){
+                            activityLogTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserActivityLog>) activityLogTableView.getItems()).getPredicate()));
+                        }else {
+                            activityLogTableView.setItems(temp);
+                        }
+                        activityLogs = temp;
+                        tableview.refresh();
                     }
-                    if (activityLogTableView.getItems() instanceof FilteredList<AdminUserActivityLog>){
-                        activityLogTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserActivityLog>) activityLogTableView.getItems()).getPredicate()));
-                    }else {
-                        activityLogTableView.setItems(temp);
-                    }
-                    activityLogs = temp;
-                    tableview.refresh();
+
                 }
 
             } catch (Exception e) {
@@ -95,16 +101,19 @@ public class AdminUserListController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminUserFriendCount> temp =  FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
-                    if(userFriendCountComparator != null){
-                        temp.sort(userFriendCountComparator);
+                    if (temp != null){
+                        if(userFriendCountComparator != null){
+                            temp.sort(userFriendCountComparator);
+                        }
+                        if (friendCountTableView.getItems() instanceof FilteredList<AdminUserFriendCount>){
+                            friendCountTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserFriendCount>) friendCountTableView.getItems()).getPredicate()));
+                        }else {
+                            friendCountTableView.setItems(temp);
+                        }
+                        friendCounts = temp;
+                        tableview.refresh();
                     }
-                    if (friendCountTableView.getItems() instanceof FilteredList<AdminUserFriendCount>){
-                        friendCountTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserFriendCount>) friendCountTableView.getItems()).getPredicate()));
-                    }else {
-                        friendCountTableView.setItems(temp);
-                    }
-                    friendCounts = temp;
-                    tableview.refresh();
+
                 }
 
             } catch (Exception e) {
@@ -587,13 +596,14 @@ public class AdminUserListController implements Initializable {
                 String newPass = UserAccountGenerator.randomPassword();
                 try {
                     AdminUserAccountDAL.updatePassword(Integer.parseInt(selected.getId()), newPass, connection);
-                    Platform.runLater(new Runnable() {
+                    tableview.refresh();
+                    Thread thrd = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             EmailDAL.sendNewPassword(selected.getEmail(), newPass);
                         }
                     });
-                    tableview.refresh();
+                    thrd.start();
                 } catch (SQLException e) {
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Error");
