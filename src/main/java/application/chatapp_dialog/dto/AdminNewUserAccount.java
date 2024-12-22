@@ -41,4 +41,15 @@ public class AdminNewUserAccount {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminNewUserAccount c)
+        {
+            //whatever here
+            return this.getUsername().equals(c.getUsername());
+        }
+        return false;
+    }
 }

@@ -145,11 +145,11 @@
                                     <children>
                                         <BorderPane prefHeight="652.0" prefWidth="1080.0">
                                             <center>
-                                                <TableView fx:id="activityLogTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                                <TableView fx:id="activityLogTableView" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                                     <columns>
-                                                        <TableColumn fx:id="activityDateTime" editable="false" prefWidth="75.0" text="Date and time" />
-                                                        <TableColumn fx:id="activityUsername" editable="false" prefWidth="75.0" text="Username" />
-                                                        <TableColumn fx:id="activityDisplayName" editable="false" prefWidth="75.0" text="Displayname" />
+                                                        <TableColumn fx:id="activityDateTime" editable="false" prefWidth="75.0" sortable="false" text="Date and time" />
+                                                        <TableColumn fx:id="activityUsername" editable="false" prefWidth="75.0" sortable="false" text="Username" />
+                                                        <TableColumn fx:id="activityDisplayName" editable="false" prefWidth="75.0" sortable="false" text="Displayname" />
                                                     </columns>
                                                     <columnResizePolicy>
                                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -200,11 +200,11 @@
                                  <center>
                                     <TableView fx:id="friendCountTableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                        <columns>
-                                          <TableColumn fx:id="friendCountUsername" prefWidth="75.0" text="Username" />
-                                          <TableColumn fx:id="friendCountDisplayName" prefWidth="75.0" text="DisplayName" />
-                                          <TableColumn fx:id="friendCountDirectFriend" prefWidth="75.0" text="Direct friends" />
-                                          <TableColumn fx:id="friendCountIndirectFriend" prefWidth="75.0" text="Indirect Friends" />
-                                          <TableColumn fx:id="friendCountCreateDate" prefWidth="75.0" text="Create Date" />
+                                          <TableColumn fx:id="friendCountUsername" editable="false" prefWidth="75.0" sortable="false" text="Username" />
+                                          <TableColumn fx:id="friendCountDisplayName" editable="false" prefWidth="75.0" sortable="false" text="DisplayName" />
+                                          <TableColumn fx:id="friendCountDirectFriend" editable="false" prefWidth="75.0" sortable="false" text="Direct friends" />
+                                          <TableColumn fx:id="friendCountIndirectFriend" editable="false" prefWidth="75.0" sortable="false" text="Indirect Friends" />
+                                          <TableColumn fx:id="friendCountCreateDate" editable="false" prefWidth="75.0" sortable="false" text="Create Date" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

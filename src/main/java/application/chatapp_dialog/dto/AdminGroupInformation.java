@@ -64,4 +64,15 @@ public class AdminGroupInformation {
     public void setMembers(Integer members) {
         this.members = members;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminGroupInformation c)
+        {
+            //whatever here
+            return this.getId().equals(c.getId());
+        }
+        return false;
+    }
 }

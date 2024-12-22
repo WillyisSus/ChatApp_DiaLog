@@ -79,6 +79,17 @@ public class AdminUserActivityLog {
     public Timestamp getSessionEndAsTimeStamp(){
         return Timestamp.valueOf(sessionEnd.get());
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminUserActivityLog c)
+        {
+            //whatever here
+            return this.getId() == c.getId();
+        }
+        return false;
+    }
 }
 
 

@@ -75,5 +75,14 @@ public class AdminUserFriendCount {
     public Integer getIndirectFriends() {
         return indirectFriends;
     }
-
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminUserFriendCount c)
+        {
+            //whatever here
+            return this.getId().equals(c.getId());
+        }
+        return false;
+    }
 }

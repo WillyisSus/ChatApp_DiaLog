@@ -423,7 +423,6 @@ public class AdminReportController implements Initializable {
         filterChoices.getItems().addAll("Reported Username", "Reported Email", "Reporter Username");
         filterChoices.setValue(filterChoices.getItems().getFirst());
         reportTable.setItems(reportList);
-        reportTable.refresh();
         reportTable.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
             if (t1 != null){
                 removeReport.setDisable(false);

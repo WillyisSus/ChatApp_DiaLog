@@ -39,4 +39,14 @@ public class AdminSimpleUserAccount {
     public void setAdmin(Boolean admin) {
         isAdmin = admin;
     }
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminSimpleUserAccount c)
+        {
+            //whatever here
+            return this.getUsername().equals(c.getUsername());
+        }
+        return false;
+    }
 }

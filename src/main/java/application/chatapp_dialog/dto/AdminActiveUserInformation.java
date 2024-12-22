@@ -87,5 +87,14 @@ public class AdminActiveUserInformation {
     public Integer getPrivateChats() {
         return privateChats;
     }
-
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminActiveUserInformation c)
+        {
+            //whatever here
+            return this.getId().equals(c.getId());
+        }
+        return false;
+    }
 }

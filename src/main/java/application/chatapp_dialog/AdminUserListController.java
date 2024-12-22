@@ -902,6 +902,7 @@ public class AdminUserListController implements Initializable {
         address.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("address"));
         createdate.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("createDate"));
         status.setCellValueFactory(new PropertyValueFactory<AdminUserAccount, String>("status"));
+
         tableview.setItems(userlist);
         tableview.getSelectionModel().selectedItemProperty().addListener((observableValue, o, t1) -> {
 
@@ -938,11 +939,9 @@ public class AdminUserListController implements Initializable {
             if(latestLogins.isSelected() && activityLogTableView.getItems().isEmpty()){
 
                 try {
-
                     activityThread.scheduleAtFixedRate(new MyAutoReloadUserActivity(), 0, 1000, TimeUnit.MILLISECONDS);
                     activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
                     activityLogTableView.setItems(activityLogs);
-                    activityLogTableView.refresh();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database ERROR");
@@ -967,7 +966,6 @@ public class AdminUserListController implements Initializable {
                     friendCountThread.scheduleAtFixedRate(new MyAutoReloadUserFriendCount(), 0, 1000, TimeUnit.MILLISECONDS);
                     friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
                     friendCountTableView.setItems(friendCounts);
-                    friendCountTableView.refresh();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database ERROR");

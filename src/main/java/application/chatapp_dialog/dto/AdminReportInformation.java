@@ -96,4 +96,15 @@ public class AdminReportInformation {
         this.reporterUsername = reporterUsername;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminReportInformation c)
+        {
+            //whatever here
+            return this.getReportedID().equals(c.getReportedID()) && this.getReporterID().equals(c.getReporterID());
+        }
+        return false;
+    }
+
 }

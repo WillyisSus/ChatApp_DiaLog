@@ -144,11 +144,10 @@ public class AdminUserAccount {
     @Override
     public boolean equals(Object o)
     {
-        if (o instanceof AdminUserAccount)
+        if (o instanceof AdminUserAccount c)
         {
-            AdminUserAccount c = (AdminUserAccount) o;
-            if ( this.getId().equals(c.getId()) ) //whatever here
-                return true;
+            //whatever here
+            return this.getId().equals(c.getId());
         }
         return false;
     }

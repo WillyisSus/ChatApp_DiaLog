@@ -41,4 +41,15 @@ public class AdminFriendOfUser{
     public String getDisplayName() {
         return displayName.get();
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof AdminFriendOfUser c)
+        {
+            //whatever here
+            return this.getId() == c.getId();
+        }
+        return false;
+    }
 }
