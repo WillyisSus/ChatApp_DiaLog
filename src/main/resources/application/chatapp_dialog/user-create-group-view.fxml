@@ -263,7 +263,7 @@
                               </ImageView>
                            </graphic>
                         </MenuButton>
-                        <TextField minHeight="40.0" minWidth="236.0" promptText="Search...">
+                        <TextField fx:id="createTextSearchbox" minHeight="40.0" minWidth="236.0" promptText="Search...">
                            <font>
                               <Font name="Courier New" size="20.0" />
                            </font>

@@ -63,11 +63,28 @@ public class UserLoginController implements Initializable {
                 int id = rs.getInt("id");
                 String hashedPass = EncryptPassword.hashPassword(password, salt);
                 if (hashedPass.equals(op)){
+                    if (rs.getString("status").equals("online")){
+                        query = "update user_accounts set status = 'offline' where id = ?; update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                        ps = conn.prepareStatement(query);
+                        ps.setInt(1, id);
+                        ps.setInt(2, id);
+                        ps.execute();
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Notification");
+                        alert.setHeaderText("Your account is being logged in from another device. Logging out.");
+                        alert.show();
+                        try{
+                            Thread.sleep(600);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     System.out.println("logged in " + id);
-                    query = "update user_accounts set status = 'online' where id = ?";
+                    query = "update user_accounts set status = 'online' where id = ?; insert into user_activity_logs (user_id) values (?)";
                     ps = conn.prepareStatement(query);
                     ps.setInt(1, id);
-                    ps.executeUpdate();
+                    ps.setInt(2, id);
+                    ps.execute();
                     return id;
                 } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
