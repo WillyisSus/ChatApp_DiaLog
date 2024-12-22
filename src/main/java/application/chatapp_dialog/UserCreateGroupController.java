@@ -319,7 +319,7 @@ public class UserCreateGroupController implements Initializable, Runnable  {
             stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
             UserAccountController controller = fxmlLoader.getController();
-            controller.setdata(1, stage);
+            controller.setdata(id, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -333,7 +333,7 @@ public class UserCreateGroupController implements Initializable, Runnable  {
             stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
             UserFriendController controller = fxmlLoader.getController();
-            controller.setdata(1, stage);
+            controller.setdata(id, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -360,9 +360,9 @@ public class UserCreateGroupController implements Initializable, Runnable  {
         }
     }
     synchronized public void menuOnlineClicked(Event event){
-        createMenuOnline2.getItems().clear();
         if (conn != null) {
             try {
+                createMenuOnline2.getItems().clear();
                 String query = "select id, username, displayname from user_account_info join user_accounts on account_id = id join friendships on ((id = request_id and accept_id = ?) or (request_id = ? and id = accept_id)) where is_accepted = true and status = 'online'";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
@@ -532,6 +532,7 @@ public class UserCreateGroupController implements Initializable, Runnable  {
     }
     synchronized public void hboxBoxClicked(MouseEvent event){
         try {
+            stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-chat-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage)display2.getScene().getWindow();
@@ -547,7 +548,7 @@ public class UserCreateGroupController implements Initializable, Runnable  {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stop = false;
-        display = display2;
+        display2 = display;
         createTextGroupname2 = createTextGroupname;
         createTextAdduser2 = createTextAdduser;
         createHboxUser2 = createHboxUser;

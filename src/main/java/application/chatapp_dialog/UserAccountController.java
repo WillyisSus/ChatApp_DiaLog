@@ -233,7 +233,7 @@ public class UserAccountController implements Initializable, Runnable {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next() || !rs.getString("status").equals("online")){
+                if (!rs.next() || !(rs.getString("status").equals("online"))){
                     query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
                     ps = conn.prepareStatement(query);
                     ps.setInt(1, id);
