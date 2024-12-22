@@ -42,8 +42,8 @@ public class AdminUserAccountDAL {
         }
         return friend;
     }
-    public static List<AdminUserAccount> getAllUserAccountsWithInfomation(){
-        Connection conn = UtilityDAL.getConnection();
+    public static List<AdminUserAccount> getAllUserAccountsWithInfomation(Connection conn){
+
 
         String query = "select user_accounts.id as UserID, user_accounts.username as Username, user_accounts.email as Email, user_accounts.status as Status, user_accounts.create_date as CreateDate," +
                 "user_account_info.displayname as DisplayName, user_account_info.dob as DOB, user_account_info.sex as Sex, user_account_info.address as Address " +
@@ -63,8 +63,8 @@ public class AdminUserAccountDAL {
         }
         return userAccounts;
     }
-    public static List<AdminFriendOfUser> getFriendOfUser(int userID){
-        Connection conn = UtilityDAL.getConnection();
+    public static List<AdminFriendOfUser> getFriendOfUser(int userID, Connection conn){
+
 
         String query = "select friend1.accept_id as friendID, useracc1.username as username, userinfo1.displayname as displayName " +
                 "from friendships as friend1 " +
@@ -93,61 +93,62 @@ public class AdminUserAccountDAL {
         return userAccounts;
     }
 
-    public static boolean createNewUser(String username, String password, String email, String displayName, Boolean sex, String address, Date dob){
+    public static boolean createNewUser(String username, String password, String email, String displayName, Boolean sex, String address, Date dob, Connection conn){
         String insertQuery = "insert into user_accounts (username, password, email, salt) values (?,?,?,?)";
         String inserUserAccountInfo = "insert into user_account_info (account_id, displayname, dob, sex, address) values (?,?,?,?,?)";
         PreparedStatement ps = null;
-        try(Connection conn = UtilityDAL.getConnection()){
-            String salt = EncryptPassword.generateRandomSalt();
-            String hashedPassword = EncryptPassword.hashPassword(password, salt);
-            ps = conn.prepareStatement(insertQuery);
-            ps.setString(1, username);
-            ps.setString(2, hashedPassword);
-            ps.setString(3, email);
-            ps.setString(4, salt);
-            int row = ps.executeUpdate();
-            if (row > 0){
-                ps = conn.prepareStatement("select id from user_accounts where username = ?");
+        if (conn != null){
+            try{
+                String salt = EncryptPassword.generateRandomSalt();
+                String hashedPassword = EncryptPassword.hashPassword(password, salt);
+                ps = conn.prepareStatement(insertQuery);
                 ps.setString(1, username);
-                ResultSet rs = ps.executeQuery();
-                int user_id = -1;
-                while (rs.next()){
-                    user_id = rs.getInt("id");
-                }
-                if (user_id != -1 ){
-                    ps = conn.prepareStatement(inserUserAccountInfo);
-                    ps.setInt(1, user_id);
-                    ps.setString(2, displayName);
-                    ps.setDate(3, dob);
-                    ps.setBoolean(4, sex);
-                    ps.setString(5, address);
-                    row = ps.executeUpdate();
-                    if (row > 0){
-                        return true;
+                ps.setString(2, hashedPassword);
+                ps.setString(3, email);
+                ps.setString(4, salt);
+                int row = ps.executeUpdate();
+                if (row > 0){
+                    ps = conn.prepareStatement("select id from user_accounts where username = ?");
+                    ps.setString(1, username);
+                    ResultSet rs = ps.executeQuery();
+                    int user_id = -1;
+                    while (rs.next()){
+                        user_id = rs.getInt("id");
+                    }
+                    if (user_id != -1 ){
+                        ps = conn.prepareStatement(inserUserAccountInfo);
+                        ps.setInt(1, user_id);
+                        ps.setString(2, displayName);
+                        ps.setDate(3, dob);
+                        ps.setBoolean(4, sex);
+                        ps.setString(5, address);
+                        row = ps.executeUpdate();
+                        if (row > 0){
+                            return true;
+                        }
                     }
                 }
+            }catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
-        }catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
+
 
         return false;
     }
 
-    public static boolean deleteUser(int userID) throws SQLException {
+    public static boolean deleteUser(int userID, Connection conn) throws SQLException {
         String query = "delete from user_accounts where id = ?";
         PreparedStatement ps = null;
-        Connection conn = UtilityDAL.getConnection();
         ps = conn.prepareStatement(query);
         ps.setInt(1, userID);
         int row =  ps.executeUpdate();
         return row > 0;
     }
 
-    public static boolean updateUserStatus(int userID, String status) throws SQLException{
+    public static boolean updateUserStatus(int userID, String status, Connection conn) throws SQLException{
         String query = "update user_accounts set status = ? where id = ?";
         PreparedStatement ps = null;
-        Connection conn = UtilityDAL.getConnection();
         ps = conn.prepareStatement(query);
         ps.setString(1, status);
         ps.setInt(2, userID);
@@ -155,9 +156,8 @@ public class AdminUserAccountDAL {
         return row > 0;
     }
 
-    public static boolean updatePassword(int userID, String password) throws SQLException{
+    public static boolean updatePassword(int userID, String password, Connection conn) throws SQLException{
         String query = "update user_accounts set password = ?, salt = ? where id = ?";
-        Connection conn = UtilityDAL.getConnection();
         PreparedStatement ps = conn.prepareStatement(query);
         ps = conn.prepareStatement(query);
 
@@ -170,10 +170,9 @@ public class AdminUserAccountDAL {
         return row > 0;
     }
 
-    public static boolean updateUserAccount(AdminUserAccount account) throws SQLException{
+    public static boolean updateUserAccount(AdminUserAccount account, Connection conn) throws SQLException{
         String query = "update user_accounts set username = ?, email = ? where id = ?";
         String infoQuery = "update user_account_info set displayname = ?, dob = ?, sex = ?, address = ? where account_id = ?";
-        Connection conn = UtilityDAL.getConnection();
         PreparedStatement ps = conn.prepareStatement(query);
         ps.setString(1, account.getUsername());
         ps.setString(2, account.getEmail());

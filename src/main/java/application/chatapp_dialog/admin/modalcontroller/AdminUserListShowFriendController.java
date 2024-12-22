@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -17,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 
 public class AdminUserListShowFriendController implements Initializable {
+    private Connection connection;
     @FXML
     private TableView friendListTable;
     @FXML
@@ -40,7 +42,7 @@ public class AdminUserListShowFriendController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                List<AdminFriendOfUser> friends = AdminUserAccountDAL.getFriendOfUser(userID);
+                List<AdminFriendOfUser> friends = AdminUserAccountDAL.getFriendOfUser(userID, connection);
                 if (!friends.isEmpty()){
                     friendList = FXCollections.observableArrayList(friends);
                     friendListTable.setItems(friendList);
@@ -49,4 +51,8 @@ public class AdminUserListShowFriendController implements Initializable {
         });
 
     }
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
+
 }

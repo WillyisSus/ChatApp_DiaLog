@@ -3,11 +3,13 @@ package application.chatapp_dialog.admin.modalcontroller;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.security.UserRegistrationValidator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class AdminEditUserController implements Initializable {
     private AdminUserAccount account;
-
+    private Connection connection;
     @FXML
     private Button toUserViewButton;
     @FXML
@@ -74,7 +76,7 @@ public class AdminEditUserController implements Initializable {
         temp.setAddress(address.getText());
         temp.setUsername(username.getText());
         try {
-            if (!AdminUserAccountDAL.updateUserAccount(temp))
+            if (!AdminUserAccountDAL.updateUserAccount(temp, connection))
                 return account;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -101,14 +103,23 @@ public class AdminEditUserController implements Initializable {
 
     public void setUser(AdminUserAccount account){
         this.account = account;
-        username.setText(account.getUsername());
-        displayName.setText(account.getDisplayName());
-        email.setText(account.getEmail());
-        address.setText(account.getAddress());
-        dob.setValue(Date.valueOf(account.getDob()).toLocalDate());
-        boolean sex = account.getSex().equals("Male");
-        isMale.setSelected(sex);
-        isFemale.setSelected(!sex);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                username.setText(account.getUsername());
+                displayName.setText(account.getDisplayName());
+                email.setText(account.getEmail());
+                address.setText(account.getAddress());
+                dob.setValue(Date.valueOf(account.getDob()).toLocalDate());
+                boolean sex = account.getSex().equals("Male");
+                isMale.setSelected(sex);
+                isFemale.setSelected(!sex);
+            }
+        });
+
+    }
+    public void setConnection(Connection conn){
+        connection = conn;
 
     }
 }

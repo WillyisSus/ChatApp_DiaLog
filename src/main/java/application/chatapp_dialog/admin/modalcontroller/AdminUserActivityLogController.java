@@ -21,11 +21,13 @@ import org.intellij.lang.annotations.JdkConstants;
 import javafx.event.ActionEvent;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class AdminUserActivityLogController implements Initializable {
+    private Connection connection;
     @FXML
     private TableView activityTable;
     @FXML
@@ -94,7 +96,7 @@ public class AdminUserActivityLogController implements Initializable {
             @Override
             public void run() {
                 try {
-                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(userID));
+                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(userID, connection));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -103,5 +105,7 @@ public class AdminUserActivityLogController implements Initializable {
         });
         System.out.println(activityLogs.size());
     }
-
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
 }

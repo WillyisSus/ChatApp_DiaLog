@@ -34,9 +34,9 @@ public class AdminReportInformationDAL {
        return obj;
     }
 
-    public static List<AdminReportInformation> getReportList() throws SQLException {
+    public static List<AdminReportInformation> getReportList(Connection conn) throws SQLException {
         List<AdminReportInformation> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
+
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(query)){
                 ResultSet rs = ps.executeQuery();
@@ -48,9 +48,8 @@ public class AdminReportInformationDAL {
         return list;
     }
 
-    public static boolean removeReport(AdminReportInformation report) throws SQLException {
+    public static boolean removeReport(AdminReportInformation report, Connection conn) throws SQLException {
         boolean success = true;
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(removeReportQuery)){
 
@@ -66,8 +65,8 @@ public class AdminReportInformationDAL {
         return success;
     }
 
-    public static boolean lockUser(AdminReportInformation report) throws SQLException {
-        return AdminUserAccountDAL.updateUserStatus(report.getReportedID(), "locked");
+    public static boolean lockUser(AdminReportInformation report, Connection conn) throws SQLException {
+        return AdminUserAccountDAL.updateUserStatus(report.getReportedID(), "locked", conn);
     }
 
     public static Comparator<AdminReportInformation> getDateAscendingComparator(){

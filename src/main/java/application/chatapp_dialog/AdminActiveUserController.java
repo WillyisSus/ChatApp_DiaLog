@@ -1,6 +1,7 @@
 package application.chatapp_dialog;
 import application.chatapp_dialog.dal.AdminActiveUserInformationDAL;
 import application.chatapp_dialog.dal.AdminReportInformationDAL;
+import application.chatapp_dialog.dal.UtilityDAL;
 import application.chatapp_dialog.dto.AdminActiveUserInformation;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Date;
@@ -27,21 +29,25 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AdminActiveUserController implements Initializable {
+    private Connection connection;
     private class MyAutoReloadActiveUser implements Runnable{
         @Override
         public void run() {
             try {
-                ObservableList<AdminActiveUserInformation> temp =  FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations());
-                if(comparator != null){
-                    temp.sort(comparator);
+                if (connection != null){
+                    ObservableList<AdminActiveUserInformation> temp =  FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations(connection));
+                    if(comparator != null){
+                        temp.sort(comparator);
+                    }
+                    if (tableView.getItems() instanceof FilteredList<AdminActiveUserInformation>){
+                        tableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminActiveUserInformation>) tableView.getItems()).getPredicate()));
+                    }else {
+                        tableView.setItems(temp);
+                    }
+                    activeUserInformations = temp;
+                    tableView.refresh();
                 }
-                if (tableView.getItems() instanceof FilteredList<AdminActiveUserInformation>){
-                    tableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminActiveUserInformation>) tableView.getItems()).getPredicate()));
-                }else {
-                    tableView.setItems(temp);
-                }
-                activeUserInformations = temp;
-                tableView.refresh();
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -121,7 +127,8 @@ public class AdminActiveUserController implements Initializable {
     private Button toActiveUserButton;
     public void switchToLogin(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load();
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -130,9 +137,13 @@ public class AdminActiveUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void switchToUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            Parent root = loader.load();
+            AdminUserListController ctrl = (AdminUserListController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -144,7 +155,10 @@ public class AdminActiveUserController implements Initializable {
     }
     public void switchToActiveUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-activeuser-view.fxml"));
+            Parent root = loader.load();
+            AdminActiveUserController ctrl = (AdminActiveUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -157,7 +171,10 @@ public class AdminActiveUserController implements Initializable {
 
     public void switchToGraph(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-graph-view.fxml"));
+            Parent root = loader.load();
+            AdminGraphController ctrl = (AdminGraphController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -170,7 +187,10 @@ public class AdminActiveUserController implements Initializable {
 
     public void switchToGroup(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-group-view.fxml"));
+            Parent root = loader.load();
+            AdminGroupController ctrl = (AdminGroupController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -183,7 +203,10 @@ public class AdminActiveUserController implements Initializable {
 
     public void switchToReport(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-report-view.fxml"));
+            Parent root = loader.load();
+            AdminReportController ctrl = (AdminReportController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -196,7 +219,10 @@ public class AdminActiveUserController implements Initializable {
 
     public void switchToNewUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-newuser-view.fxml"));
+            Parent root = loader.load();
+            AdminNewUserController ctrl = (AdminNewUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -301,6 +327,9 @@ public class AdminActiveUserController implements Initializable {
         });
 
     }
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -309,18 +338,19 @@ public class AdminActiveUserController implements Initializable {
                 toActiveUserButton.requestFocus();
             }
         });
+//        connection = UtilityDAL.getConnection();
         comparator = null;
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(new MyAutoReloadActiveUser(), 5000, 1000, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(new MyAutoReloadActiveUser(), 0, 1000, TimeUnit.MILLISECONDS);
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-        createDateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toLocalDateTime().withNano(0).toString()));
+        createDateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
         loginsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLogins().toString()));
         privateChatsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPrivateChats().toString()));
         groupChatColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGroupChats().toString()));
 
         try {
-            activeUserInformations = FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations());
+            activeUserInformations = FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations(connection));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

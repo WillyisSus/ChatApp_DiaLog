@@ -13,11 +13,13 @@ import javafx.event.ActionEvent;
 import javax.xml.transform.Source;
 import java.lang.reflect.AccessFlag;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AdminChangeUserPasswordController implements Initializable {
+    private Connection connection;
     private AdminUserAccount userID;
     @FXML
     private PasswordField newPassword;
@@ -51,7 +53,7 @@ public class AdminChangeUserPasswordController implements Initializable {
 
     public boolean changeUserPassword(){
         try {
-            AdminUserAccountDAL.updatePassword(Integer.parseInt(userID.getId()), newPassword.getText());
+            AdminUserAccountDAL.updatePassword(Integer.parseInt(userID.getId()), newPassword.getText(), connection);
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
@@ -73,5 +75,10 @@ public class AdminChangeUserPasswordController implements Initializable {
     public void setUserID(AdminUserAccount selected){
         this.userID = selected;
     }
+
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
+
 
 }

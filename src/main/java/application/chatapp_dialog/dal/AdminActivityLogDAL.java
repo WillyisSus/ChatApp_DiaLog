@@ -2,6 +2,7 @@ package application.chatapp_dialog.dal;
 
 import application.chatapp_dialog.dto.AdminFriendOfUser;
 import application.chatapp_dialog.dto.AdminUserActivityLog;
+import com.almasb.fxgl.scene3d.Cone;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,8 +25,7 @@ public class AdminActivityLogDAL {
         log.setSessionStart(rs.getTimestamp("session_start"));
         return log;
     }
-    public static List<AdminUserActivityLog> getAllUserActivityLog(Integer userID) throws SQLException {
-        Connection conn = UtilityDAL.getConnection();
+    public static List<AdminUserActivityLog> getAllUserActivityLog(Integer userID, Connection conn) throws SQLException {
         String query = "select user_accounts.id as userID, user_accounts.username as Username, " +
                 "user_account_info.displayname as displayName, user_activity_logs.session_start as sessionStart,  user_activity_logs.session_end as sessionEnd " +
                 " from user_accounts" +
@@ -46,8 +46,7 @@ public class AdminActivityLogDAL {
         return activityLogs;
     }
 
-    public static List<AdminUserActivityLog> getActiveUserInYear(int year) throws SQLException {
-        Connection conn = UtilityDAL.getConnection();
+    public static List<AdminUserActivityLog> getActiveUserInYear(int year, Connection conn) throws SQLException {
         String query = "select distinct on (user_id, EXTRACT(month from session_start)) user_id, session_start from user_activity_logs where EXTRACT(year from user_activity_logs.session_start) = ?";
         PreparedStatement ps = null;
         List<AdminUserActivityLog> activityLogs = new ArrayList<>();

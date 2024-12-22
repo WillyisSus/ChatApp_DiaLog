@@ -22,9 +22,9 @@ public class AdminNewUserAccountDAL {
         obj.setCreateDate(rs.getTimestamp("create_date"));
         return  obj;
     }
-    public static List<AdminNewUserAccount> getAllNewAccount() throws SQLException {
+    public static List<AdminNewUserAccount> getAllNewAccount(Connection conn) throws SQLException {
         List<AdminNewUserAccount> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
+
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(query)){
                 ResultSet rs = ps.executeQuery();
@@ -35,9 +35,9 @@ public class AdminNewUserAccountDAL {
         } else throw new SQLException("Database refuse connection.");
         return list;
     }
-    public static List<AdminNewUserAccount> getNewAccountInYear(int year) throws SQLException {
+    public static List<AdminNewUserAccount> getNewAccountInYear(int year, Connection conn) throws SQLException {
         List<AdminNewUserAccount> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
+
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(queryInYear)){
                 ps.setInt(1, year);
@@ -50,9 +50,9 @@ public class AdminNewUserAccountDAL {
         return list;
     }
 
-    public static List<Integer> getDifferentYearWithNewAccount() throws SQLException {
+    public static List<Integer> getDifferentYearWithNewAccount(Connection conn) throws SQLException {
         List<Integer> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
+
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement("select distinct EXTRACT(year from user_accounts.create_date) as years from user_accounts")){
 

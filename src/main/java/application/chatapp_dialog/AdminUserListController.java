@@ -4,16 +4,11 @@ package application.chatapp_dialog;
 import application.chatapp_dialog.admin.modalcontroller.*;
 import application.chatapp_dialog.dal.*;
 import application.chatapp_dialog.dummy.UserAccountGenerator;
-import com.almasb.fxgl.scene3d.DoorComponent;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,9 +22,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -43,6 +37,7 @@ import org.w3c.dom.html.HTMLTableElement;
 
 public class AdminUserListController implements Initializable {
     private int adminID = -1;
+    private Connection connection;
     private Comparator<AdminUserAccount> userAccountComparator;
     private Comparator<AdminUserActivityLog> userActivityLogComparator;
     private Comparator<AdminUserFriendCount> userFriendCountComparator;
@@ -50,17 +45,20 @@ public class AdminUserListController implements Initializable {
         @Override
         public void run() {
             try {
-                ObservableList<AdminUserAccount> temp =  FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
-                if(userAccountComparator != null){
-                    temp.sort(userAccountComparator);
+                if (connection != null){
+                    ObservableList<AdminUserAccount> temp =  FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation(connection));
+                    if(userAccountComparator != null){
+                        temp.sort(userAccountComparator);
+                    }
+                    if (tableview.getItems() instanceof FilteredList<AdminUserAccount>){
+                        tableview.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserAccount>) tableview.getItems()).getPredicate()));
+                    }else {
+                        tableview.setItems(temp);
+                    }
+                    userlist = temp;
+                    tableview.refresh();
                 }
-                if (tableview.getItems() instanceof FilteredList<AdminUserAccount>){
-                    tableview.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserAccount>) tableview.getItems()).getPredicate()));
-                }else {
-                    tableview.setItems(temp);
-                }
-                userlist = temp;
-                tableview.refresh();
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -70,17 +68,20 @@ public class AdminUserListController implements Initializable {
         @Override
         public void run() {
             try {
-                ObservableList<AdminUserActivityLog> temp =  FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
-                if(userActivityLogComparator != null){
-                    temp.sort(userActivityLogComparator);
+                if (connection != null){
+                    ObservableList<AdminUserActivityLog> temp =  FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
+                    if(userActivityLogComparator != null){
+                        temp.sort(userActivityLogComparator);
+                    }
+                    if (activityLogTableView.getItems() instanceof FilteredList<AdminUserActivityLog>){
+                        activityLogTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserActivityLog>) activityLogTableView.getItems()).getPredicate()));
+                    }else {
+                        activityLogTableView.setItems(temp);
+                    }
+                    activityLogs = temp;
+                    tableview.refresh();
                 }
-                if (activityLogTableView.getItems() instanceof FilteredList<AdminUserActivityLog>){
-                    activityLogTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserActivityLog>) activityLogTableView.getItems()).getPredicate()));
-                }else {
-                    activityLogTableView.setItems(temp);
-                }
-                activityLogs = temp;
-                tableview.refresh();
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -90,17 +91,20 @@ public class AdminUserListController implements Initializable {
         @Override
         public void run() {
             try {
-                ObservableList<AdminUserFriendCount> temp =  FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
-                if(userFriendCountComparator != null){
-                    temp.sort(userFriendCountComparator);
+                if (connection != null){
+                    ObservableList<AdminUserFriendCount> temp =  FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
+                    if(userFriendCountComparator != null){
+                        temp.sort(userFriendCountComparator);
+                    }
+                    if (friendCountTableView.getItems() instanceof FilteredList<AdminUserFriendCount>){
+                        friendCountTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserFriendCount>) friendCountTableView.getItems()).getPredicate()));
+                    }else {
+                        friendCountTableView.setItems(temp);
+                    }
+                    friendCounts = temp;
+                    tableview.refresh();
                 }
-                if (friendCountTableView.getItems() instanceof FilteredList<AdminUserFriendCount>){
-                    friendCountTableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminUserFriendCount>) friendCountTableView.getItems()).getPredicate()));
-                }else {
-                    friendCountTableView.setItems(temp);
-                }
-                friendCounts = temp;
-                tableview.refresh();
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -274,7 +278,8 @@ public class AdminUserListController implements Initializable {
     }
     public void switchToLogin(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load();
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -286,7 +291,10 @@ public class AdminUserListController implements Initializable {
 
     public void switchToUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            Parent root = loader.load();
+            AdminUserListController ctrl = (AdminUserListController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -298,7 +306,10 @@ public class AdminUserListController implements Initializable {
     }
     public void switchToActiveUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-activeuser-view.fxml"));
+            Parent root = loader.load();
+            AdminActiveUserController ctrl = (AdminActiveUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -311,7 +322,10 @@ public class AdminUserListController implements Initializable {
 
     public void switchToGraph(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-graph-view.fxml"));
+            Parent root = loader.load();
+            AdminGraphController ctrl = (AdminGraphController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -324,7 +338,10 @@ public class AdminUserListController implements Initializable {
 
     public void switchToGroup(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-group-view.fxml"));
+            Parent root = loader.load();
+            AdminGroupController ctrl = (AdminGroupController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -337,7 +354,10 @@ public class AdminUserListController implements Initializable {
 
     public void switchToReport(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-report-view.fxml"));
+            Parent root = loader.load();
+            AdminReportController ctrl = (AdminReportController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -350,7 +370,10 @@ public class AdminUserListController implements Initializable {
 
     public void switchToNewUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-newuser-view.fxml"));
+            Parent root = loader.load();
+            AdminNewUserController ctrl = (AdminNewUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -369,6 +392,7 @@ public class AdminUserListController implements Initializable {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-add-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
             AdminAddNewUserController addNewCtrl = fxmlLoader.getController();
+            addNewCtrl.setConnection(connection);
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             final Button ok = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
@@ -396,7 +420,7 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 try {
-                    userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
+                    userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation(connection));
                     tableview.setItems(userlist);
                     tableview.refresh();
                 } catch (Exception e) {
@@ -414,6 +438,7 @@ public class AdminUserListController implements Initializable {
             DialogPane dialogPane = fxmlLoader.load();
             Dialog<ButtonType> dialog = new Dialog<>();
             AdminEditUserController ctrl =  fxmlLoader.getController();
+            ctrl.setConnection(connection);
             int index = tableview.getSelectionModel().getSelectedIndex();
             AdminUserAccount account = userlist.get(index);
             ctrl.setUser(account);
@@ -447,7 +472,7 @@ public class AdminUserListController implements Initializable {
             if (clickButton.get() == ButtonType.OK){
                 int index = tableview.getSelectionModel().getSelectedIndex();
                 AdminUserAccount selected = tableview.getItems().get(index);
-                if (AdminUserAccountDAL.deleteUser(Integer.parseInt(selected.getId()))){
+                if (AdminUserAccountDAL.deleteUser(Integer.parseInt(selected.getId()), connection)){
                     userlist.remove(selected);
                     tableview.refresh();
                 }else{
@@ -475,7 +500,7 @@ public class AdminUserListController implements Initializable {
             if (clickedButton.isPresent()){
                 if (clickedButton.get() ==  ButtonType.OK){
                     String newStatus = (selected.getStatus().equals("locked") ? "offline" : "locked");
-                    if (AdminUserAccountDAL.updateUserStatus(Integer.parseInt(selected.getId()), newStatus)){
+                    if (AdminUserAccountDAL.updateUserStatus(Integer.parseInt(selected.getId()), newStatus, connection)){
                         alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Result for action - Success");
                         alert.setHeaderText(newStatus.equals("locked") ? "Lock user successfully!!!" : "Unlock user successfully!!!" );
@@ -496,6 +521,7 @@ public class AdminUserListController implements Initializable {
             FXMLLoader fxmlLoader =  new FXMLLoader(getClass().getResource("admin-user-listing-signin-dialog.fxml"));
             DialogPane dialogPane = fxmlLoader.load();
             AdminUserActivityLogController ctrl = fxmlLoader.getController();
+            ctrl.setConnection(connection);
             AdminUserAccount selected = tableview.getSelectionModel().getSelectedItem();
             ctrl.setUser(Integer.parseInt(selected.getId()));
             Dialog<ButtonType> dialog = new Dialog<>();
@@ -513,6 +539,7 @@ public class AdminUserListController implements Initializable {
             DialogPane dialogPane = fxmlLoader.load();
 
             AdminUserListShowFriendController friendController = fxmlLoader.getController();
+            friendController.setConnection(connection);
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setDialogPane(dialogPane);
             friendController.loadData(userID);
@@ -532,7 +559,7 @@ public class AdminUserListController implements Initializable {
             if (clicked.get() == ButtonType.OK){
                 String newPass = UserAccountGenerator.randomPassword();
                 try {
-                    AdminUserAccountDAL.updatePassword(Integer.parseInt(selected.getId()), newPass);
+                    AdminUserAccountDAL.updatePassword(Integer.parseInt(selected.getId()), newPass, connection);
                     EmailDAL.sendNewPassword(selected.getEmail(), newPass);
                     tableview.refresh();
                 } catch (SQLException e) {
@@ -550,6 +577,7 @@ public class AdminUserListController implements Initializable {
             DialogPane dialogPane = fxmlLoader.load();
             Dialog<ButtonType> dialog = new Dialog<>();
             AdminChangeUserPasswordController ctrl = fxmlLoader.getController();
+            ctrl.setConnection(connection);
             int index = tableview.getSelectionModel().getSelectedIndex();
             AdminUserAccount selected = tableview.getItems().get(index);
             ctrl.setUserID(selected);
@@ -714,7 +742,7 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 try {
-                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
+                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
                     activityLogTableView.setItems(activityLogs);
                     activityLogTableView.refresh();
                 } catch (SQLException e) {
@@ -786,7 +814,7 @@ public class AdminUserListController implements Initializable {
             @Override
             public void run() {
                 try {
-                    friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
+                    friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database ERROR");
@@ -802,6 +830,9 @@ public class AdminUserListController implements Initializable {
     }
 
 //    end of Friend count function
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -811,14 +842,14 @@ public class AdminUserListController implements Initializable {
                 toUserViewButton.requestFocus();
             }
         });
-
+//        connection = UtilityDAL.getConnection();
         userAccountComparator = null;
         userActivityLogComparator = null;
         userFriendCountComparator = null;
         ScheduledExecutorService scheduledExecutorServiceUserList = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorServiceUserList.scheduleAtFixedRate(new MyAutoReloadUserList(), 0, 1000, TimeUnit.MILLISECONDS);
         filteredUserList = null;
-        userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation());
+        userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation(connection));
         updateButton.setDisable(true);
         changePasswordButton.setDisable(true);
         removeButton.setDisable(true);
@@ -876,7 +907,7 @@ public class AdminUserListController implements Initializable {
                 try {
                     ScheduledExecutorService activityThread = Executors.newSingleThreadScheduledExecutor();
                     activityThread.scheduleAtFixedRate(new MyAutoReloadUserActivity(), 0, 1000, TimeUnit.MILLISECONDS);
-                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null));
+                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
                     activityLogTableView.setItems(activityLogs);
                     activityLogTableView.refresh();
                 } catch (SQLException e) {
@@ -901,7 +932,7 @@ public class AdminUserListController implements Initializable {
                 try {
                     ScheduledExecutorService friendCountThread = Executors.newSingleThreadScheduledExecutor();
                     friendCountThread.scheduleAtFixedRate(new MyAutoReloadUserFriendCount(), 0, 1000, TimeUnit.MILLISECONDS);
-                    friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount());
+                    friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
                     friendCountTableView.setItems(friendCounts);
                     friendCountTableView.refresh();
                 } catch (SQLException e) {

@@ -42,23 +42,24 @@ public class AdminGroupInformationDAL {
         obj.setDisplayName(rs.getString("displayname"));
         return obj;
     }
-    public static List<AdminGroupInformation> getGroupInformationList() throws SQLException {
+    public static List<AdminGroupInformation> getGroupInformationList(Connection conn) throws SQLException {
         List<AdminGroupInformation> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(query)){
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()){
                     list.add(createObject(rs));
                 }
+            } catch (SQLException e) {
+                throw new SQLException("Database refuse connection.");
+
             }
-        } else throw new SQLException("Database refuse connection.");
+        }
 
         return list;
     }
-    public static List<AdminSimpleUserAccount> getMemberOfGroup(AdminGroupInformation group) throws SQLException {
+    public static List<AdminSimpleUserAccount> getMemberOfGroup(AdminGroupInformation group, Connection conn) throws SQLException {
         List<AdminSimpleUserAccount> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(memberQuery)){
                 ps.setInt(1, group.getId());

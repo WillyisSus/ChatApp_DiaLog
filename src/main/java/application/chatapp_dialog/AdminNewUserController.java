@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -29,22 +30,25 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AdminNewUserController implements Initializable {
-
+    private Connection connection;
     private class MyAutoReloadNewUser implements Runnable{
         @Override
         public void run() {
             try {
-                ObservableList<AdminNewUserAccount> temp =  FXCollections.observableArrayList(AdminNewUserAccountDAL.getAllNewAccount());
-                if(comparator != null){
-                    temp.sort(comparator);
+                if (connection != null){
+                    ObservableList<AdminNewUserAccount> temp =  FXCollections.observableArrayList(AdminNewUserAccountDAL.getAllNewAccount(connection));
+                    if(comparator != null){
+                        temp.sort(comparator);
+                    }
+                    if (newUserTable.getItems() instanceof FilteredList<AdminNewUserAccount>){
+                        newUserTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminNewUserAccount>) newUserTable.getItems()).getPredicate()));
+                    }else {
+                        newUserTable.setItems(temp);
+                    }
+                    newUserAccounts = temp;
+                    newUserTable.refresh();
                 }
-                if (newUserTable.getItems() instanceof FilteredList<AdminNewUserAccount>){
-                    newUserTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminNewUserAccount>) newUserTable.getItems()).getPredicate()));
-                }else {
-                    newUserTable.setItems(temp);
-                }
-                newUserAccounts = temp;
-                newUserTable.refresh();
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -111,7 +115,8 @@ public class AdminNewUserController implements Initializable {
 // Scene management
     public void switchToLogin(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -120,9 +125,13 @@ public class AdminNewUserController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void switchToUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            Parent root = loader.load();
+            AdminUserListController ctrl = (AdminUserListController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -134,7 +143,10 @@ public class AdminNewUserController implements Initializable {
     }
     public void switchToActiveUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-activeuser-view.fxml"));
+            Parent root = loader.load();
+            AdminActiveUserController ctrl = (AdminActiveUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -147,7 +159,10 @@ public class AdminNewUserController implements Initializable {
 
     public void switchToGraph(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-graph-view.fxml"));
+            Parent root = loader.load();
+            AdminGraphController ctrl = (AdminGraphController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -160,7 +175,10 @@ public class AdminNewUserController implements Initializable {
 
     public void switchToGroup(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-group-view.fxml"));
+            Parent root = loader.load();
+            AdminGroupController ctrl = (AdminGroupController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -173,7 +191,10 @@ public class AdminNewUserController implements Initializable {
 
     public void switchToReport(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-report-view.fxml"));
+            Parent root = loader.load();
+            AdminReportController ctrl = (AdminReportController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -186,7 +207,10 @@ public class AdminNewUserController implements Initializable {
 
     public void switchToNewUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-newuser-view.fxml"));
+            Parent root = loader.load();
+            AdminNewUserController ctrl = (AdminNewUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -276,6 +300,9 @@ public class AdminNewUserController implements Initializable {
         });
 
     }
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -286,12 +313,12 @@ public class AdminNewUserController implements Initializable {
         });
         comparator = null;
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadNewUser(), 5000, 1000, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadNewUser(), 0, 1000, TimeUnit.MILLISECONDS);
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         createDateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
         try {
-            newUserAccounts = FXCollections.observableArrayList(AdminNewUserAccountDAL.getAllNewAccount());
+            newUserAccounts = FXCollections.observableArrayList(AdminNewUserAccountDAL.getAllNewAccount(connection));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

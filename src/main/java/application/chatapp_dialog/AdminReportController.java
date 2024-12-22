@@ -3,6 +3,7 @@ package application.chatapp_dialog;
 import application.chatapp_dialog.dal.AdminGroupInformationDAL;
 import application.chatapp_dialog.dal.AdminReportInformationDAL;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
+import application.chatapp_dialog.dal.UtilityDAL;
 import application.chatapp_dialog.dto.AdminReportInformation;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import javafx.application.Platform;
@@ -20,8 +21,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
+import java.net.ConnectException;
 import java.net.URL;
 import java.security.AllPermission;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -32,24 +35,27 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AdminReportController implements Initializable {
-
+    private Connection connection;
     private class MyAutoReloadReport implements Runnable{
 
         @Override
         public void run() {
             try {
-                ObservableList<AdminReportInformation> temp =  FXCollections.observableArrayList(AdminReportInformationDAL.getReportList());
-                if(comparator != null){
-                    temp.sort(comparator);
-                }
-                if (reportTable.getItems() instanceof FilteredList<AdminReportInformation>){
-                    reportTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminReportInformation>) reportTable.getItems()).getPredicate()));
-                }else {
-                    reportTable.setItems(temp);
+                if (connection != null){
+                    ObservableList<AdminReportInformation> temp =  FXCollections.observableArrayList(AdminReportInformationDAL.getReportList(connection));
+                    if(comparator != null){
+                        temp.sort(comparator);
+                    }
+                    if (reportTable.getItems() instanceof FilteredList<AdminReportInformation>){
+                        reportTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminReportInformation>) reportTable.getItems()).getPredicate()));
+                    }else {
+                        reportTable.setItems(temp);
+                    }
+
+                    reportList = temp;
+                    reportTable.refresh();
                 }
 
-                reportList = temp;
-                reportTable.refresh();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -123,7 +129,8 @@ public class AdminReportController implements Initializable {
     private ObservableList<AdminReportInformation> reportList;
     public void switchToLogin(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -132,9 +139,13 @@ public class AdminReportController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void switchToUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            Parent root = loader.load();
+            AdminUserListController ctrl = (AdminUserListController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -146,7 +157,10 @@ public class AdminReportController implements Initializable {
     }
     public void switchToActiveUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-activeuser-view.fxml"));
+            Parent root = loader.load();
+            AdminActiveUserController ctrl = (AdminActiveUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -159,7 +173,10 @@ public class AdminReportController implements Initializable {
 
     public void switchToGraph(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-graph-view.fxml"));
+            Parent root = loader.load();
+            AdminGraphController ctrl = (AdminGraphController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -172,7 +189,10 @@ public class AdminReportController implements Initializable {
 
     public void switchToGroup(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-group-view.fxml"));
+            Parent root = loader.load();
+            AdminGroupController ctrl = (AdminGroupController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -185,7 +205,10 @@ public class AdminReportController implements Initializable {
 
     public void switchToReport(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-report-view.fxml"));
+            Parent root = loader.load();
+            AdminReportController ctrl = (AdminReportController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -198,7 +221,10 @@ public class AdminReportController implements Initializable {
 
     public void switchToNewUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-newuser-view.fxml"));
+            Parent root = loader.load();
+            AdminNewUserController ctrl = (AdminNewUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -219,7 +245,7 @@ public class AdminReportController implements Initializable {
             alert.setContentText("Click OK to continue.");
             Optional<ButtonType> clicked = alert.showAndWait();
             if (clicked.isPresent() && clicked.get() == ButtonType.OK){
-                if (!AdminReportInformationDAL.removeReport(selected)){
+                if (!AdminReportInformationDAL.removeReport(selected, connection)){
                     alert.setAlertType(Alert.AlertType.ERROR);
                     alert.setTitle("Remove ERROR");
                     alert.setHeaderText("Cannot remove report from: " + selected.getReporterUsername());
@@ -246,7 +272,7 @@ public class AdminReportController implements Initializable {
             alert.setContentText("Click OK to continue.");
             Optional<ButtonType> clicked = alert.showAndWait();
             if (clicked.isPresent() && clicked.get() == ButtonType.OK){
-                if (!AdminReportInformationDAL.lockUser(selected)){
+                if (!AdminReportInformationDAL.lockUser(selected, connection)){
                     alert.setAlertType(Alert.AlertType.ERROR);
                     alert.setTitle("Lock user ERROR");
                     alert.setHeaderText("Cannot locked user: " + selected.getReportedUsername());
@@ -342,7 +368,9 @@ public class AdminReportController implements Initializable {
         });
 
     }
-
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -351,8 +379,9 @@ public class AdminReportController implements Initializable {
                 toReportViewButton.requestFocus();
             }
         });
+//        connection = UtilityDAL.getConnection();
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadReport(), 5000, 1000, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadReport(), 0, 1000, TimeUnit.MILLISECONDS);
         comparator = null;
         reportedUsername.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReportedUsername()));
         reportedEmail.setCellValueFactory(data->new SimpleStringProperty(data.getValue().getReportedEmail()));
@@ -361,7 +390,7 @@ public class AdminReportController implements Initializable {
         createDate.setCellValueFactory(data->new SimpleStringProperty(data.getValue().getCreateDate().toString()));
 
         try {
-            reportList = FXCollections.observableList(AdminReportInformationDAL.getReportList());
+            reportList = FXCollections.observableList(AdminReportInformationDAL.getReportList(connection));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

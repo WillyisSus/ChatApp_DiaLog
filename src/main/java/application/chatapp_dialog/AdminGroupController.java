@@ -1,6 +1,7 @@
 package application.chatapp_dialog;
 
 import application.chatapp_dialog.dal.AdminGroupInformationDAL;
+import application.chatapp_dialog.dal.UtilityDAL;
 import application.chatapp_dialog.dto.AdminGroupInformation;
 import application.chatapp_dialog.dto.AdminSimpleUserAccount;
 import javafx.application.Platform;
@@ -19,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Optional;
@@ -28,21 +30,25 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AdminGroupController implements Initializable {
+    private Connection connection;
     private class MyAutoReloadGroupInformation implements Runnable {
         @Override
         public void run() {
             try {
-                ObservableList<AdminGroupInformation> temp =  FXCollections.observableArrayList(AdminGroupInformationDAL.getGroupInformationList());
-                if(comparator != null){
-                    temp.sort(comparator);
+                if (connection != null){
+                    ObservableList<AdminGroupInformation> temp =  FXCollections.observableArrayList(AdminGroupInformationDAL.getGroupInformationList(connection));
+                    if(comparator != null){
+                        temp.sort(comparator);
+                    }
+                    if (boxTable.getItems() instanceof FilteredList<AdminGroupInformation>){
+                        boxTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminGroupInformation>) boxTable.getItems()).getPredicate()));
+                    }else {
+                        boxTable.setItems(temp);
+                    }
+                    groupInformations = temp;
+                    boxTable.refresh();
                 }
-                if (boxTable.getItems() instanceof FilteredList<AdminGroupInformation>){
-                    boxTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminGroupInformation>) boxTable.getItems()).getPredicate()));
-                }else {
-                    boxTable.setItems(temp);
-                }
-                groupInformations = temp;
-                boxTable.refresh();
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -117,7 +123,8 @@ public class AdminGroupController implements Initializable {
     private Button toActiveUserButton;
     public void switchToLogin(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -126,9 +133,13 @@ public class AdminGroupController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void switchToUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            Parent root = loader.load();
+            AdminUserListController ctrl = (AdminUserListController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -140,7 +151,10 @@ public class AdminGroupController implements Initializable {
     }
     public void switchToActiveUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-activeuser-view.fxml"));
+            Parent root = loader.load();
+            AdminActiveUserController ctrl = (AdminActiveUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -153,7 +167,10 @@ public class AdminGroupController implements Initializable {
 
     public void switchToGraph(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-graph-view.fxml"));
+            Parent root = loader.load();
+            AdminGraphController ctrl = (AdminGraphController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -166,7 +183,10 @@ public class AdminGroupController implements Initializable {
 
     public void switchToGroup(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-group-view.fxml"));
+            Parent root = loader.load();
+            AdminGroupController ctrl = (AdminGroupController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -179,7 +199,10 @@ public class AdminGroupController implements Initializable {
 
     public void switchToReport(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-report-view.fxml"));
+            Parent root = loader.load();
+            AdminReportController ctrl = (AdminReportController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -192,7 +215,10 @@ public class AdminGroupController implements Initializable {
 
     public void switchToNewUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-newuser-view.fxml"));
+            Parent root = loader.load();
+            AdminNewUserController ctrl = (AdminNewUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -255,7 +281,7 @@ public class AdminGroupController implements Initializable {
             @Override
             public void run() {
                 try {
-                    memberInGroups = FXCollections.observableArrayList(AdminGroupInformationDAL.getMemberOfGroup(groupInformation));
+                    memberInGroups = FXCollections.observableArrayList(AdminGroupInformationDAL.getMemberOfGroup(groupInformation, connection));
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Database error");
@@ -272,7 +298,9 @@ public class AdminGroupController implements Initializable {
         });
 
     }
-
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -281,15 +309,16 @@ public class AdminGroupController implements Initializable {
                 toGroupViewButton.requestFocus();
             }
         });
+//        connection = UtilityDAL.getConnection();
         comparator = null;
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadGroupInformation(), 5000, 1000, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadGroupInformation(), 0, 1000, TimeUnit.MILLISECONDS);
         boxName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGroupName()));
         boxCreateDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));
         boxAdmins.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAdmins().toString()));
         boxMembers.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMembers().toString()));
         try {
-            groupInformations = FXCollections.observableArrayList(AdminGroupInformationDAL.getGroupInformationList());
+            groupInformations = FXCollections.observableArrayList(AdminGroupInformationDAL.getGroupInformationList(connection));
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -1,6 +1,7 @@
 package application.chatapp_dialog;
 import application.chatapp_dialog.dal.AdminActivityLogDAL;
 import application.chatapp_dialog.dal.AdminNewUserAccountDAL;
+import application.chatapp_dialog.dal.UtilityDAL;
 import application.chatapp_dialog.dto.AdminNewUserAccount;
 import application.chatapp_dialog.dto.AdminUserActivityLog;
 import javafx.application.Platform;
@@ -24,11 +25,13 @@ import javafx.scene.Node;
 
 import java.net.URL;
 import java.nio.channels.NotYetBoundException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
 public class AdminGraphController implements Initializable {
+    private Connection connection;
 //    Chart properties
     @FXML
     private LineChart<String , Integer> newUsersChart;
@@ -70,7 +73,8 @@ public class AdminGraphController implements Initializable {
     private Button toActiveUserButton;
     public void switchToLogin(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -79,9 +83,13 @@ public class AdminGraphController implements Initializable {
             e.printStackTrace();
         }
     }
+
     public void switchToUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-user-listing-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-user-listing-view.fxml"));
+            Parent root = loader.load();
+            AdminUserListController ctrl = (AdminUserListController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -93,7 +101,10 @@ public class AdminGraphController implements Initializable {
     }
     public void switchToActiveUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-activeuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-activeuser-view.fxml"));
+            Parent root = loader.load();
+            AdminActiveUserController ctrl = (AdminActiveUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -106,7 +117,10 @@ public class AdminGraphController implements Initializable {
 
     public void switchToGraph(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-graph-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-graph-view.fxml"));
+            Parent root = loader.load();
+            AdminGraphController ctrl = (AdminGraphController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -119,7 +133,10 @@ public class AdminGraphController implements Initializable {
 
     public void switchToGroup(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-group-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-group-view.fxml"));
+            Parent root = loader.load();
+            AdminGroupController ctrl = (AdminGroupController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -132,7 +149,10 @@ public class AdminGraphController implements Initializable {
 
     public void switchToReport(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-report-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-report-view.fxml"));
+            Parent root = loader.load();
+            AdminReportController ctrl = (AdminReportController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -145,7 +165,10 @@ public class AdminGraphController implements Initializable {
 
     public void switchToNewUser(ActionEvent event){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("admin-newuser-view.fxml"));
+            FXMLLoader loader =  new FXMLLoader(getClass().getResource("admin-newuser-view.fxml"));
+            Parent root = loader.load();
+            AdminNewUserController ctrl = (AdminNewUserController) loader.getController();
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -172,7 +195,7 @@ public class AdminGraphController implements Initializable {
             public void run() {
 
                 try {
-                    List<AdminNewUserAccount> newUserList = AdminNewUserAccountDAL.getNewAccountInYear(year);
+                    List<AdminNewUserAccount> newUserList = AdminNewUserAccountDAL.getNewAccountInYear(year, connection);
                     newUserList.forEach(data -> {
                         int monthValue = data.getCreateDate().toLocalDateTime().getMonthValue();
                         int newValue = newUsersInMonth.get(monthValue - 1) + 1;
@@ -183,7 +206,7 @@ public class AdminGraphController implements Initializable {
                 }
 
                 try {
-                    List<AdminUserActivityLog> newUserList = AdminActivityLogDAL.getActiveUserInYear(year);
+                    List<AdminUserActivityLog> newUserList = AdminActivityLogDAL.getActiveUserInYear(year, connection);
                     newUserList.forEach(data -> {
                         int monthValue = data.getSessionStartAsTimeStamp().toLocalDateTime().getMonthValue();
                         int newValue = activeUsersInMonth.get(monthValue - 1) + 1;
@@ -212,6 +235,9 @@ public class AdminGraphController implements Initializable {
         System.out.println(year);
         loadDataOfYear(year);
     }
+    public void setConnection(Connection conn){
+        connection = conn;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -220,6 +246,7 @@ public class AdminGraphController implements Initializable {
                 toGraphViewButton.requestFocus();
             }
         });
+//        connection = UtilityDAL.getConnection();
         newUsersInMonth = new ArrayList<>(List.of(0,0,0,0,0,0,0,0,0,0,0,0));
         activeUsersInMonth = new ArrayList<>(List.of(0,0,0,0,0,0,0,0,0,0,0,0));
         activeUsersX = new CategoryAxis(monthList);
@@ -233,7 +260,7 @@ public class AdminGraphController implements Initializable {
         newUsersX = new CategoryAxis(monthList);
         newUsersY = new NumberAxis();
         try {
-            List<Integer> years = AdminNewUserAccountDAL.getDifferentYearWithNewAccount();
+            List<Integer> years = AdminNewUserAccountDAL.getDifferentYearWithNewAccount(connection);
             years.forEach(year -> {
                 MenuItem newItem = new MenuItem(year.toString());
                 newItem.setOnAction(this::fetchYearData);

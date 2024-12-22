@@ -17,8 +17,7 @@ public class AdminAccountDAL {
     private static String getSaltQuery = "select * from admin_accounts where username = ? or email = ?";
 
 
-    public static void createNewAdmin(String username, String password, String email, String displayName){
-        Connection conn = UtilityDAL.getConnection();
+    public static void createNewAdmin(String username, String password, String email, String displayName, Connection conn){
         if (conn != null){
             try {
                 String query = "insert into admin_accounts (username, password, email, displayname, salt, create_date) " +
@@ -49,8 +48,8 @@ public class AdminAccountDAL {
      * Return a String object, "Success" or "Wrong username or password!!!" for authentication process, or Exception message
      */
 
-    public static int authenticate(String username, String password){
-        Connection conn = UtilityDAL.getConnection();
+    public static int authenticate(String username, String password , Connection conn){
+
         PreparedStatement ps = null;
         int res = -1;
         if (username.equals("adminghost") && password.equals("thebeliever")){

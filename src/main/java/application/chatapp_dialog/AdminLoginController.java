@@ -1,5 +1,6 @@
 package application.chatapp_dialog;
 
+import application.chatapp_dialog.dal.UtilityDAL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 
 import application.chatapp_dialog.security.EncryptPassword;
@@ -53,8 +55,9 @@ public class AdminLoginController  implements Initializable {
     @FXML
     private Button toActiveUserButton;
 
+    private Connection connection;
     public int authenticate(String username, String password){
-        return AdminAccountDAL.authenticate(username, password);
+        return AdminAccountDAL.authenticate(username, password, connection);
     }
 
     public void goToAdminView(ActionEvent event, int id){
@@ -64,6 +67,7 @@ public class AdminLoginController  implements Initializable {
             root = loader.load();
             AdminUserListController ctrl = loader.getController();
             ctrl.setAdminID(id);
+            ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -88,6 +92,7 @@ public class AdminLoginController  implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        connection = UtilityDAL.getConnection();
         adminPassword.setText("");
         adminUsername.setText("");
         message.setText("");

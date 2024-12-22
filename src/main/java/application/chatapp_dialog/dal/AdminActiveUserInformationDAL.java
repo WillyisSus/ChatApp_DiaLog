@@ -32,9 +32,9 @@ public class AdminActiveUserInformationDAL {
         obj.setCreateDate(rs.getTimestamp("create_date"));
         return obj;
     }
-    public static List<AdminActiveUserInformation> getAciveUserInformations() throws SQLException {
+    public static List<AdminActiveUserInformation> getAciveUserInformations(Connection conn) throws SQLException {
         List<AdminActiveUserInformation> list = new ArrayList<>();
-        Connection conn = UtilityDAL.getConnection();
+
         if (conn != null){
             try(PreparedStatement ps = conn.prepareStatement(query)){
                 ResultSet rs = ps.executeQuery();

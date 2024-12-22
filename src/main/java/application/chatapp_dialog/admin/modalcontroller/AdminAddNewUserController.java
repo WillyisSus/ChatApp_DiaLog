@@ -12,11 +12,13 @@ import javafx.scene.control.*;
 import org.w3c.dom.Text;
 
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import application.chatapp_dialog.dal.AdminUserAccountDAL;
 public class AdminAddNewUserController implements Initializable {
+    private Connection connection;
     @FXML
     private TextField username;
     @FXML
@@ -58,11 +60,14 @@ public class AdminAddNewUserController implements Initializable {
 
     public boolean addNewUser(){
         if (AdminUserAccountDAL.createNewUser(username.getText(), password.getText(), email.getText(), displayName.getText(),
-                (isMale.selectedProperty().get()), address.getText(), Date.valueOf(dob.getValue()))){
+                (isMale.selectedProperty().get()), address.getText(), Date.valueOf(dob.getValue()), connection)){
             return true;
         }
         errorMessage.setText("Cannot add user, please try another username or email");
         return false;
+    }
+    public void setConnection(Connection conn){
+        connection = conn;
     }
 
     @Override
@@ -90,4 +95,5 @@ public class AdminAddNewUserController implements Initializable {
         showPassword.setSelected(false);
 
     }
+
 }

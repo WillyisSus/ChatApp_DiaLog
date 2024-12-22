@@ -39,10 +39,9 @@ public class AdminUserFriendCountDAL {
             return obj;
         }
 
-        public static List<AdminUserFriendCount> getUserDirectAndIndirectFriendCount() throws SQLException {
+        public static List<AdminUserFriendCount> getUserDirectAndIndirectFriendCount(Connection conn) throws SQLException {
             List<AdminUserFriendCount> list = new ArrayList<>();
 
-            Connection conn = UtilityDAL.getConnection();
             if (conn != null){
                 try (PreparedStatement ps = conn.prepareStatement(query)){
                     ResultSet rs = ps.executeQuery();
