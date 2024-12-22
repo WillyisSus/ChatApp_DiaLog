@@ -43,11 +43,18 @@ public class UserLoginController implements Initializable {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setString(1, username);
                 ps.setString(2, username);
-                ResultSet  rs = ps.executeQuery();
+                ResultSet rs = ps.executeQuery();
                 if(!rs.next()){
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Notification");
                     alert.setHeaderText("Wrong username or password");
+                    alert.showAndWait();
+                    return 0;
+                }
+                if (rs.getString("status").equals("locked")){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Notification");
+                    alert.setHeaderText("Account was banned.");
                     alert.showAndWait();
                     return 0;
                 }
@@ -81,7 +88,7 @@ public class UserLoginController implements Initializable {
         String username = loginTextUsername.getText();
         String password = loginPasswordPassword.getText();
         System.out.println(username + "\n" + password);
-        if (username == null || password == null){
+        if (username == null || username.isBlank() || password == null || password.isBlank()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Wrong username or password");
