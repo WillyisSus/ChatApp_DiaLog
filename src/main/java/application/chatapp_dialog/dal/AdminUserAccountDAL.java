@@ -3,7 +3,9 @@ package application.chatapp_dialog.dal;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.dto.AdminFriendOfUser;
 import application.chatapp_dialog.security.EncryptPassword;
+import org.postgresql.util.PSQLException;
 
+import javax.print.attribute.standard.RequestingUserName;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -169,24 +171,37 @@ public class AdminUserAccountDAL {
         return row > 0;
     }
 
-    public static boolean updateUserAccount(AdminUserAccount account, Connection conn) throws SQLException{
+    public static boolean updateUserAccount(AdminUserAccount account, Connection conn) throws SQLException {
+        String checkQuery = "select * from user_accounts where (username = ? or email = ?) and id != ?";
         String query = "update user_accounts set username = ?, email = ? where id = ?";
         String infoQuery = "update user_account_info set displayname = ?, dob = ?, sex = ?, address = ? where account_id = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, account.getUsername());
-        ps.setString(2, account.getEmail());
-        ps.setInt(3, Integer.parseInt(account.getId()));
-        int row =  ps.executeUpdate();
-        if (row > 0){
-            ps = conn.prepareStatement(infoQuery);
-            ps.setString(1, account.getDisplayName());
-            ps.setDate(2, Date.valueOf(account.getDob()));
-            ps.setBoolean(3, Boolean.parseBoolean(account.getSex()));
-            ps.setString(4, account.getAddress());
-            ps.setInt(5, Integer.parseInt(account.getId()));
-            row = ps.executeUpdate();
-        }else {
-            return false;
+        int row = 0;
+        if (conn !=  null){
+            PreparedStatement ps = conn.prepareStatement(checkQuery);
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getEmail());
+            ps.setInt(3, Integer.parseInt(account.getId()));
+            ResultSet rs = ps.executeQuery();
+            if (rs.isBeforeFirst()){
+                System.out.println("Has something");
+                return false;
+            }
+            ps = conn.prepareStatement(query);
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getEmail());
+            ps.setInt(3, Integer.parseInt(account.getId()));
+            row =  ps.executeUpdate();
+            if (row > 0){
+                ps = conn.prepareStatement(infoQuery);
+                ps.setString(1, account.getDisplayName());
+                ps.setDate(2, Date.valueOf(account.getDob()));
+                ps.setBoolean(3, Boolean.parseBoolean(account.getSex()));
+                ps.setString(4, account.getAddress());
+                ps.setInt(5, Integer.parseInt(account.getId()));
+                row = ps.executeUpdate();
+            }else {
+                return false;
+            }
         }
         return row > 0;
     }

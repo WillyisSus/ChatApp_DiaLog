@@ -16,6 +16,8 @@ module application.chatapp_dialog {
 //    requires com.fasterxml.jackson.annotation;
     requires jdk.xml.dom;
     requires jakarta.mail;
+    requires org.postgresql.jdbc;
+    requires java.desktop;
     opens application.chatapp_dialog.dto to javafx.base;
     opens application.chatapp_dialog.dal to javafx.base;
     opens application.chatapp_dialog to javafx.fxml;

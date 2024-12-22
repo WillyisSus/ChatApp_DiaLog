@@ -482,7 +482,8 @@ public class AdminUserListController implements Initializable {
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+
         }
     }
     public void handleRemoveUser(){
@@ -817,7 +818,7 @@ public class AdminUserListController implements Initializable {
 
 //        connection = UtilityDAL.getConnection();
 
-        userAccountComparator = null;
+        userAccountComparator = AdminUserAccountDAL.getNameComparatorAscending();
         userActivityLogComparator = null;
         userFriendCountComparator = null;
         scheduledExecutorServiceUserList = Executors.newSingleThreadScheduledExecutor();
