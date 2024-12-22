@@ -84,6 +84,8 @@ public class UserAccountController implements Initializable, Runnable {
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
                 stage = (Stage)display.getScene().getWindow();
                 stage.setScene(scene);
+                UserLoginController controller = fxmlLoader.getController();
+                controller.setdata(stage);
                 stage.show();
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
@@ -173,6 +175,8 @@ public class UserAccountController implements Initializable, Runnable {
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
                 stage = (Stage)display.getScene().getWindow();
                 stage.setScene(scene);
+                UserLoginController controller = fxmlLoader.getController();
+                controller.setdata(stage);
                 stage.show();
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
@@ -247,6 +251,8 @@ public class UserAccountController implements Initializable, Runnable {
                                 scene = new Scene(fxmlLoader.load(), 1080, 720);
                                 stage = (Stage) display2.getScene().getWindow();
                                 stage.setScene(scene);
+                                UserLoginController controller = fxmlLoader.getController();
+                                controller.setdata(stage);
                                 stage.show();
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
