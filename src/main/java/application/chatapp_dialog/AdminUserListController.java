@@ -482,7 +482,8 @@ public class AdminUserListController implements Initializable {
             Optional<ButtonType> clickedButton = dialog.showAndWait();
 
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+
         }
     }
     public void handleRemoveUser(){
@@ -530,6 +531,7 @@ public class AdminUserListController implements Initializable {
                         alert.setTitle("Result for action - Success");
                         alert.setHeaderText(newStatus.equals("locked") ? "Lock user successfully!!!" : "Unlock user successfully!!!" );
                         selected.setStatus(newStatus);
+                        userlist.set(index, selected);
                         alert.showAndWait();
                         tableview.refresh();
                     }
@@ -585,7 +587,12 @@ public class AdminUserListController implements Initializable {
                 String newPass = UserAccountGenerator.randomPassword();
                 try {
                     AdminUserAccountDAL.updatePassword(Integer.parseInt(selected.getId()), newPass, connection);
-                    EmailDAL.sendNewPassword(selected.getEmail(), newPass);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            EmailDAL.sendNewPassword(selected.getEmail(), newPass);
+                        }
+                    });
                     tableview.refresh();
                 } catch (SQLException e) {
                     Alert error = new Alert(Alert.AlertType.ERROR);
@@ -625,93 +632,67 @@ public class AdminUserListController implements Initializable {
     }
 
     public void handleFilter(ActionEvent event){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getSource() == filterButton){
-                    FilteredList<AdminUserAccount> filteredList = new FilteredList<AdminUserAccount>(userlist, i->{
-                        boolean filteredByUsername = true;
-                        boolean filteredByDisplayName = true;
-                        boolean filteredByStatus = true;
-                        if (!displayNameFilter.getText().isEmpty()){
-                            filteredByDisplayName =  i.getDisplayName().startsWith(displayNameFilter.getText());
-                        }
-                        if (!nameFilter.getText().isEmpty()){
-                            filteredByUsername = i.getUsername().startsWith(nameFilter.getText());
-                        }
-                        String chosenStatus = statusFilter.getValue();
-                        if (!chosenStatus.equals(statusFilter.getItems().getFirst())){
-                            filteredByStatus = i.getStatus().equals(chosenStatus.toLowerCase());
-                        }
-                        return (filteredByUsername && filteredByDisplayName && filteredByStatus);
-                    });
-                    tableview.setItems(filteredList);
-                    tableview.refresh();
-
-
+        if (event.getSource() == filterButton){
+            FilteredList<AdminUserAccount> filteredList = new FilteredList<AdminUserAccount>(userlist, i->{
+                boolean filteredByUsername = true;
+                boolean filteredByDisplayName = true;
+                boolean filteredByStatus = true;
+                if (!displayNameFilter.getText().isEmpty()){
+                    filteredByDisplayName =  i.getDisplayName().startsWith(displayNameFilter.getText());
                 }
-                else if (event.getSource() == clearFilterButton){
-                    tableview.setItems(userlist);
-                    nameFilter.clear();
-                    displayNameFilter.clear();
-                    statusFilter.setValue(statusFilter.getItems().getFirst());
-                    tableview.refresh();
+                if (!nameFilter.getText().isEmpty()){
+                    filteredByUsername = i.getUsername().startsWith(nameFilter.getText());
                 }
-            }
-        });
+                String chosenStatus = statusFilter.getValue();
+                if (!chosenStatus.equals(statusFilter.getItems().getFirst())){
+                    filteredByStatus = i.getStatus().equals(chosenStatus.toLowerCase());
+                }
+                return (filteredByUsername && filteredByDisplayName && filteredByStatus);
+            });
+            tableview.setItems(filteredList);
+            tableview.refresh();
 
+
+        }
+        else if (event.getSource() == clearFilterButton){
+            tableview.setItems(userlist);
+            nameFilter.clear();
+            displayNameFilter.clear();
+            statusFilter.setValue(statusFilter.getItems().getFirst());
+            tableview.refresh();
+        }
 
     }
 
     public void handleSortByUsernameAscending(){
         orderMenu.setText(nameAscending.getText());
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                userlist.sort(AdminUserAccountDAL.getNameComparatorAscending());
-                userAccountComparator = AdminUserAccountDAL.getNameComparatorAscending();
-                tableview.refresh();
-            }
-        });
+        userlist.sort(AdminUserAccountDAL.getNameComparatorAscending());
+        userAccountComparator = AdminUserAccountDAL.getNameComparatorAscending();
+        tableview.refresh();
+
 
     }
 
     public void handleSortByUsernameDescending(){
         orderMenu.setText(nameDescending.getText());
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                userlist.sort(AdminUserAccountDAL.getNameComparatorDescending());
-                userAccountComparator = AdminUserAccountDAL.getNameComparatorDescending();
-                tableview.refresh();
-            }
-        });
+        userlist.sort(AdminUserAccountDAL.getNameComparatorDescending());
+        userAccountComparator = AdminUserAccountDAL.getNameComparatorDescending();
+        tableview.refresh();
 
     }
 
     public void handleSortByCreateDateAscending(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                userlist.sort(AdminUserAccountDAL.getCreateDateComparatorAscending());
-                userAccountComparator = AdminUserAccountDAL.getCreateDateComparatorAscending();
-
-                tableview.refresh();
-            }
-        });
+        userlist.sort(AdminUserAccountDAL.getCreateDateComparatorAscending());
+        userAccountComparator = AdminUserAccountDAL.getCreateDateComparatorAscending();
+        tableview.refresh();
         orderMenu.setText(dateAscending.getText());
 
     }
 
     public void handleSortByCreateDateDescending(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                userlist.sort(AdminUserAccountDAL.getCreateDateComparatorDescending());
-                userAccountComparator = AdminUserAccountDAL.getCreateDateComparatorDescending();
-                tableview.refresh();
-            }
-        });
+        userlist.sort(AdminUserAccountDAL.getCreateDateComparatorDescending());
+        userAccountComparator = AdminUserAccountDAL.getCreateDateComparatorDescending();
+        tableview.refresh();;
         orderMenu.setText(dateDescending.getText());
 
     }
@@ -762,21 +743,7 @@ public class AdminUserListController implements Initializable {
             activityLogTableView.refresh();
         }
     }
-    public void handlerReloadActivityLogs(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
-                    activityLogTableView.setItems(activityLogs);
-                    activityLogTableView.refresh();
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
 
-    }
 // Friend Count Function;
     public void handleFilterUserFriendCount(ActionEvent event){
         if (event.getSource() == filterFriendTable){
@@ -834,25 +801,6 @@ public class AdminUserListController implements Initializable {
 
     }
 
-    public void handleReloadFriendCountData(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
-                } catch (SQLException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Database ERROR");
-                    alert.setHeaderText("CANNOT GET DATA!!");
-                    alert.setContentText("Something prevents client from getting data.");
-                    alert.showAndWait();
-                }
-                friendCountTableView.setItems(friendCounts);
-                friendCountTableView.refresh();
-            }
-        });
-
-    }
 
 //    end of Friend count function
     public void setConnection(Connection conn){
@@ -870,7 +818,7 @@ public class AdminUserListController implements Initializable {
 
 //        connection = UtilityDAL.getConnection();
 
-        userAccountComparator = null;
+        userAccountComparator = AdminUserAccountDAL.getNameComparatorAscending();
         userActivityLogComparator = null;
         userFriendCountComparator = null;
         scheduledExecutorServiceUserList = Executors.newSingleThreadScheduledExecutor();

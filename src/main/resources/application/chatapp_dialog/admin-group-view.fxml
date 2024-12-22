@@ -70,7 +70,7 @@
                                                       <HBox prefHeight="100.0" prefWidth="200.0" spacing="16.0">
                                                          <children>
                                                             <Button fx:id="filterGroupName" mnemonicParsing="false" onAction="#handleFilter" prefHeight="31.0" prefWidth="139.0" text="Filter" />
-                                                            <Button fx:id="clearFilter" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleFilter" prefHeight="31.0" prefWidth="139.0" text="Clear Filte" />
+                                                            <Button fx:id="clearFilter" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleFilter" prefHeight="31.0" prefWidth="139.0" text="Clear Filter" />
                                                          </children>
                                                       </HBox>
                                                    </children>

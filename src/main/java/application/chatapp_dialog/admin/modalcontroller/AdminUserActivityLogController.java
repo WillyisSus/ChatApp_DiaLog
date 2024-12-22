@@ -31,8 +31,6 @@ public class AdminUserActivityLogController implements Initializable {
     @FXML
     private TableColumn<String, String> dateAndTimes;
     @FXML
-    private TableColumn<AdminUserActivityLog, String> index;
-    @FXML
     private MenuButton orderMenu;
     @FXML
     private MenuItem ascendingItem;
@@ -46,11 +44,6 @@ public class AdminUserActivityLogController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         activityLogs = FXCollections.observableArrayList(new ArrayList<>());
         dateAndTimes.setCellValueFactory(new PropertyValueFactory<String, String>("sessionStart"));
-        index.setCellValueFactory(data -> {
-            AdminUserActivityLog item = data.getValue();
-            int index = activityTable.getItems().indexOf(item);
-            return new SimpleStringProperty(Integer.toString(index));
-        });
         ascendingItem.setOnAction(this::sortAscending);
         descendingItem.setOnAction(this::sortDescending);
     }

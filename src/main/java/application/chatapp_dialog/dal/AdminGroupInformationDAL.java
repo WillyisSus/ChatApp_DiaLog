@@ -100,7 +100,7 @@ public class AdminGroupInformationDAL {
         return new Comparator<AdminGroupInformation>() {
             @Override
             public int compare(AdminGroupInformation o1, AdminGroupInformation o2) {
-                return o1.getGroupName().compareTo(o2.getGroupName());
+                return o2.getGroupName().compareTo(o1.getGroupName());
             }
         };
     }

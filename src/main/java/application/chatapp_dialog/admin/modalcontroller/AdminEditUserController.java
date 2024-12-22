@@ -69,6 +69,7 @@ public class AdminEditUserController implements Initializable {
     }
     public AdminUserAccount setNewInformation() {
         AdminUserAccount temp = new AdminUserAccount(account);
+        System.out.println(temp.getId() == account.getId());
         temp.setDob(Date.valueOf(dob.getValue()));
         temp.setSex(isMale.isSelected());
         temp.setDisplayName(displayName.getText());
@@ -76,10 +77,19 @@ public class AdminEditUserController implements Initializable {
         temp.setAddress(address.getText());
         temp.setUsername(username.getText());
         try {
-            if (!AdminUserAccountDAL.updateUserAccount(temp, connection))
+            if (!AdminUserAccountDAL.updateUserAccount(temp, connection)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid information");
+                alert.setContentText("Please use another email or username!!!");
+                alert.showAndWait();
                 return account;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            }
+
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid information");
+            alert.setContentText("Please use another email or username!!!");
+            alert.showAndWait();
         }
         return temp;
     }
