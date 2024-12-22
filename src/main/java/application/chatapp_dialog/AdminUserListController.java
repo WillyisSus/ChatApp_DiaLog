@@ -32,9 +32,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import application.chatapp_dialog.dto.*;
-import javafx.stage.WindowEvent;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
-import org.w3c.dom.html.HTMLTableElement;
 
 
 public class AdminUserListController implements Initializable {

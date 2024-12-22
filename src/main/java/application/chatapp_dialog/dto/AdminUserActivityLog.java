@@ -1,14 +1,9 @@
 package application.chatapp_dialog.dto;
 
-import application.chatapp_dialog.dal.AdminUserAccountDAL;
-import eu.hansolo.toolbox.time.Times;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.AbstractMap;
 
 public class AdminUserActivityLog {
     private SimpleIntegerProperty id;

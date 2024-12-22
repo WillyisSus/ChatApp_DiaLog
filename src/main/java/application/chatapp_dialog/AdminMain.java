@@ -15,6 +15,7 @@ public class AdminMain extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1080, 720);
         stage.setResizable(false);
+        stage.setTitle("Dialog - Admin View");
         stage.setScene(scene);
         stage.show();
     }

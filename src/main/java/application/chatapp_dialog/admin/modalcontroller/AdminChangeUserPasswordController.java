@@ -8,14 +8,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.event.ActionEvent;
 
-import javax.xml.transform.Source;
-import java.lang.reflect.AccessFlag;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AdminChangeUserPasswordController implements Initializable {

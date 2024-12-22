@@ -3,7 +3,6 @@ package application.chatapp_dialog.admin.modalcontroller;
 import application.chatapp_dialog.dal.AdminActivityLogDAL;
 import application.chatapp_dialog.dto.AdminUserAccount;
 import application.chatapp_dialog.dto.AdminUserActivityLog;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,7 +15,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.intellij.lang.annotations.JdkConstants;
 
 import javafx.event.ActionEvent;
 

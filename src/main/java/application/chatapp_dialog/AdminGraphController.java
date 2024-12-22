@@ -238,11 +238,11 @@ public class AdminGraphController implements Initializable {
         MenuItem clicked = (MenuItem) event.getSource();
         yearButton.setText( clicked.getText());
         int year = Integer.parseInt(clicked.getText());
-        System.out.println(year);
         loadDataOfYear(year);
     }
     public void setConnection(Connection conn){
         connection = conn;
+
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -265,19 +265,27 @@ public class AdminGraphController implements Initializable {
         newUsersChart.getData().add(newUserSeries);
         newUsersX = new CategoryAxis(monthList);
         newUsersY = new NumberAxis();
-        try {
-            List<Integer> years = AdminNewUserAccountDAL.getDifferentYearWithNewAccount(connection);
-            years.forEach(year -> {
-                MenuItem newItem = new MenuItem(year.toString());
-                newItem.setOnAction(this::fetchYearData);
-                yearButton.getItems().addLast(newItem);
 
-            });
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
         loadDataOfYear(LocalDate.now().getYear());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    List<Integer> years = AdminNewUserAccountDAL.getDifferentYearWithNewAccount(connection);
+                    System.out.println(years.size());
+                    years.forEach(year -> {
+                        MenuItem newItem = new MenuItem(year.toString());
+                        newItem.setOnAction(event -> fetchYearData(event));
+
+                    });
+
+
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
 
     }
 }

@@ -1,19 +1,19 @@
 module application.chatapp_dialog {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.web;
-
-    requires org.controlsfx.controls;
-    requires com.dlsc.formsfx;
-    requires net.synedra.validatorfx;
-    requires org.kordamp.ikonli.javafx;
-    requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
-    requires com.almasb.fxgl.all;
-    requires annotations;
+//    requires javafx.web;
+//
+//    requires org.controlsfx.controls;
+//    requires com.dlsc.formsfx;
+//    requires net.synedra.validatorfx;
+//    requires org.kordamp.ikonli.javafx;
+//    requires org.kordamp.bootstrapfx.core;
+//    requires eu.hansolo.tilesfx;
+//    requires com.almasb.fxgl.all;
+//    requires annotations;
     requires java.sql;
     requires jdk.jdi;
-    requires com.fasterxml.jackson.annotation;
+//    requires com.fasterxml.jackson.annotation;
     requires jdk.xml.dom;
     requires jakarta.mail;
     opens application.chatapp_dialog.dto to javafx.base;
