@@ -667,7 +667,19 @@ public class UserChatController implements Initializable, Runnable {
                     if (changable == 0){
                         chatScrollChat2.applyCss();
                         chatScrollChat2.layout();
-                        chatScrollChat2.setVvalue((double) chatVboxChat2.getChildren().indexOf(chatVboxChat.lookup("#" + rs.getInt("id"))) / chatVboxChat.getChildren().size());
+                        chatScrollChat2.setVvalue((double) chatVboxChat2.getChildren().indexOf(chatVboxChat2.lookup("#" + rs.getInt("id"))) / chatVboxChat2.getChildren().size());
+                        changable = rs.getInt("id");
+                        break;
+                    } else {
+                        int mid = rs.getInt("id");
+                        if (mid >= changable){
+                            continue;
+                        }
+                        chatScrollChat2.applyCss();
+                        chatScrollChat2.layout();
+                        chatScrollChat2.setVvalue((double) chatVboxChat2.getChildren().indexOf(chatVboxChat2.lookup("#" + mid)) / chatVboxChat2.getChildren().size());
+                        changable = rs.getInt("id");
+                        break;
                     }
                 }
             } catch (SQLException e) {
@@ -774,7 +786,7 @@ public class UserChatController implements Initializable, Runnable {
             });
             if (!Objects.equals(chatTextSearchchat2.getText(), searchValue)){
                 searchValue = chatTextSearchchat2.getText();
-                changable = 1;
+                changable = 0;
             }
         }
     }
