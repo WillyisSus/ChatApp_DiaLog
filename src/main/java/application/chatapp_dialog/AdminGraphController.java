@@ -74,7 +74,7 @@ public class AdminGraphController implements Initializable {
     public void switchToLogin(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
-            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load();
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
@@ -93,6 +93,7 @@ public class AdminGraphController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -108,6 +109,7 @@ public class AdminGraphController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -124,6 +126,7 @@ public class AdminGraphController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+//            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -140,6 +143,7 @@ public class AdminGraphController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -156,6 +160,7 @@ public class AdminGraphController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -172,6 +177,7 @@ public class AdminGraphController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();

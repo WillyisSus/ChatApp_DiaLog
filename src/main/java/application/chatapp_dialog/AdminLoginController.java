@@ -2,6 +2,7 @@ package application.chatapp_dialog;
 
 import application.chatapp_dialog.dal.UtilityDAL;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
 import java.io.IOException;
@@ -71,6 +73,7 @@ public class AdminLoginController  implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -31,6 +32,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import application.chatapp_dialog.dto.*;
+import javafx.stage.WindowEvent;
 import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.w3c.dom.html.HTMLTableElement;
 
@@ -38,6 +40,9 @@ import org.w3c.dom.html.HTMLTableElement;
 public class AdminUserListController implements Initializable {
     private int adminID = -1;
     private Connection connection;
+    ScheduledExecutorService scheduledExecutorServiceUserList;
+    ScheduledExecutorService friendCountThread;
+    ScheduledExecutorService activityThread;
     private Comparator<AdminUserAccount> userAccountComparator;
     private Comparator<AdminUserActivityLog> userActivityLogComparator;
     private Comparator<AdminUserFriendCount> userFriendCountComparator;
@@ -110,6 +115,9 @@ public class AdminUserListController implements Initializable {
             }
         }
     }
+    //    Root pane
+    @FXML
+    private AnchorPane rootPane;
     //    Table related
     @FXML
     private TableView<AdminUserAccount> tableview;
@@ -283,6 +291,7 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -298,6 +307,8 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -313,6 +324,8 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -329,6 +342,8 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+//            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -345,6 +360,8 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -361,6 +378,8 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -377,14 +396,23 @@ public class AdminUserListController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
-
-
+    public void setStageAndCloseHandler(Stage stage){
+        this.stage = stage;
+        stage.setOnCloseRequest(windowEvent -> this.handleCloseStage());
+    }
+    public void handleCloseStage(){
+        scheduledExecutorServiceUserList.shutdown();
+        friendCountThread.shutdown();
+        activityThread.shutdown();
+    }
     @FXML
     public void handleAddNewUser(){
 
@@ -842,11 +870,16 @@ public class AdminUserListController implements Initializable {
                 toUserViewButton.requestFocus();
             }
         });
+
 //        connection = UtilityDAL.getConnection();
+
         userAccountComparator = null;
         userActivityLogComparator = null;
         userFriendCountComparator = null;
-        ScheduledExecutorService scheduledExecutorServiceUserList = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorServiceUserList = Executors.newSingleThreadScheduledExecutor();
+        friendCountThread = Executors.newSingleThreadScheduledExecutor();
+        activityThread = Executors.newSingleThreadScheduledExecutor();
+
         scheduledExecutorServiceUserList.scheduleAtFixedRate(new MyAutoReloadUserList(), 0, 1000, TimeUnit.MILLISECONDS);
         filteredUserList = null;
         userlist = FXCollections.observableArrayList(AdminUserAccountDAL.getAllUserAccountsWithInfomation(connection));
@@ -905,7 +938,7 @@ public class AdminUserListController implements Initializable {
             if(latestLogins.isSelected() && activityLogTableView.getItems().isEmpty()){
 
                 try {
-                    ScheduledExecutorService activityThread = Executors.newSingleThreadScheduledExecutor();
+
                     activityThread.scheduleAtFixedRate(new MyAutoReloadUserActivity(), 0, 1000, TimeUnit.MILLISECONDS);
                     activityLogs = FXCollections.observableArrayList(AdminActivityLogDAL.getAllUserActivityLog(null, connection));
                     activityLogTableView.setItems(activityLogs);
@@ -930,7 +963,7 @@ public class AdminUserListController implements Initializable {
             if(userFriends.isSelected() && friendCountTableView.getItems().isEmpty()){
 
                 try {
-                    ScheduledExecutorService friendCountThread = Executors.newSingleThreadScheduledExecutor();
+
                     friendCountThread.scheduleAtFixedRate(new MyAutoReloadUserFriendCount(), 0, 1000, TimeUnit.MILLISECONDS);
                     friendCounts = FXCollections.observableArrayList(AdminUserFriendCountDAL.getUserDirectAndIndirectFriendCount(connection));
                     friendCountTableView.setItems(friendCounts);

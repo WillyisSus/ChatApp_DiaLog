@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AdminGroupController implements Initializable {
     private Connection connection;
+    ScheduledExecutorService scheduledExecutorService;
     private class MyAutoReloadGroupInformation implements Runnable {
         @Override
         public void run() {
@@ -124,9 +125,10 @@ public class AdminGroupController implements Initializable {
     public void switchToLogin(ActionEvent event){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
-            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
+            Parent root = loader.load();
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
+            handleCloseStage();
             stage.setScene(scene);
             stage.show();
         }catch (Exception e){
@@ -143,6 +145,8 @@ public class AdminGroupController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -157,7 +161,9 @@ public class AdminGroupController implements Initializable {
             ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
+            handleCloseStage();
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -173,7 +179,9 @@ public class AdminGroupController implements Initializable {
             ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
+            handleCloseStage();
             stage.setScene(scene);
+//            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -189,7 +197,9 @@ public class AdminGroupController implements Initializable {
             ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
+            handleCloseStage();
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -205,7 +215,9 @@ public class AdminGroupController implements Initializable {
             ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
+            handleCloseStage();
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -221,7 +233,9 @@ public class AdminGroupController implements Initializable {
             ctrl.setConnection(connection);
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
+            handleCloseStage();
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -301,6 +315,13 @@ public class AdminGroupController implements Initializable {
     public void setConnection(Connection conn){
         connection = conn;
     }
+    public void setStageAndCloseHandler(Stage stage){
+        this.stage = stage;
+        stage.setOnCloseRequest(windowEvent -> this.handleCloseStage());
+    }
+    public void handleCloseStage(){
+        scheduledExecutorService.shutdown();
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -311,7 +332,7 @@ public class AdminGroupController implements Initializable {
         });
 //        connection = UtilityDAL.getConnection();
         comparator = null;
-        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadGroupInformation(), 0, 1000, TimeUnit.MILLISECONDS);
         boxName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGroupName()));
         boxCreateDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCreateDate().toString()));

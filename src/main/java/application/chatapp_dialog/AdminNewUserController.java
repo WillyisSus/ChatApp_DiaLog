@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AdminNewUserController implements Initializable {
     private Connection connection;
+    ScheduledExecutorService scheduledExecutorService;
     private class MyAutoReloadNewUser implements Runnable{
         @Override
         public void run() {
@@ -113,18 +114,19 @@ public class AdminNewUserController implements Initializable {
     @FXML
     private MenuItem emailDescending;
 // Scene management
-    public void switchToLogin(ActionEvent event){
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
-            Parent root = loader.load(getClass().getResource("admin-login.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+public void switchToLogin(ActionEvent event){
+    try{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-login.fxml"));
+        Parent root = loader.load();
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        handleCloseStage();
+        stage.show();
+    }catch (Exception e){
+        e.printStackTrace();
     }
+}
 
     public void switchToUser(ActionEvent event){
         try{
@@ -135,6 +137,8 @@ public class AdminNewUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -150,6 +154,8 @@ public class AdminNewUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -166,6 +172,8 @@ public class AdminNewUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+//            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -182,6 +190,8 @@ public class AdminNewUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -198,6 +208,8 @@ public class AdminNewUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -214,6 +226,8 @@ public class AdminNewUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -303,6 +317,13 @@ public class AdminNewUserController implements Initializable {
     public void setConnection(Connection conn){
         connection = conn;
     }
+    public void setStageAndCloseHandler(Stage stage){
+        this.stage = stage;
+        stage.setOnCloseRequest(windowEvent -> this.handleCloseStage());
+    }
+    public void handleCloseStage(){
+        scheduledExecutorService.shutdown();
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -312,7 +333,7 @@ public class AdminNewUserController implements Initializable {
             }
         });
         comparator = null;
-        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new MyAutoReloadNewUser(), 0, 1000, TimeUnit.MILLISECONDS);
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));

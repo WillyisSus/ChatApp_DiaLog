@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AdminActiveUserController implements Initializable {
     private Connection connection;
+    ScheduledExecutorService executorService;
     private class MyAutoReloadActiveUser implements Runnable{
         @Override
         public void run() {
@@ -132,6 +133,7 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -147,6 +149,8 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -162,6 +166,8 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -178,6 +184,8 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+//            ctrl.setStageAndCloseHandler(stage);
+            handleCloseStage();
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -194,6 +202,8 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -210,6 +220,8 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -226,6 +238,8 @@ public class AdminActiveUserController implements Initializable {
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            handleCloseStage();
+            ctrl.setStageAndCloseHandler(stage);
             stage.show();
         }catch (Exception e){
             e.printStackTrace();
@@ -330,6 +344,13 @@ public class AdminActiveUserController implements Initializable {
     public void setConnection(Connection conn){
         connection = conn;
     }
+    public void setStageAndCloseHandler(Stage stage){
+        this.stage = stage;
+        stage.setOnCloseRequest(windowEvent -> this.handleCloseStage());
+    }
+    public void handleCloseStage(){
+        executorService.shutdown();
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
@@ -340,7 +361,7 @@ public class AdminActiveUserController implements Initializable {
         });
 //        connection = UtilityDAL.getConnection();
         comparator = null;
-        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(new MyAutoReloadActiveUser(), 0, 1000, TimeUnit.MILLISECONDS);
         usernameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
         emailColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
