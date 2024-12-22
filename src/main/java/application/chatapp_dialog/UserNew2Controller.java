@@ -92,7 +92,13 @@ public class UserNew2Controller implements Initializable {
             alert.showAndWait();
             return;
         }
-
+        if (displayname.length() > 32){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Notification");
+            alert.setHeaderText("Display name can only contains 6-32 characters.");
+            alert.showAndWait();
+            return;
+        }
         System.out.println(username + "\n" + email + "\n" + password + "\n" + dob + "\n" + sex + "\n" + address);
 
         if (createdNewUser(username, email, password, displayname, dob, sex, address) > 0) {

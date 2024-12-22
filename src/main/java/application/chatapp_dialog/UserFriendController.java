@@ -606,7 +606,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
                 alert.setHeaderText("Removed.");
-                alert.showAndWait();
+                alert.show();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -633,7 +633,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
                 alert.setHeaderText("Blocked.");
-                alert.showAndWait();
+                alert.show();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -650,7 +650,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
                 alert.setHeaderText("Reported.");
-                alert.showAndWait();
+                alert.show();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -686,7 +686,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
                 alert.setHeaderText("Removed.");
-                alert.showAndWait();
+                alert.show();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -794,7 +794,7 @@ public class UserFriendController implements Initializable, Runnable  {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next() || !rs.getString("status").equals("online")){
+                if (!rs.next() || !(rs.getString("status").equals("online"))){
                     query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
                     ps = conn.prepareStatement(query);
                     ps.setInt(1, id);

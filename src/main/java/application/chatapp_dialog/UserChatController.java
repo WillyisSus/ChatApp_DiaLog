@@ -43,14 +43,12 @@ public class UserChatController implements Initializable, Runnable {
     private Scene scene;
     @FXML
     private GridPane display;
+    static GridPane display2 = new GridPane();
 
     static int id = 1;
     static int boxid = 0;
     static boolean stop  = false;
-//    static List<Integer> chatBoxchatList = new ArrayList<>();
-//    static List<Integer> chatBoxchatList2 = new ArrayList<>();
-//    static List<Integer> chatMessagesList = new ArrayList<>();
-//    static List<Integer> chatMessagesList2 = new ArrayList<>();
+
     @FXML
     private TextField chatTextSend;
     static TextField chatTextSend2 = new TextField();
@@ -66,9 +64,6 @@ public class UserChatController implements Initializable, Runnable {
     @FXML
     private MenuButton chatMenuChat;
     static MenuButton chatMenuChat2 = new MenuButton();
-    @FXML
-    private MenuButton chatMenuAccount;
-    static MenuButton chatMenuAccount2 = new MenuButton();
     @FXML
     private MenuItem chatMenuitemAccount;
     static MenuItem chatMenuitemAccount2 = new MenuItem();
@@ -173,7 +168,34 @@ public class UserChatController implements Initializable, Runnable {
                 if (!rs.next()){
                     return;
                 }
-                if (rs.getBoolean("is_direct")){
+                boolean direct = rs.getBoolean("is_direct");
+                if (direct){
+                    String query2 = "select user_id from box_chat_members where box_id = ? and user_id != ?";
+                    PreparedStatement ps2 = conn.prepareStatement(query2);
+                    ps2.setInt(1, boxid);
+                    ps2.setInt(2, id);
+                    ResultSet rs2 = ps2.executeQuery();
+                    rs2.next();
+                    int uid = rs2.getInt(1);
+                    query2 = "select sum(ro) from (\n" +
+                            "select count(id) as ro from user_accounts where id = ? and status = 'locked'\n" +
+                            "union\n" +
+                            "select count(id) as ro from block_lists where (user_id = ? and block_id = ?) or (user_id = ? and block_id = ?))";
+                    ps2 = conn.prepareStatement(query2);
+                    ps2.setInt(1, uid);
+                    ps2.setInt(2, id);
+                    ps2.setInt(3, uid);
+                    ps2.setInt(4, uid);
+                    ps2.setInt(5, id);
+                    rs2 = ps2.executeQuery();
+                    rs2.next();
+                    int inval = rs2.getInt(1);
+                    if (inval > 0){
+                        chatTextSend2.setVisible(false);
+                        chatImageSend2.setVisible(false);
+                    }
+                }
+                if (direct){
                     chatLabelChatname2.setText(rs.getString("displayname"));
                 } else {
                     chatLabelChatname2.setText(rs.getString("box_name"));
@@ -283,13 +305,27 @@ public class UserChatController implements Initializable, Runnable {
                 ResultSet rs = ps.executeQuery();
                 rs.next();
                 if (rs.getBoolean(1)){
-                    MenuItem newitemfriend = new MenuItem("Unfriend");
-                    newitemfriend.setOnAction(this::menuitemFriendClicked);
-                    MenuItem newitemreport = new MenuItem("Report");
-                    newitemreport.setOnAction(this::menuitemReportClicked);
-                    MenuItem newitemblock = new MenuItem("Block");
-                    newitemblock.setOnAction(this::menuitemBlockClicked);
-                    chatMenuChat2.getItems().addAll(newitemfriend, newitemreport, newitemblock);
+                    query = "select * from box_chat_members where box_id = ? and user_id != ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, boxid);
+                    ps.setInt(2, id);
+                    rs = ps.executeQuery();
+                    rs.next();
+                    int uid = rs.getInt("user_id");
+                    query = "select * from block_lists where (user_id = ? and block_id = ?) or (user_id = ? and block_id = ?)";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, uid);
+                    ps.setInt(2, id);
+                    ps.setInt(3, id);
+                    ps.setInt(4, uid);
+                    rs = ps.executeQuery();
+                    if(!rs.next()){
+                        MenuItem newitemreport = new MenuItem("Report");
+                        newitemreport.setOnAction(this::menuitemReportClicked);
+                        MenuItem newitemblock = new MenuItem("Block");
+                        newitemblock.setOnAction(this::menuitemBlockClicked);
+                        chatMenuChat2.getItems().addAll(newitemreport, newitemblock);
+                    }
                 } else {
                     MenuItem newitemmember = new MenuItem("Members");
                     newitemmember.setOnAction(this::menuitemMembersClicked);
@@ -297,31 +333,6 @@ public class UserChatController implements Initializable, Runnable {
                     newitemleave.setOnAction(this::menuitemLeaveClicked);
                     chatMenuChat2.getItems().addAll(newitemmember, newitemleave);
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    synchronized public void menuitemFriendClicked(ActionEvent event){
-        if (conn != null) {
-            try {
-                String query = "delete from friendships where (request_id = ? and accept_id = (select user_id from box_chat_members where box_id = ? and user_id != ?))\n" +
-                        "or (request_id = (select user_id from box_chat_members where box_id = ? and user_id != ?) and accept_id = ?)\n";
-                PreparedStatement ps = conn.prepareStatement(query);
-                ps.setInt(1, id);
-                ps.setInt(2, boxid);
-                ps.setInt(3, id);
-                ps.setInt(4, boxid);
-                ps.setInt(5, id);
-                ps.setInt(6, id);
-                ps.executeUpdate();
-                query = "delete from box_chat_members where box_id = ?";
-                ps = conn.prepareStatement(query);
-                ps.setInt(1, boxid);
-                ps.executeUpdate();
-                boxid = 0;
-                vboxChatboxLoaded();
-                vboxChatLoaded();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -338,8 +349,8 @@ public class UserChatController implements Initializable, Runnable {
                 ps.executeUpdate();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
-                alert.setHeaderText("Reported sucessfully.");
-                alert.showAndWait();
+                alert.setHeaderText("Reported.");
+                alert.show();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -348,13 +359,24 @@ public class UserChatController implements Initializable, Runnable {
     synchronized public void menuitemBlockClicked(ActionEvent event){
         if (conn != null) {
             try {
-                String query = "insert into block_lists (user_id, block_id) values (?, (select user_id from box_chat_members where box_id = ? and user_id != ?))";
+                String query = "select user_id from box_chat_members where box_id = ? and user_id != ?";
                 PreparedStatement ps = conn.prepareStatement(query);
-                ps.setInt(1, id);
-                ps.setInt(2, boxid);
+                ps.setInt(1, boxid);
+                ps.setInt(2, id);
+                ResultSet rs = ps.executeQuery();
+                rs.next();
+                int uid = rs.getInt(1);
+                query = "insert into block_lists (user_id, block_id) values (?, ?); delete from friendships where (request_id = ? and accept_id = ?) or (request_id = ? and accept_id = ?)";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, uid);
+                ps.setInt(2, id);
                 ps.setInt(3, id);
-                ps.executeUpdate();
-                menuitemFriendClicked(event);
+                ps.setInt(4, uid);
+                ps.setInt(5, uid);
+                ps.setInt(6, id);
+                ps.execute();
+                vboxChatboxLoaded();
+                vboxChatLoaded();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -365,10 +387,10 @@ public class UserChatController implements Initializable, Runnable {
             stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-group-member-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            UserGroupMemberController controller = fxmlLoader.getController();
-            controller.setdata(id, boxid);
-            stage = (Stage)display.getScene().getWindow();
+            stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
+            UserGroupMemberController controller = fxmlLoader.getController();
+            controller.setdata(id, boxid, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -395,8 +417,10 @@ public class UserChatController implements Initializable, Runnable {
             stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-account-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            stage = (Stage)display.getScene().getWindow();
+            stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
+            UserAccountController controller = fxmlLoader.getController();
+            controller.setdata(id, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -407,8 +431,10 @@ public class UserChatController implements Initializable, Runnable {
             stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-friends-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            stage = (Stage)display.getScene().getWindow();
+            stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
+            UserFriendController controller = fxmlLoader.getController();
+            controller.setdata(id, stage);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -416,20 +442,28 @@ public class UserChatController implements Initializable, Runnable {
     }
     public void menuitemLogoutClicked(ActionEvent event){
         try{
+            String query = "update user_accounts set status = 'offline' where id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
             stop = true;
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            stage = (Stage)display.getScene().getWindow();
+            stage = (Stage)display2.getScene().getWindow();
             stage.setScene(scene);
             stage.show();
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             throw new RuntimeException(e);
         }
     }
     public void menuOnlineClicked(Event event){
-        chatMenuOnline2.getItems().clear();
         if (conn != null) {
             try {
+                chatMenuOnline2.getItems().clear();
                 String query = "select id, username, displayname from user_account_info join user_accounts on account_id = id join friendships on ((id = request_id and accept_id = ?) or (request_id = ? and id = accept_id)) where is_accepted = true and status = 'online'";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
@@ -449,21 +483,34 @@ public class UserChatController implements Initializable, Runnable {
     public void menuitemOnlineClicked(ActionEvent event){
         if (conn != null) {
             try {
-                String query = "select box_id from\n" +
-                        "(select box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ?\n" +
-                        "intersect\n" +
-                        "select box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ?)\n" +
-                        "where box_id in (select box_chats.id from box_chats where box_chats.is_direct)";
+                String query = "select id from box_chats join box_chat_members on id = box_id where user_id = ? and is_direct = true intersect select id from box_chats join box_chat_members on id = box_id where user_id = ? and is_direct = true";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ps.setInt(2, Integer.parseInt(((MenuItem)event.getSource()).getId()));
                 ResultSet rs = ps.executeQuery();
-                rs.next();
-                boxid = rs.getInt(1);
-                vboxChatLoaded();
-                chatScrollChat2.applyCss();
-                chatScrollChat2.layout();
-                chatScrollChat2.setVvalue(1.0);
+                if (rs.next()){
+                    boxid = rs.getInt("id");
+                    vboxChatLoaded();
+                    chatScrollChat2.applyCss();
+                    chatScrollChat2.layout();
+                    chatScrollChat2.setVvalue(1.0);
+                } else {
+                    query = "insert into box_chats (box_name, is_direct) values ('Direct', true);\n" +
+                            "select max(id) from box_chats";
+                    ps = conn.prepareStatement(query);
+                    ps.execute();
+                    ps.getMoreResults();
+                    rs = ps.getResultSet();
+                    rs.next();
+                    query = "insert into box_chat_members (box_id, user_id) values (?, ?), (?, ?)";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, rs.getInt(1));
+                    ps.setInt(2, id);
+                    ps.setInt(3, rs.getInt(1));
+                    ps.setInt(4, Integer.parseInt(((MenuItem)event.getSource()).getId()));
+                    ps.executeUpdate();
+                    menuitemOnlineClicked(event);
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -486,52 +533,87 @@ public class UserChatController implements Initializable, Runnable {
         }
     }
     synchronized public void vboxChatboxLoaded(){
-        chatVboxChatbox2.getChildren().clear();
         if (conn != null) {
             try {
-                String query = "select * from box_chat_members where box_id = ? and user_id = ?";
-                PreparedStatement ps = conn.prepareStatement(query);
-                ps.setInt(1, boxid);
-                ps.setInt(2, id);
-                ResultSet rs = ps.executeQuery();
-                if (!rs.next()){
-                    boxid = 0;
+                chatVboxChatbox2.getChildren().clear();
+                String boxssearch = chatTextSearchbox2.getText();
+                String query;
+                if (boxssearch != null && !boxssearch.isBlank()){
+                    query = "with directbox as (\n" +
+                            "    select box_chats.id, user_account_info.displayname as box_name, messages.content as newestmessage\n" +
+                            "    from box_chats\n" +
+                            "    join box_chat_members \n" +
+                            "    on box_chat_members.box_id = box_chats.id\n" +
+                            "    join user_account_info \n" +
+                            "    on user_account_info.account_id = box_chat_members.user_id and box_chat_members.user_id != ?\n" +
+                            "    left join messages on messages.box_id = box_chats.id\n" +
+                            "    where box_chats.is_direct and box_chats.id in (\n" +
+                            "        select distinct box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ?\n" +
+                            "    ) and messages.content like ?\n" +
+                            "    order by box_chats.id, messages.create_date desc\n" +
+                            "), \n" +
+                            "groupbox as (\n" +
+                            "    select box_chats.id, box_chats.box_name, \n" +
+                            "    case when LENGTH(messages.content) > 0  \n" +
+                            "    then CONCAT(user_account_info.displayname, ': ', messages.content)\n" +
+                            "    else null\n" +
+                            "    end\n" +
+                            "    as newestmessage \n" +
+                            "    from box_chats\n" +
+                            "    join box_chat_members on box_chat_members.box_id = box_chats.id\n" +
+                            "    left join messages on messages.box_id = box_chats.id\n" +
+                            "    left join user_account_info on user_account_info.account_id = messages.user_id\n" +
+                            "    where box_chat_members.user_id = ? and not box_chats.is_direct and messages.content like ?\n" +
+                            "    order by box_chats.id, messages.create_date desc\n" +
+                            ")\n" +
+                            "select * from groupbox\n" +
+                            "union \n" +
+                            "select * from directbox";
+                } else {
+                    query = "with directbox as ( " +
+                            "    select distinct on (box_chats.id) box_chats.id, user_account_info.displayname as box_name, messages.content as newestmessage " +
+                            "    from box_chats " +
+                            "    join box_chat_members  " +
+                            "    on box_chat_members.box_id = box_chats.id " +
+                            "    join user_account_info  " +
+                            "    on user_account_info.account_id = box_chat_members.user_id and box_chat_members.user_id != ? " +
+                            "    left join messages on messages.box_id = box_chats.id " +
+                            "    where box_chats.is_direct and box_chats.id in ( " +
+                            "        select distinct box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ? " +
+                            "    ) " +
+                            "    order by box_chats.id, messages.create_date desc " +
+                            "),  " +
+                            "groupbox as ( " +
+                            "    select distinct on (box_chats.id) box_chats.id, box_chats.box_name,  " +
+                            "    case when LENGTH(messages.content) > 0   " +
+                            "    then CONCAT(user_account_info.displayname, ': ', messages.content) " +
+                            "    else null " +
+                            "    end " +
+                            "    as newestmessage  " +
+                            "    from box_chats " +
+                            "    join box_chat_members on box_chat_members.box_id = box_chats.id " +
+                            "    left join messages on messages.box_id = box_chats.id " +
+                            "    left join user_account_info on user_account_info.account_id = messages.user_id " +
+                            "    where box_chat_members.user_id = ? and not box_chats.is_direct " +
+                            "    order by box_chats.id, messages.create_date desc " +
+                            ") " +
+                            "select * from groupbox " +
+                            "union " +
+                            "select * from directbox;";
                 }
-                query = "with directbox as ( " +
-                        "    select distinct on (box_chats.id) box_chats.id, user_account_info.displayname as box_name, messages.content as newestmessage " +
-                        "    from box_chats " +
-                        "    join box_chat_members  " +
-                        "    on box_chat_members.box_id = box_chats.id " +
-                        "    join user_account_info  " +
-                        "    on user_account_info.account_id = box_chat_members.user_id and box_chat_members.user_id != ? " +
-                        "    left join messages on messages.box_id = box_chats.id " +
-                        "    where box_chats.is_direct and box_chats.id in ( " +
-                        "        select distinct box_chat_members.box_id from box_chat_members where box_chat_members.user_id = ? " +
-                        "    ) " +
-                        "    order by box_chats.id, messages.create_date desc " +
-                        "),  " +
-                        "groupbox as ( " +
-                        "    select distinct on (box_chats.id) box_chats.id, box_chats.box_name,  " +
-                        "    case when LENGTH(messages.content) > 0   " +
-                        "    then CONCAT(user_account_info.displayname, ': ', messages.content) " +
-                        "    else null " +
-                        "    end " +
-                        "    as newestmessage  " +
-                        "    from box_chats " +
-                        "    join box_chat_members on box_chat_members.box_id = box_chats.id " +
-                        "    left join messages on messages.box_id = box_chats.id " +
-                        "    left join user_account_info on user_account_info.account_id = messages.user_id " +
-                        "    where box_chat_members.user_id = ? and not box_chats.is_direct " +
-                        "    order by box_chats.id, messages.create_date desc " +
-                        ") " +
-                        "select * from groupbox " +
-                        "union  " +
-                        "select * from directbox;";
-                ps = conn.prepareStatement(query);
-                ps.setInt(1, id);
-                ps.setInt(2, id);
-                ps.setInt(3, id);
-                rs = ps.executeQuery();
+                PreparedStatement ps = conn.prepareStatement(query);
+                if (boxssearch != null && !boxssearch.isBlank()){
+                    ps.setInt(1, id);
+                    ps.setInt(2, id);
+                    ps.setString(3, "%" + boxssearch + "%");
+                    ps.setInt(4, id);
+                    ps.setString(5, "%" + boxssearch + "%");
+                } else {
+                    ps.setInt(1, id);
+                    ps.setInt(2, id);
+                    ps.setInt(3, id);
+                }
+                ResultSet rs = ps.executeQuery();
                 while (rs.next()){
                     int boxrid = rs.getInt(1);
                     String boxname = rs.getString(2);
@@ -597,6 +679,7 @@ public class UserChatController implements Initializable, Runnable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stop = false;
+        display2 = display;
         chatTextSend2 = chatTextSend;
         chatImageSend2 = chatImageSend;
         chatVboxChat2 = chatVboxChat;
@@ -650,6 +733,35 @@ public class UserChatController implements Initializable, Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            try{
+                String query = "select * from user_accounts where id = ?";
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next() || !rs.getString("status").equals("online")){
+                    query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
+                    stop = true;
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
+                                scene = new Scene(fxmlLoader.load(), 1080, 720);
+                                stage = (Stage)display2.getScene().getWindow();
+                                stage.setScene(scene);
+                                stage.show();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             if (stop){
                 return;
             }
@@ -662,7 +774,7 @@ public class UserChatController implements Initializable, Runnable {
             });
             if (!Objects.equals(chatTextSearchchat2.getText(), searchValue)){
                 searchValue = chatTextSearchchat2.getText();
-                changable = 0;
+                changable = 1;
             }
         }
     }
@@ -673,7 +785,11 @@ public class UserChatController implements Initializable, Runnable {
                 String query = "update user_accounts set status = 'offline' where id = ?";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
-                ps.executeUpdate();;
+                ps.executeUpdate();
+                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                ps = conn.prepareStatement(query);
+                ps.setInt(1, id);
+                ps.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
