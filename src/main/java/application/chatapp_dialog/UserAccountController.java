@@ -233,15 +233,28 @@ public class UserAccountController implements Initializable, Runnable {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next() || rs.getString("status").equals("locked")){
+                if (!rs.next() || !rs.getString("status").equals("online")){
+                    query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
                     stop = true;
-                    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
-                    scene = new Scene(fxmlLoader.load(), 1080, 720);
-                    stage = (Stage)display2.getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.show();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
+                                scene = new Scene(fxmlLoader.load(), 1080, 720);
+                                stage = (Stage) display2.getScene().getWindow();
+                                stage.setScene(scene);
+                                stage.show();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
                 }
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             if (stop){

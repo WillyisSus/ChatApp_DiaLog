@@ -1,6 +1,8 @@
 package application.chatapp_dialog;
 
+import application.chatapp_dialog.dal.EmailDAL;
 import application.chatapp_dialog.dal.UtilityDAL;
+import application.chatapp_dialog.dummy.UserAccountGenerator;
 import application.chatapp_dialog.security.EncryptPassword;
 import application.chatapp_dialog.security.UserRegistrationValidator;
 import javafx.application.Platform;
@@ -109,24 +111,40 @@ public class UserPasswordController implements Initializable, Runnable {
                 ResultSet rs = ps.executeQuery();
                 rs.next();
                 String email = rs.getString(1);
-                query = "update user_accounts set status = 'offline' where id = ?";
-                ps = conn.prepareStatement(query);
-                ps.setInt(1, id);
-                ps.executeUpdate();
-                query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
-                ps = conn.prepareStatement(query);
-                ps.setInt(1, id);
-                ps.executeUpdate();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Notification");
-                alert.setHeaderText("An email has been send.");
-                alert.show();
-                stop = true;
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
-                scene = new Scene(fxmlLoader.load(), 1080, 720);
-                stage = (Stage)display.getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
+                String newpass = UserAccountGenerator.randomPassword();
+                if (EmailDAL.sendNewPassword(email, newpass)){
+                    String salt = EncryptPassword.generateRandomSalt();
+                    String hashedPassword = EncryptPassword.hashPassword(newpass,salt);
+                    query = "update user_accounts set password = ?, salt = ? where id = ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setString(1, hashedPassword);
+                    ps.setString(2, salt);
+                    ps.setInt(3, id);
+                    ps.executeUpdate();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Notification");
+                    alert.setHeaderText("Password has been reset. Logging out.");
+                    alert.show();
+                    query = "update user_accounts set status = 'offline' where id = ?";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
+                    query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
+                    stop = true;
+                    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
+                    scene = new Scene(fxmlLoader.load(), 1080, 720);
+                    stage = (Stage)display.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Notification");
+                    alert.setHeaderText("Error when attempting send reset email.");
+                    alert.showAndWait();
+                }
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
@@ -212,7 +230,7 @@ public class UserPasswordController implements Initializable, Runnable {
         passwordButtonReset.setOnAction(this::buttonResetClicked);
         passwordButtonConfirm.setOnAction(this::buttonConfirmClicked);
         Runnable r1 = new UserAccountController();
-        Thread t1 = new Thread(r1, "UserAccountController");
+        Thread t1 = new Thread(r1, "UserPasswordController");
         t1.setDaemon(true);
         t1.start();
     }
@@ -235,15 +253,28 @@ public class UserPasswordController implements Initializable, Runnable {
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
-                if (!rs.next() || rs.getString("status").equals("locked")){
+                if (!rs.next() || !rs.getString("status").equals("online")){
+                    query = "update user_activity_logs set session_end = CURRENT_TIMESTAMP where user_id = ? and session_end is null";
+                    ps = conn.prepareStatement(query);
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
                     stop = true;
-                    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
-                    scene = new Scene(fxmlLoader.load(), 1080, 720);
-                    stage = (Stage)display2.getScene().getWindow();
-                    stage.setScene(scene);
-                    stage.show();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-login-view.fxml"));
+                                scene = new Scene(fxmlLoader.load(), 1080, 720);
+                                stage = (Stage) display2.getScene().getWindow();
+                                stage.setScene(scene);
+                                stage.show();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
                 }
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             if (stop){

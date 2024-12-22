@@ -427,18 +427,19 @@ public class UserChatController implements Initializable, Runnable {
         }
     }
     public void menuOnlineClicked(Event event){
-        chatMenuOnline.getItems().clear();
+        chatMenuOnline2.getItems().clear();
         if (conn != null) {
             try {
-                String query = "select id, username, displayname from user_account_info join user_accounts on account_id = id join friendships on (id = request_id or id = accept_id) and is_accepted = true where status = 'online' and id != ?";
+                String query = "select id, username, displayname from user_account_info join user_accounts on account_id = id join friendships on ((id = request_id and accept_id = ?) or (request_id = ? and id = accept_id)) where is_accepted = true and status = 'online'";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setInt(1, id);
+                ps.setInt(2, id);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()){
-                    MenuItem newonlinefriend = new MenuItem(rs.getString(3));
-                    newonlinefriend.setId(String.valueOf(rs.getInt(1)));
+                    MenuItem newonlinefriend = new MenuItem(rs.getString("displayname") + " @" + rs.getString("username"));
+                    newonlinefriend.setId(String.valueOf(rs.getInt("id")));
                     newonlinefriend.setOnAction(this::menuitemOnlineClicked);
-                    chatMenuOnline.getItems().add(newonlinefriend);
+                    chatMenuOnline2.getItems().add(newonlinefriend);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);

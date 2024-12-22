@@ -80,7 +80,7 @@ public class UserForgotController implements Initializable {
                     } else {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Notification");
-                        alert.setHeaderText("Error when attempting send an email.");
+                        alert.setHeaderText("Error when attempting send reset email.");
                         alert.showAndWait();
                     }
                 } else {
