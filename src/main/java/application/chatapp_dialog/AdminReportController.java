@@ -337,49 +337,44 @@ public class AdminReportController implements Initializable {
     }
 
     public void handleFilter(ActionEvent event){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getSource() == filterButton){
-                    if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null){
-                        return;
-                    }
-                    FilteredList<AdminReportInformation> filteredList = new FilteredList<>(reportList, data->{
-                        boolean filterByName = true;
-                        boolean filterByMinDate = true;
-                        boolean filterByMaxDate = true;
-                        if (!filterValue.getText().isEmpty()){
-                            String filterMode = filterChoices.getValue();
-                            if (filterMode.contains("Reported")){
-                                filterByName = data.getReportedUsername().startsWith(filterValue.getText());
-                            } else if (filterMode.contains("Email")){
-                                filterByName = data.getReportedEmail().startsWith(filterValue.getText());
-                            } else {
-                                filterByName = data.getReporterUsername().startsWith(filterValue.getText());
-                            }
-                        }
-                        if (minDate.getValue() != null){
-                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                            filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
-                        }
-                        if (maxDate.getValue() != null){
-                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                            filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
-                        }
-                        return (filterByName && filterByMaxDate && filterByMinDate);
-                    });
-                    reportTable.setItems(filteredList);
-                    reportTable.refresh();
-
-                }else {
-                    maxDate.setValue(null);
-                    minDate.setValue(null);
-                    reportTable.setItems(reportList);
-                    reportTable.refresh();
-
-                }
+        if (event.getSource() == filterButton){
+            if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null){
+                return;
             }
-        });
+            FilteredList<AdminReportInformation> filteredList = new FilteredList<>(reportList, data->{
+                boolean filterByName = true;
+                boolean filterByMinDate = true;
+                boolean filterByMaxDate = true;
+                if (!filterValue.getText().isEmpty()){
+                    String filterMode = filterChoices.getValue();
+                    if (filterMode.contains("Reported")){
+                        filterByName = data.getReportedUsername().startsWith(filterValue.getText());
+                    } else if (filterMode.contains("Email")){
+                        filterByName = data.getReportedEmail().startsWith(filterValue.getText());
+                    } else {
+                        filterByName = data.getReporterUsername().startsWith(filterValue.getText());
+                    }
+                }
+                if (minDate.getValue() != null){
+                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                    filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
+                }
+                if (maxDate.getValue() != null){
+                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                    filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
+                }
+                return (filterByName && filterByMaxDate && filterByMinDate);
+            });
+            reportTable.setItems(filteredList);
+            reportTable.refresh();
+
+        }else {
+            maxDate.setValue(null);
+            minDate.setValue(null);
+            reportTable.setItems(reportList);
+            reportTable.refresh();
+
+        }
 
     }
     public void setConnection(Connection conn){

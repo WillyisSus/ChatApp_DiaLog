@@ -271,47 +271,42 @@ public void switchToLogin(ActionEvent event){
     }
 
     public void handleFilter(ActionEvent event) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getSource() == filterButton) {
-                    if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null) {
-                        return;
-                    }
-                    FilteredList<AdminNewUserAccount> filteredList = new FilteredList<>(newUserAccounts, data -> {
-                        boolean filterByName = true;
-                        boolean filterByMinDate = true;
-                        boolean filterByMaxDate = true;
-                        if (!filterValue.getText().isEmpty()) {
-                            String filterMode = filterChoices.getValue();
-                            if (filterMode.contains("Username")) {
-                                filterByName = data.getUsername().startsWith(filterValue.getText());
-                            } else if (filterMode.contains("Email")) {
-                                filterByName = data.getEmail().startsWith(filterValue.getText());
-                            }
-                        }
-                        if (minDate.getValue() != null) {
-                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                            filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
-                        }
-                        if (maxDate.getValue() != null) {
-                            LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
-                            filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
-                        }
-                        return (filterByName && filterByMaxDate && filterByMinDate);
-                    });
-                    newUserTable.setItems(filteredList);
-                    newUserTable.refresh();
-
-                } else {
-                    maxDate.setValue(null);
-                    minDate.setValue(null);
-                    newUserTable.setItems(newUserAccounts);
-                    newUserTable.refresh();
-
-                }
+        if (event.getSource() == filterButton) {
+            if (filterValue.getText().isEmpty() && maxDate.getValue() == null && minDate.getValue() == null) {
+                return;
             }
-        });
+            FilteredList<AdminNewUserAccount> filteredList = new FilteredList<>(newUserAccounts, data -> {
+                boolean filterByName = true;
+                boolean filterByMinDate = true;
+                boolean filterByMaxDate = true;
+                if (!filterValue.getText().isEmpty()) {
+                    String filterMode = filterChoices.getValue();
+                    if (filterMode.contains("Username")) {
+                        filterByName = data.getUsername().startsWith(filterValue.getText());
+                    } else if (filterMode.contains("Email")) {
+                        filterByName = data.getEmail().startsWith(filterValue.getText());
+                    }
+                }
+                if (minDate.getValue() != null) {
+                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                    filterByMinDate = minDate.getValue().isBefore(date) || minDate.getValue().isEqual(date);
+                }
+                if (maxDate.getValue() != null) {
+                    LocalDate date = data.getCreateDate().toLocalDateTime().toLocalDate();
+                    filterByMaxDate = maxDate.getValue().isAfter(date) || maxDate.getValue().isEqual(date);
+                }
+                return (filterByName && filterByMaxDate && filterByMinDate);
+            });
+            newUserTable.setItems(filteredList);
+            newUserTable.refresh();
+
+        } else {
+            maxDate.setValue(null);
+            minDate.setValue(null);
+            newUserTable.setItems(newUserAccounts);
+            newUserTable.refresh();
+
+        }
 
     }
     public void setConnection(Connection conn){

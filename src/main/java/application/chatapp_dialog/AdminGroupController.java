@@ -244,25 +244,20 @@ public class AdminGroupController implements Initializable {
     }
 
     public void handleFilter(ActionEvent event){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getSource() ==  filterGroupName){
-                    FilteredList<AdminGroupInformation>  filteredList = new FilteredList<AdminGroupInformation>(groupInformations, data->{
-                        boolean filtered = true;
-                        if (!groupNameFilter.getText().isEmpty()){
-                            filtered = data.getGroupName().startsWith(groupNameFilter.getText());
-                        }
-                        return filtered;
-                    });
-                    boxTable.setItems(filteredList);
-                    boxTable.refresh();
-                }else {
-                    boxTable.setItems(groupInformations);
-                    boxTable.refresh();
+        if (event.getSource() ==  filterGroupName){
+            FilteredList<AdminGroupInformation>  filteredList = new FilteredList<AdminGroupInformation>(groupInformations, data->{
+                boolean filtered = true;
+                if (!groupNameFilter.getText().isEmpty()){
+                    filtered = data.getGroupName().startsWith(groupNameFilter.getText());
                 }
-            }
-        });
+                return filtered;
+            });
+            boxTable.setItems(filteredList);
+            boxTable.refresh();
+        }else {
+            boxTable.setItems(groupInformations);
+            boxTable.refresh();
+        }
 
 
     }
@@ -273,15 +268,19 @@ public class AdminGroupController implements Initializable {
             public void run() {
                 if (event.getSource() == dateAscending){
                     orderMenu.setText(dateAscending.getText());
+                    comparator = AdminGroupInformationDAL.getDateAscendingComparator();
                     groupInformations.sort(AdminGroupInformationDAL.getDateAscendingComparator());
                 } else if(event.getSource() == dateDescending){
                     orderMenu.setText(dateDescending.getText());
+                    comparator = AdminGroupInformationDAL.getDateDescendingComparator();
                     groupInformations.sort(AdminGroupInformationDAL.getDateDescendingComparator());
                 } else if (event.getSource() == boxNameAscending){
                     orderMenu.setText(boxNameAscending.getText());
+                    comparator = AdminGroupInformationDAL.getBoxNameAscendingComparator();
                     groupInformations.sort(AdminGroupInformationDAL.getBoxNameAscendingComparator());
                 } else {
                     orderMenu.setText(boxNameDescending.getText());
+                    comparator = AdminGroupInformationDAL.getBoxNameDescendingComparator();
                     groupInformations.sort(AdminGroupInformationDAL.getBoxNameDescendingComparator());
                 }
                 boxTable.refresh();

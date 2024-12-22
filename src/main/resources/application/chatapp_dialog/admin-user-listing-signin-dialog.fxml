@@ -25,7 +25,6 @@
             </Label>
             <TableView fx:id="activityTable" layoutX="26.0" layoutY="141.0" prefHeight="264.0" prefWidth="641.0">
               <columns>
-                <TableColumn fx:id="index" prefWidth="75.0" text="Record No." />
                 <TableColumn fx:id="dateAndTimes" prefWidth="75.0" text="Date and Time" />
               </columns>
                <columnResizePolicy>

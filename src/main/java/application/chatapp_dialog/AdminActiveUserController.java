@@ -248,70 +248,65 @@ public class AdminActiveUserController implements Initializable {
     }
 // Handle Filter
     public void handleFilter(ActionEvent event){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                if (event.getSource() ==  filterButton){
-                    if (minDate.getValue() == null && maxDate.getValue() == null && usernameFilter.getText().isEmpty()
-                            && maxLogins.getText().isEmpty() && minLogins.getText().isEmpty() && maxPrivateChats.getText().isEmpty() && minPrivateChats.getText().isEmpty()
-                            && maxGroupChats.getText().isEmpty() && minGroupChats.getText().isEmpty())
-                        return;
-                    FilteredList<AdminActiveUserInformation> filterList = new FilteredList<AdminActiveUserInformation>(activeUserInformations, data -> {
-                        boolean filterByDate = true;
-                        boolean filterByName = true;
-                        boolean filterByLogins = true;
-                        boolean filterByPrivateChats = true;
-                        boolean filterByGroupChats = true;
-                        try{
-                            if (minDate.getValue()!=null){
-                                filterByDate = filterByDate && (minDate.getValue().isBefore(data.getCreateDate().toLocalDateTime().toLocalDate()) || minDate.getValue().isEqual(data.getCreateDate().toLocalDateTime().toLocalDate()));
-                            }
-                            if (maxDate.getValue()!=null){
-                                filterByDate = filterByDate && (maxDate.getValue().isAfter(data.getCreateDate().toLocalDateTime().toLocalDate()) || maxDate.getValue().isEqual(data.getCreateDate().toLocalDateTime().toLocalDate()));
-                            }
-                            if (!maxLogins.getText().isEmpty()){
-                                filterByLogins = filterByLogins && Integer.parseInt(maxLogins.getText()) >= data.getLogins();
-                            }
-                            if (!minLogins.getText().isEmpty()){
-                                filterByLogins = filterByLogins && Integer.parseInt(minLogins.getText()) <= data.getLogins();
-                            }
-                            if (!maxGroupChats.getText().isEmpty()){
-                                filterByGroupChats = filterByGroupChats && Integer.parseInt(maxGroupChats.getText()) >= data.getGroupChats();
-                            }
-                            if (!minGroupChats.getText().isEmpty()){
-                                filterByGroupChats = filterByGroupChats && Integer.parseInt(minGroupChats.getText()) <= data.getGroupChats();
-                            }
-                            if (!maxPrivateChats.getText().isEmpty()){
-                                filterByPrivateChats = filterByPrivateChats && Integer.parseInt(maxPrivateChats.getText()) >= data.getPrivateChats();
-                            }
-                            if (!minPrivateChats.getText().isEmpty()){
-                                filterByPrivateChats = filterByPrivateChats && Integer.parseInt(minPrivateChats.getText()) <= data.getPrivateChats();
-                            }
-                            if (!usernameFilter.getText().isEmpty()){
-                                filterByName = data.getUsername().startsWith(usernameFilter.getText());
-                            }
-                        } catch (NumberFormatException e){
+        if (event.getSource() ==  filterButton){
+            if (minDate.getValue() == null && maxDate.getValue() == null && usernameFilter.getText().isEmpty()
+                    && maxLogins.getText().isEmpty() && minLogins.getText().isEmpty() && maxPrivateChats.getText().isEmpty() && minPrivateChats.getText().isEmpty()
+                    && maxGroupChats.getText().isEmpty() && minGroupChats.getText().isEmpty())
+                return;
+            FilteredList<AdminActiveUserInformation> filterList = new FilteredList<AdminActiveUserInformation>(activeUserInformations, data -> {
+                boolean filterByDate = true;
+                boolean filterByName = true;
+                boolean filterByLogins = true;
+                boolean filterByPrivateChats = true;
+                boolean filterByGroupChats = true;
+                try{
+                    if (minDate.getValue()!=null){
+                        filterByDate = filterByDate && (minDate.getValue().isBefore(data.getCreateDate().toLocalDateTime().toLocalDate()) || minDate.getValue().isEqual(data.getCreateDate().toLocalDateTime().toLocalDate()));
+                    }
+                    if (maxDate.getValue()!=null){
+                        filterByDate = filterByDate && (maxDate.getValue().isAfter(data.getCreateDate().toLocalDateTime().toLocalDate()) || maxDate.getValue().isEqual(data.getCreateDate().toLocalDateTime().toLocalDate()));
+                    }
+                    if (!maxLogins.getText().isEmpty()){
+                        filterByLogins = filterByLogins && Integer.parseInt(maxLogins.getText()) >= data.getLogins();
+                    }
+                    if (!minLogins.getText().isEmpty()){
+                        filterByLogins = filterByLogins && Integer.parseInt(minLogins.getText()) <= data.getLogins();
+                    }
+                    if (!maxGroupChats.getText().isEmpty()){
+                        filterByGroupChats = filterByGroupChats && Integer.parseInt(maxGroupChats.getText()) >= data.getGroupChats();
+                    }
+                    if (!minGroupChats.getText().isEmpty()){
+                        filterByGroupChats = filterByGroupChats && Integer.parseInt(minGroupChats.getText()) <= data.getGroupChats();
+                    }
+                    if (!maxPrivateChats.getText().isEmpty()){
+                        filterByPrivateChats = filterByPrivateChats && Integer.parseInt(maxPrivateChats.getText()) >= data.getPrivateChats();
+                    }
+                    if (!minPrivateChats.getText().isEmpty()){
+                        filterByPrivateChats = filterByPrivateChats && Integer.parseInt(minPrivateChats.getText()) <= data.getPrivateChats();
+                    }
+                    if (!usernameFilter.getText().isEmpty()){
+                        filterByName = data.getUsername().startsWith(usernameFilter.getText());
+                    }
+                } catch (NumberFormatException e){
 
-                        }
-                        return (filterByDate && filterByName && filterByLogins && filterByPrivateChats && filterByGroupChats);
-                    });
-                    tableView.setItems(filterList);
-                    tableView.refresh();
-                }else {
-                    usernameFilter.setText(null);
-                    minDate.setValue(null);
-                    maxDate.setValue(null);
-                    maxLogins.setText(null);
-                    minLogins.setText(null);
-                    maxGroupChats.setText(null);
-                    minGroupChats.setText(null);
-                    maxPrivateChats.setText(null);
-                    maxPrivateChats.setText(null);
-                    tableView.setItems(activeUserInformations);
-                    tableView.refresh();
                 }
-            }
-        });
+                return (filterByDate && filterByName && filterByLogins && filterByPrivateChats && filterByGroupChats);
+            });
+            tableView.setItems(filterList);
+            tableView.refresh();
+        }else {
+            usernameFilter.setText("");
+            minDate.setValue(null);
+            maxDate.setValue(null);
+            maxLogins.setText("");
+            minLogins.setText("");
+            maxGroupChats.setText("");
+            minGroupChats.setText("");
+            maxPrivateChats.setText("");
+            maxPrivateChats.setText("");
+            tableView.setItems(activeUserInformations);
+            tableView.refresh();
+        }
 
     }
 
@@ -370,6 +365,14 @@ public class AdminActiveUserController implements Initializable {
         privateChatsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPrivateChats().toString()));
         groupChatColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getGroupChats().toString()));
 
+
+        usernameFilter.setText("");
+        maxLogins.setText("");
+        minLogins.setText("");
+        maxGroupChats.setText("");
+        minGroupChats.setText("");
+        maxPrivateChats.setText("");
+        minPrivateChats.setText("");
         try {
             activeUserInformations = FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations(connection));
         } catch (SQLException e) {
