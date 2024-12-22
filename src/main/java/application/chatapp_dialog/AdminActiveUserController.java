@@ -37,16 +37,19 @@ public class AdminActiveUserController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminActiveUserInformation> temp =  FXCollections.observableArrayList(AdminActiveUserInformationDAL.getAciveUserInformations(connection));
-                    if(comparator != null){
-                        temp.sort(comparator);
+                    if (temp != null){
+                        if(comparator != null){
+                            temp.sort(comparator);
+                        }
+                        if (tableView.getItems() instanceof FilteredList<AdminActiveUserInformation>){
+                            tableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminActiveUserInformation>) tableView.getItems()).getPredicate()));
+                        }else {
+                            tableView.setItems(temp);
+                        }
+                        activeUserInformations = temp;
+                        tableView.refresh();
                     }
-                    if (tableView.getItems() instanceof FilteredList<AdminActiveUserInformation>){
-                        tableView.setItems(new FilteredList<>(temp, ((FilteredList<AdminActiveUserInformation>) tableView.getItems()).getPredicate()));
-                    }else {
-                        tableView.setItems(temp);
-                    }
-                    activeUserInformations = temp;
-                    tableView.refresh();
+
                 }
 
             } catch (Exception e) {

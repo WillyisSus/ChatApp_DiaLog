@@ -38,16 +38,19 @@ public class AdminNewUserController implements Initializable {
             try {
                 if (connection != null){
                     ObservableList<AdminNewUserAccount> temp =  FXCollections.observableArrayList(AdminNewUserAccountDAL.getAllNewAccount(connection));
-                    if(comparator != null){
-                        temp.sort(comparator);
+                    if (temp != null){
+                        if(comparator != null){
+                            temp.sort(comparator);
+                        }
+                        if (newUserTable.getItems() instanceof FilteredList<AdminNewUserAccount>){
+                            newUserTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminNewUserAccount>) newUserTable.getItems()).getPredicate()));
+                        }else {
+                            newUserTable.setItems(temp);
+                        }
+                        newUserAccounts = temp;
+                        newUserTable.refresh();
                     }
-                    if (newUserTable.getItems() instanceof FilteredList<AdminNewUserAccount>){
-                        newUserTable.setItems(new FilteredList<>(temp, ((FilteredList<AdminNewUserAccount>) newUserTable.getItems()).getPredicate()));
-                    }else {
-                        newUserTable.setItems(temp);
-                    }
-                    newUserAccounts = temp;
-                    newUserTable.refresh();
+
                 }
 
             } catch (Exception e) {

@@ -15,7 +15,7 @@ public class CreateAdmin {
         List<String> password = new ArrayList<>(List.of("admin1", "admin2", "admin3"));
         for (int i = 0; i < 3; i ++){
 
-            AdminAccountDAL.createNewAdmin(username.get(i), email.get(i), password.get(i), username.get(i), connection);
+            AdminAccountDAL.createNewAdmin(username.get(i), password.get(i), email.get(i),  username.get(i), connection);
         }
     }
 }
