@@ -187,6 +187,22 @@ public class UserAccountController implements Initializable, Runnable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         display2 = display;
+        accountChoiceSex.getItems().addAll(sexList);
+        accountMenuitemFriends.setOnAction(this::menuitemFriendsClicked);
+        accountMenuitemLogout.setOnAction(this::menuitemLogoutClicked);
+        accountImageBack.setOnMouseClicked(this::imageBackClicked);
+        accountButtonPassword.setOnAction(this::buttonPasswordClicked);
+        accountButtonConfirm.setOnAction(this::buttonConfirmClicked);
+        Runnable r1 = new UserAccountController();
+        Thread t1 = new Thread(r1, "UserAccountController");
+        t1.setDaemon(true);
+        t1.start();
+    }
+
+    void setdata(int logid, Stage gstage){
+        id = logid;
+        stage = gstage;
+        stage.setOnCloseRequest(event -> logout(stage));
         if (conn != null) {
             try {
                 String query = "select id, displayname, address, email, dob, sex from user_accounts join user_account_info on id = account_id where id = ?";
@@ -203,26 +219,10 @@ public class UserAccountController implements Initializable, Runnable {
                 } else {
                     accountChoiceSex.setValue("Female");
                 }
-                accountChoiceSex.getItems().addAll(sexList);
-                accountMenuitemFriends.setOnAction(this::menuitemFriendsClicked);
-                accountMenuitemLogout.setOnAction(this::menuitemLogoutClicked);
-                accountImageBack.setOnMouseClicked(this::imageBackClicked);
-                accountButtonPassword.setOnAction(this::buttonPasswordClicked);
-                accountButtonConfirm.setOnAction(this::buttonConfirmClicked);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        Runnable r1 = new UserAccountController();
-        Thread t1 = new Thread(r1, "UserAccountController");
-        t1.setDaemon(true);
-        t1.start();
-    }
-
-    void setdata(int logid, Stage gstage){
-        id = logid;
-        stage = gstage;
-        stage.setOnCloseRequest(event -> logout(stage));
     }
 
     public void run(){
