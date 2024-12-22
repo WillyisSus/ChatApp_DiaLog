@@ -48,8 +48,7 @@ public class UserNew2Controller implements Initializable {
         Connection conn = UtilityDAL.getConnection();
         if (conn != null) {
             try {
-                String query = "insert into user_accounts (username, password, email, salt) " +
-                        "values (?, ?, ?, ?)";
+                String query = "insert into user_accounts (username, password, email, salt) values (?, ?, ?, ?); insert into user_account_info (displayname, dob, sex, address) values (?, ?, ?, ?)";
                 PreparedStatement ps = conn.prepareStatement(query);
                 String salt = EncryptPassword.generateRandomSalt();
                 String hashedPassword = EncryptPassword.hashPassword(password,salt);
@@ -57,23 +56,16 @@ public class UserNew2Controller implements Initializable {
                 ps.setString(2, hashedPassword);
                 ps.setString(3, email);
                 ps.setString(4, salt);
-                int row = ps.executeUpdate();
-                System.out.println(ps.toString());
-                System.out.println(row + " added");
-                query = "insert into user_account_info (displayname, dob, sex, address)" + "values (?, ?, ?, ?)";
-                ps = conn.prepareStatement(query);
-                ps.setString(1, displayname);
-                ps.setDate(2, Date.valueOf(dob));
-                ps.setBoolean(3, sex);
-                ps.setString(4, address);
-                row = ps.executeUpdate();
-                System.out.println(ps.toString());
-                System.out.println(row + " added");
+                ps.setString(5, displayname);
+                ps.setDate(6, Date.valueOf(dob));
+                ps.setBoolean(7, sex);
+                ps.setString(8, address);
+                ps.execute();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Notification");
                 alert.setHeaderText("Account create successfully!");
                 alert.showAndWait();
-                return row;
+                return 1;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -93,7 +85,7 @@ public class UserNew2Controller implements Initializable {
         }
         String address = signupTextAddress.getText();
 
-        if (displayname.isBlank() || dob == null || dob.isAfter(LocalDate.now()) || sex == null || address.isBlank()){
+        if (displayname == null || displayname.isBlank() || dob == null || dob.isAfter(LocalDate.now()) || sex == null || address == null || address.isBlank()){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notification");
             alert.setHeaderText("Invalid information");
@@ -109,6 +101,8 @@ public class UserNew2Controller implements Initializable {
                 scene = new Scene(fxmlLoader.load(), 1080, 720);
                 stage = (Stage) display.getScene().getWindow();
                 stage.setScene(scene);
+                UserLoginController controller = fxmlLoader.getController();
+                controller.setdata(stage);
                 stage.show();
             } catch (IOException exception) {
                 throw new RuntimeException(exception);
@@ -127,6 +121,8 @@ public class UserNew2Controller implements Initializable {
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserForgotController controller = fxmlLoader.getController();
+            controller.setdata(stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -139,6 +135,8 @@ public class UserNew2Controller implements Initializable {
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserLoginController controller = fxmlLoader.getController();
+            controller.setdata(stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -155,13 +153,10 @@ public class UserNew2Controller implements Initializable {
         signupButtonLogin.setOnAction(this::buttonLoginClicked);
     }
 
-    void setUsername(String u){
-        username = u;
-    }
-    void setEmail(String e){
-        email = e;
-    }
-    void setPassword(String p){
-        password = p;
+    void setdata(String gusername, String gemail, String gpassword, Stage gstage){
+        username = gusername;
+        email = gemail;
+        password = gpassword;
+        stage = gstage;
     }
 }

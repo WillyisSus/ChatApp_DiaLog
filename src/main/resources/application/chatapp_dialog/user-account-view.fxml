@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.BoxController">
+<GridPane fx:id="display" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.chatapp_dialog.UserAccountController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
@@ -32,9 +33,9 @@
                      <children>
                         <MenuButton mnemonicParsing="false">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#accountClick" text="Account" />
-                              <MenuItem mnemonicParsing="false" onAction="#friendsClick" text="Friends" />
-                              <MenuItem mnemonicParsing="false" onAction="#logoutClick" text="Log out" />
+                              <MenuItem mnemonicParsing="false" text="Account" />
+                              <MenuItem fx:id="accountMenuitemFriends" mnemonicParsing="false" text="Friends" />
+                              <MenuItem fx:id="accountMenuitemLogout" mnemonicParsing="false" text="Log out" />
                            </items>
                            <graphic>
                               <ImageView fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
@@ -47,7 +48,7 @@
                      </children>
                   </HBox>
                   <Label minHeight="570.0" />
-                  <ImageView fitHeight="72.0" fitWidth="72.0" onMouseClicked="#loginClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="accountImageBack" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/arrow-back-icon.png" />
                      </image>
@@ -67,7 +68,7 @@
                               <Font name="Courier New Bold" size="28.0" />
                            </font>
                         </Label>
-                        <TextField minWidth="280.0" text="Maverlous">
+                        <TextField fx:id="accountTextDisplayname" minWidth="280.0" text="Maverlous">
                            <font>
                               <Font name="Courier New" size="24.0" />
                            </font>
@@ -77,12 +78,12 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Label minWidth="40.0" />
-                        <Label text="Username">
+                        <Label text="Address">
                            <font>
                               <Font name="Courier New Bold" size="28.0" />
                            </font>
                         </Label>
-                        <TextField minWidth="280.0" text="Username123">
+                        <TextField fx:id="accountTextAddress" minWidth="280.0" text="123 Abc Street">
                            <font>
                               <Font name="Courier New" size="24.0" />
                            </font>
@@ -97,7 +98,7 @@
                               <Font name="Courier New Bold" size="28.0" />
                            </font>
                         </Label>
-                        <TextField minWidth="280.0" text="abc@email.com">
+                        <TextField fx:id="accountTextEmail" minWidth="280.0" text="abc@email.com">
                            <font>
                               <Font name="Courier New" size="24.0" />
                            </font>
@@ -112,11 +113,7 @@
                               <Font name="Courier New Bold" size="28.0" />
                            </font>
                         </Label>
-                        <TextField minWidth="280.0" text="01/01/2077">
-                           <font>
-                              <Font name="Courier New" size="24.0" />
-                           </font>
-                        </TextField>
+                        <DatePicker fx:id="accountDateDob" editable="false" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -127,17 +124,17 @@
                               <Font name="Courier New Bold" size="28.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="sexChoice" prefWidth="150.0" />
+                        <ChoiceBox fx:id="accountChoiceSex" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#changepassClick" text="Change Password">
+                        <Button fx:id="accountButtonPassword" mnemonicParsing="false" text="Change Password">
                            <font>
                               <Font name="Courier New Bold" size="26.0" />
                            </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#loginClick" text="Confirm Change">
+                        <Button fx:id="accountButtonConfirm" mnemonicParsing="false" text="Confirm Change">
                            <font>
                               <Font name="Courier New Bold" size="26.0" />
                            </font>

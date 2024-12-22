@@ -100,13 +100,10 @@ public class UserNewController implements Initializable {
             }
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("user-new-2-view.fxml"));
             scene = new Scene(fxmlLoader.load(), 1080, 720);
-            UserNew2Controller controller = fxmlLoader.getController();
-            System.out.println(controller);
-            controller.setUsername(username);
-            controller.setEmail(email);
-            controller.setPassword(password);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserNew2Controller controller = fxmlLoader.getController();
+            controller.setdata(username, email, password, stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -119,6 +116,8 @@ public class UserNewController implements Initializable {
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserForgotController controller = fxmlLoader.getController();
+            controller.setdata(stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -131,6 +130,8 @@ public class UserNewController implements Initializable {
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserLoginController controller = fxmlLoader.getController();
+            controller.setdata(stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -145,5 +146,9 @@ public class UserNewController implements Initializable {
         signupButtonNext.setOnAction(this::buttonNextClicked);
         signupButtonForgot.setOnAction(this::buttonForgotClicked);
         signupButtonLogin.setOnAction(this::buttonLoginClicked);
+    }
+
+    void setdata(Stage gstage){
+        stage = gstage;
     }
 }

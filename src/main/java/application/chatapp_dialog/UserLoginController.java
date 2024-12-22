@@ -117,6 +117,8 @@ public class UserLoginController implements Initializable {
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserForgotController controller = fxmlLoader.getController();
+            controller.setdata(stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -129,6 +131,8 @@ public class UserLoginController implements Initializable {
             scene = new Scene(fxmlLoader.load(), 1080, 720);
             stage = (Stage) display.getScene().getWindow();
             stage.setScene(scene);
+            UserNewController controller = fxmlLoader.getController();
+            controller.setdata(stage);
             stage.show();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -142,5 +146,9 @@ public class UserLoginController implements Initializable {
         loginButtonLogin.setOnAction(this::buttonLoginClicked);
         loginButtonForgot.setOnAction(this::buttonForgotClicked);
         loginButtonCreate.setOnAction(this::buttonCreateClicked);
+    }
+
+    void setdata(Stage gstage){
+        stage = gstage;
     }
 }
